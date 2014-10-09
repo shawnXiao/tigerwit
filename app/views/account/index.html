@@ -1,0 +1,35 @@
+<div class="wd-index" ng-keyDown="keyDown($event)">
+    <div class="up-part" wd-width-equal-height>
+        <div class="header wd-header">
+            <a href="#/" class="logo"></a>
+            <div class="toolbar">
+                <p class="phone-num">400-809-8509</p>
+                <a class="word">优势</a>
+                <a class="word">跟单</a>
+                <a class="word">帮助</a>
+                <a href="#/login" class="btn login-btn">登录</a>
+            </div>
+        </div>
+        <div class="open-form">
+            <h1>投资外汇，从未如此轻松</h1>
+            <h2>开户即可获得 500 美元体验金</h2>
+            <div class="form">
+                <input autofocus ng-class="{error: signIn.uiPhoneError}" type="text" wd-place-holder placeholder="您的手机号码" ng-model="signIn.phone">
+                <input ng-class="{error: signIn.uiPasswordError}" type="text" wd-place-holder placeholder="设置登录密码" ng-model="signIn.password">
+                <p class="error">{{signIn.uiPhoneError || signIn.uiPasswordError}}</p>
+                <div class="btn" ng-click="goToRegister();">开通账户</div>
+                <p class="tip">开通账户代表您了解并知悉外汇 <a href="">交易风险</a></p> 
+            </div>
+        </div>
+    </div>
+    <div class="down-part">
+        <div class="item">
+            <h1>简单，不只是简单</h1>
+            <h2>无论是 iPhone 还是 PC 统统都支持</h2>
+            <div class="image"></div>
+        </div>
+    </div>
+    <div class="loading" ng-if="loading">
+        <div wd-loading></div>
+    </div>
+</div>

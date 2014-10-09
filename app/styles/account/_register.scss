@@ -1,0 +1,205 @@
+.wd-register {
+    width: $min-page-width;
+    margin: 0 auto 50px auto;
+    input[type=text] {
+        width: 220px;
+    }
+    .header {
+        .logo {
+            @include wd-image('logo-black.png');
+            cursor: pointer;
+        }
+        .toolbar {
+            float: right;
+            .login-btn {
+                border-radius: 30px;
+                background-color: $standard-blue;
+                margin-right: 40px;
+                margin-left: 30px;
+                width: 50px;
+            }
+        }
+    }
+    .all-form {
+        margin: 0 auto;
+        width: 720px;
+        background-color: $standard-gray;
+        border: 1px solid #ddd;
+        padding: 40px 40px;
+        .item {
+            margin: 10px 0px;
+            .item-header {
+                @include transition(all, 0.4s);
+                font-size: 15px;
+                background-color: $standard-black;
+                color: $standard-white;
+                height: 40px;
+                line-height: 40px;
+                border-radius: 3px;
+                padding-left: 30px;
+                &.hide {
+                    color: $standard-black;
+                    background-color: #ccc;                    
+                }
+            }
+            .item-body {
+                @include transition(all, 0.4s);
+                overflow: hidden;
+                height: 290px;
+                .btn {
+                    width: 200px;
+                }
+                &.hide {
+                    height: 0px;
+                    @include opacity(0);
+                    margin: 0px;
+                }
+            }
+        }
+        .verify-phone {
+            text-align: center;
+            margin-top: 30px;
+            a {
+                cursor: pointer;
+                margin-left: 20px;
+                font-size: 14px;
+                color: $standard-blue;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+            .tip {
+                font-size: 13px;
+                color: $standard-deep-gray;
+                margin-bottom: 30px;
+                width: 315px;
+                text-align: left;
+                &.error {
+                    color: $standard-red;
+                }
+            }
+        }
+        .person-info {
+            text-align: center;
+            margin-top: 20px;
+            input {
+                margin-top: 4px;
+            }
+            .tip {
+                font-size: 12px;
+                text-align: left;
+                width: 232px;
+            }
+            .error {
+                margin: 3px 0px;
+                font-size: 13px;
+            }
+        }
+        .person-info-show {
+            &.item-body {
+                height: 160px;
+            }
+            text-align: center;
+            margin-top: 30px;
+            .wrapper {
+                margin: 0 auto;
+                text-align: center;
+                .title {
+                    width: 100px;
+                    color: $standard-deep-gray;
+                    text-align: right;
+                    margin-bottom: 10px;
+                    margin-right: 30px;
+                }
+                .word {
+                    width: 190px;
+                    text-align: left;
+                }
+                .tip {
+                    margin-top: 5px;
+                }
+            }
+        }
+        .real-info {
+            text-align: center;
+            margin-top: 30px;
+            .upload {
+                .front {
+                    @include wd-image('id-card-front.png');
+                    display: inline-block;
+                    margin-right: 3px;
+                }
+                .back {
+                    @include wd-image('id-card-back.png');
+                    display: inline-block;
+                }
+                .upload-tip {
+                    display: inline-block;
+                    width: 320px;
+                    .status {
+                        font-size: 16px;
+                        &.error {
+                            border: none;
+                            color: $standard-red;
+                        }
+                        &.uploading {
+                            color: $standard-black;
+                        }
+                        &.success {
+                            border: none;
+                            color: $standard-green;
+                        }
+                    }
+                }
+                .error {
+                    border: 3px solid $standard-red;
+                }
+                .success {
+                    margin-top: 0px;
+                    border: 3px solid $standard-green;
+                }
+            }
+            .btn {
+                margin-top: 20px;
+            }
+        }
+        .success {
+            margin-top: 50px;
+            text-align: center;
+            .tip {
+                text-align: center;
+                p {
+                    margin-bottom: 15px;
+                }
+            }
+            .client {
+                margin-top: 30px;
+                text-align: center;
+                div {
+                    display: inline-block;
+                    margin: 0px 50px;
+                    cursor: pointer;
+                    &:hover {
+                        @include transition(opacity, 0.4s);
+                        @include opacity(0.6);
+                    }
+                    &:hover {
+                        @include opacity(1);
+                    }
+                }
+                .mt4 {
+                    @include wd-image('mt4.png');
+                }
+                .android {
+                    @include wd-image('android.png');
+                }
+                .qrcode {
+                    @include wd-image('mt4.png');
+                }
+            }
+            .btn {
+                margin-top: 20px;
+            }
+        }
+    }
+}

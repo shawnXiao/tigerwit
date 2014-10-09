@@ -1,0 +1,15 @@
+<div class="wd-login" ng-keyDown="keyDown($event)">
+    <div class="header wd-header">
+        <a href="#/" class="logo"></a>
+    </div>
+    <div class="login-form">
+        <input type="text" wd-place-holder placeholder="手机号码" autofocus ng-model="login.phone"><br>
+        <input type="password" wd-place-holder placeholder="登录密码" ng-model="login.password"><br>
+        <p ng-if="login.uiLoginError" class="error">{{login.uiLoginError}}</p>
+        <div class="btn" ng-click="loginFun();">登录</div>
+        <p class="tip">无法登录？</p>
+    </div>
+    <div class="loading" ng-if="loading">
+        <div wd-loading></div>
+    </div>
+</div>

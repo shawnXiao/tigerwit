@@ -1,0 +1,50 @@
+<div class="wd-money">
+    <div class="header wd-header">
+        <a href="#/" class="logo"></a>
+        <div class="toolbar">
+            <div class="logout-btn btn" ng-click="logout();">退出</div>
+        </div>
+    </div>
+    <div class="statistics">
+        <div class="block">
+            <p class="title">可用现金</p>
+            <p class="down">￥{{user.money.available}}</p>
+        </div>
+        <div class="block">
+            <p class="title">投资资产</p>
+            <p>$0</p>
+        </div>
+        <div class="block">
+            <p class="title">浮动盈亏</p>
+            <p class="up">0</p>
+        </div>
+        <div class="block">
+            <p class="title">总资产</p>
+            <p>$0</p>
+        </div>
+    </div>
+    <div class="btns-list">
+        <div class="block" ng-click="user.money.uiRecharge = !user.money.uiRecharge">
+            <div class="in"></div>
+            <p>注资</p>
+        </div>
+        <div class="block">
+            <div class="out"></div>
+            <p>出金</p>
+        </div>
+        <div class="block">
+            <div class="setting"></div>
+            <p>账户管理</p>
+        </div>
+    </div>
+    <div class="form">
+        <div class="recharge" ng-class="{hide: !user.money.uiRecharge}">
+            <p>注资金额（元）：</p>
+            <input type="text" ng-model="user.money.recharge">
+            <div class="btn" ng-click="pay();">充值</div>
+        </div>
+    </div>
+    <div class="download">
+        <a href="">下载交易软件</a>
+    </div>
+</div>

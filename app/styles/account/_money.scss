@@ -1,0 +1,91 @@
+.wd-money {
+    width: $min-page-width;
+    margin: 0 auto;
+    .header {
+        .logo {
+            @include wd-image('logo-black.png');
+            float: left;
+            cursor: pointer;
+        }
+        .toolbar {
+            float: right;
+            .logout-btn {
+                border-radius: 30px;
+                background-color: $standard-blue;
+                margin-right: 40px;
+                margin-left: 30px;
+                width: 50px;
+            }
+        }
+    }
+    .statistics {
+        text-align: center;
+        margin-top: 40px;
+        .block {
+            display: inline-block;
+            margin: 0px 10px;
+            width: 140px;
+            p {
+                width: 100%;
+                text-align: center;
+                font-weight: 600;
+                &.title {
+                    margin-bottom: 10px;
+                }
+                &.up {
+                    color: $standard-red;
+                }
+                &.down {
+                    color: $standard-green;
+                }
+            }
+        }
+    }
+    .btns-list {
+        margin-top: 50px;
+        text-align: center;
+        .block {
+            display: inline-block;
+            border: 1px solid $standard-deep-gray;
+            padding: 25px 20px 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0px 40px;
+            text-align: center;
+            width: 100px;
+            div {
+                display: inline-block;
+            }
+            &:hover {
+                @include opacity(0.6);
+                @include transition(opacity, 0.4s);
+            }
+            &:active {
+                @include opacity(1);
+            }
+            p {
+                margin-top: 20px;
+            }
+            .in {
+                @include wd-image('up.png');
+            }
+            .out {
+                @include wd-image('down.png');
+            }
+            .setting {
+                @include wd-image('setting.png');
+            }
+        }
+    }
+    .form {
+        .recharge {
+            @include transition(all, 0.4s);
+        }
+        text-align: center;
+        margin-top: 35px;
+    }
+    .download {
+        padding-left: 150px;
+        margin-top: 100px;
+    }
+}

@@ -1,0 +1,72 @@
+$wd-loading-background-color: #fff;
+$wd-loading-foreground-color: #000;
+.wd-loading {
+    $width: 48px;
+    $dot-width: 9px;
+    $dot-radius: ($dot-width - 1px) / 2;
+    $duration: 0.13s;
+    $n: 8;
+    position: absolute;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    margin: (-$width / 2) 0 0 (-$width / 2);
+    width:  $width;
+    height: $width;
+    @include transition(opacity, 0.4s);
+    opacity: 0.6;
+    @include transform(scale(0.6));
+
+    &.wd-loading-local {
+        position: absolute;
+    }
+
+    &.wd-loading-inline {
+        $scale: 20/48;
+        position: static;
+        @include transform(scale($scale));
+        opacity: 1;
+        display: inline-block;
+        margin: -14px;
+        line-height: 20px;
+        vertical-align: top;
+    }
+
+    &.wd-loading-hide {
+        // Hideout without display:none to keep transition.
+        top: -$width;
+        opacity: 0;
+    }
+
+    &.wd-loading-animation-pause > * {
+        @include animation-play-state(paused);
+    }
+
+    %wd-loading-dot {
+        position: absolute;
+        background-color: $wd-loading-background-color;
+        width:  $dot-width;
+        height: $dot-width;
+        @include border-radius($dot-radius);
+        @include animation-duration($duration * $n);
+        @include animation-iteration-count(infinite);
+        @include animation-direction(linear);
+    }
+
+    @for $i from 1 through $n {
+        & > :nth-child(#{$i}) {
+            @extend %wd-loading-dot;
+            left: $width / 2 - cos(pi() * 2 / $n * $i) * $width / 2 - $dot-width / 2;
+            top:  $width / 2 - sin(pi() * 2 / $n * $i) * $width / 2 - $dot-width / 2;
+            @include animation-name(wd-loading);
+            @include animation-delay((-1 + $i) * $duration);
+        }
+    }
+}
+
+@include keyframes (wd-loading) {
+    0%   { background-color: $wd-loading-foreground-color; }
+    100% { background-color: $wd-loading-background-color; }
+}
+

@@ -1,0 +1,122 @@
+.wd-index {
+    margin: 0px auto;
+    .up-part {
+        @include wd-image('index-bg.jpg');
+        background-size: cover;
+        width: 100%;
+        height: 640px;
+        position: relative;
+        .header {
+            .logo {
+                @include wd-image('logo-white.png');
+                float: left;
+                margin-left: 40px;
+                cursor: pointer;
+            }
+            .toolbar {
+                float: right;
+                .phone-num {
+                    color: $standard-blue-green;
+                }
+                .word {
+                    color: #fff;
+                    border-left: 1px solid $standard-white;
+                    height: 30px;
+                    line-height: 30px;
+                    margin-left: 15px;
+                    padding-left: 15px;
+                    cursor: pointer;
+                }
+                .login-btn {
+                    width: 50px;
+                    border-radius: 30px;
+                    background-color: $standard-blue;
+                    margin-right: 40px;
+                    margin-left: 30px;
+                }
+            }
+        }
+        .open-form {
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            margin-top: -210px;
+            h1 {
+                color: $standard-white;
+                font-size: 44px;
+                font-weight: 300;
+            }
+            h2 {
+                color: $standard-gray;
+                font-size: 22px;
+            }
+            .form {
+                margin: 15px auto 0px auto;
+                padding: 40px 0px 25px 0px;
+                width: 408px;
+                border-radius: 5px;
+                text-align: center;
+                background-color: $standard-black;
+                .tip {
+                    font-size: 15px;
+                    color: $standard-gray;
+                    margin-top: 10px;
+                    a {
+                        text-decoration: underline;
+                        font-size: 15px;
+                        color: $standard-gray;
+                    }
+                }
+                input {
+                    text-align: center;
+                    margin-bottom: 16px;
+                    width: 320px;
+                    height: 40px;
+                    line-height: 40px;
+                    font-size: 32px;
+                    /*letter-spacing: 5px;*/
+                }
+                .btn {
+                    margin-top: 3px;
+                    width: 312px;
+                    height: 34px;
+                    line-height: 34px;
+                    font-size: 22px;
+                }
+                p.error {
+                    font-size: 20px;
+                    display: block;
+                }
+            }
+        }
+    }
+    .down-part {
+        padding-top: 50px;
+        height: 640px;
+        .item {
+            text-align: center;
+            h1 {
+                font-size: 30px;
+            }
+            h2 {
+                font-size: 16px;
+                margin-top: 8px;
+                margin-bottom: 30px;
+            }
+            .image {
+                @include wd-image('mac.png');
+                text-align: center;
+                margin: 0px auto;
+            }
+        }
+    }
+    .loading {
+        background-color: $standard-white;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+    }
+}

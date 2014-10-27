@@ -1,0 +1,18 @@
+#tigerwitRegisterSucc {
+    .container-module {
+        padding-bottom: 100px;
+        .icon-succ-lg {
+            margin-bottom: 20px;
+        }
+        p {
+            color: $text-title-color;
+            font-size: $font-size-large;
+        }
+        .wrapper-btn {
+            margin-top: 20px;
+            .btn {
+                margin-right: 30px;
+            }
+        }
+    }
+}

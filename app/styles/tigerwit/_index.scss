@@ -1,0 +1,43 @@
+#tigerwitIndex {
+   .container-form {
+        padding-top: 40px;
+        .form-inline {
+            width: 50%;
+            text-align: center;
+            .form-control {
+                height: 44px;
+                width: 220px;
+            }
+            .btn {
+                padding: 11px 12px;
+            }
+        }
+    }
+    .row-signin {
+      .btn-magnet-lf {
+            margin-left: -5px;
+      }
+    }
+    .contact-lg {
+        color: $standard-white;
+        font-size: $font-size-large;
+        line-height: 20px;
+        padding: 15px 0;
+    }
+    .carousel {
+        border-bottom: 1px solid $brand-primary;
+        .carousel-inner .container {
+            padding: 0;
+        }
+    }
+
+    .marketing{
+        margin-top: 50px;
+        h3 {
+            color: $text-title-color;
+        }
+        .marketing-text {
+            color: $text-content-color;
+        }
+    }
+}

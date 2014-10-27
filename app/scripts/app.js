@@ -9,13 +9,17 @@
  * Main module of the application.
  */
 angular
-.module('tigerwitApp', 
+.module('tigerwitApp',
 ['ngCookies', 'ngResource', 'ngRoute', 'ngSanitize'])
 .config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
 $routeProvider
     .when('/index', {
-        templateUrl: 'views/account/index.html',
-        controller: 'registerCtrl'
+        templateUrl: 'views/web/index.html',
+        controller: 'wdWebMarketingController'
+    })
+    .when('/personal', {
+        templateUrl: 'views/personal/index.html',
+        controller: 'wdWebPersonalController'
     })
     .when('/login', {
         templateUrl: 'views/account/login.html',
@@ -25,9 +29,12 @@ $routeProvider
         templateUrl: 'views/account/register.html',
         controller: 'registerCtrl'
     })
+    .when('/register_succ', {
+        templateUrl: 'views/account/register_succ.html'
+    })
     .when('/money', {
         templateUrl: 'views/account/money.html',
-        controller: 'moneyCtrl'        
+        controller: 'moneyCtrl'
     })
     .otherwise({
         redirectTo: '/index'
@@ -59,4 +66,26 @@ $routeProvider
             // }
         };
     }]);
+}])
+.controller("wdLayoutController", ['$scope', 'wdAccount', function ($scope, wdAccount) {
+    $scope.login = {
+        phone: '',
+        password: '',
+        error_msg: ''
+    };
+
+    $scope.login = function() {
+        $scope.login.uiLoginError = '';
+        wdAccount.login($scope.login).then(function(data) {
+            if (data.is_succ) {
+                $location.path('/register');
+            } else {
+                $scope.login.uiLoginError = data.error_msg;
+            }
+        }, function(data) {
+            console.log(data);
+            $scope.login.uiLoginError = '登录失败';
+        });
+    };
+
 }]);

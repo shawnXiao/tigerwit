@@ -1,0 +1,95 @@
+//
+// Utility classes
+// --------------------------------------------------
+
+
+// Floats
+// -------------------------
+
+.clearfix {
+  @include clearfix();
+}
+.center-block {
+  @include center-block();
+}
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}
+
+
+// Toggling content
+// -------------------------
+
+// Note: Deprecated .hide in favor of .hidden or .sr-only (as appropriate) in v3.0.1
+.hide {
+  display: none !important;
+}
+.show {
+  display: block !important;
+}
+.invisible {
+  visibility: hidden;
+}
+
+
+// Hide from screenreaders and browsers
+//
+// Credit: HTML5 Boilerplate
+
+.hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.logo{
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 140px;
+    height: 40px;
+}
+.logo-color {
+    @extend .logo;
+    @include wd-image('logo-color.png');
+}
+
+.logo-gray {
+    @extend .logo;
+    @include wd-image('logo-gray.png');
+}
+
+.social-list {
+    > li {
+        display: inline-block;
+        .social-item {
+            display: block;
+            width: 24px;
+            height: 24px;
+            @include wd-image-url('icon-social.png');
+        }
+        .social-item-wechart {
+            @extend .social-item;
+                background-position: 0 0;
+            &:hover {
+                background-position: 0 -27px;
+            }
+        }
+        .social-item-weibo {
+            @extend .social-item;
+                background-position: -28px 0;
+            &:hover {
+                background-position: -28px -27px;
+            }
+        }
+        .social-item-email {
+            @extend .social-item;
+            background-position: -54px 0;
+            &:hover {
+                background-position: -54px -27px;
+            }
+        }
+    }
+}

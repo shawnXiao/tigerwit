@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.factory('wdConfig', 
-['$rootScope', '$location', 
+.factory('wdConfig',
+['$rootScope', '$location',
 function($rootScope, $location) {
     return {
         apiUrl: '/api/v1',
@@ -10,5 +10,5 @@ function($rootScope, $location) {
         webSocketUrl: 'ws://' + $location.host() + '/api/v1',
         httpTimeout: 10000
     };
-    // 结束 
+    // 结束
 }]);

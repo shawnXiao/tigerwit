@@ -2,16 +2,36 @@
 // bower:scss
 // endbower
 
-/* common */
-@import "common/base";
-@import "common/background-image";
-@import "common/loading";
-@import "common/place-holder";
-@import "common/header";
-@import "../base/webuploader-0.1.5/webuploader";
+// Reset
+@import "common/normalize";
 
-/* account */
-@import "account/index";
-@import "account/login";
+// Core variables and mixins
+@import "common/variables";
+@import "common/mixins";
+
+// Core CSS
+@import "common/utilities";
+@import "common/type";
+@import "common/scaffolding";
+@import "common/grid";
+@import "common/navs";
+@import "common/forms";
+@import "common/buttons";
+
+// Common Components
+@import "common/navbar";
+@import "common/layout";
+@import "common/dropdown";
+
+// Javascript Components
+@import "common/carousel";
+
+// Module scss
+@import "tigerwit/index";
 @import "account/register";
-@import "account/money";
+@import "account/register_succ";
+@import "personal/index";
+
+// Third party
+
+@import "../base/webuploader-0.1.5/webuploader";

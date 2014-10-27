@@ -1,0 +1,30 @@
+p {
+    margin: 0 0 ($line-height-computed / 2);
+}
+
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-justify {
+    text-align: justify;
+}
+.text-nowrap {
+    white-space: nowrap;
+}
+
+.bg-primary {
+    color: #fff;
+}
+
+@include bg-variant('.bg-primary', $brand-primary);
+@include bg-variant('.bg-info', $gray-lighter);

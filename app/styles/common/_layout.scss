@@ -1,0 +1,50 @@
+.doc1 {
+    .navbar-lang {
+        margin-left: 150px;
+        top: 14px;
+    }
+    .navbar-tail {
+        .btn-magnet-lf {
+            margin-left: -5px;
+        }
+        .help-tip {
+            position: absolute;
+        }
+    }
+    .module {
+        background-color: $module-bg;
+        padding: 30px 0;
+        .container-module {
+            padding-left: 0;
+            @media (min-width: $screen-lg-min) {
+                width: $container-md;
+            }
+            .container {
+                width: 100%;
+            }
+            background-color: $module-sub-bg;
+            border: 1px solid #e7e7e7;
+            .h2 {
+                    background-color: $standard-white;
+                    padding-left: 70px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid #f3f3f3;
+            }
+        }
+    }
+
+    .ft {
+        margin: 30px auto 80px auto;
+        h4 {
+            color: $text-title-color;
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            li {
+                list-style: none;
+                color: $text-content-color;
+            }
+        }
+    }
+}

@@ -1,56 +1,111 @@
-<div class="wd-register" ng-keyDown="keyDown($event);">
-    <div class="header wd-header">
-        <a href="#/" class="logo"></a>
-        <div class="toolbar">
-            <a href="#/login" class="login-btn btn">登录</a>
-        </div>
-    </div>
-    <div class="all-form">
-        <div class="item">
-            <div class="item-header">1. 验证手机号</div>
-            <div class="item-body verify-phone" ng-class="{hide: step !== 1}">
-                <input autofocus ng-class="{error: signIn.uiVerifyCodeError}" type="text" wd-place-holder placeholder="短信验证码" ng-model="signIn.verify_code">
-                <a ng-click="verifyPhone();">重新发送</a>
-                <br>
-                <p class="tip" ng-class="{error: signIn.uiVerifyCodeError}">请输入您所收到的短信验证码</p>
-                <br>
-                <div class="btn" ng-click="nextStep();">下一步</div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="item-header" ng-class="{hide: step < 2}">2. 补全个人信息</div>
-            <div class="item-body person-info" ng-class="{hide: step !== 2}">
-                <input ng-class="{error: person.uiRealNameError}" type="text" wd-place-holder placeholder="真实姓名" ng-model="person.real_name">
-                <br>
-                <input ng-class="{error: person.uiIdNoError}" type="text" wd-place-holder placeholder="身份证号码" ng-model="person.id_no">
-                <br>
-                <input ng-class="{error: person.uiEmailError}" type="text" wd-place-holder placeholder="电子邮件" ng-model="person.email">
-                <br>
-                <input ng-class="{error: person.uiQQError}" type="text" wd-place-holder placeholder="QQ 号码" ng-model="person.qq">
-                <br>
-                <input type="text" wd-place-holder placeholder="邀请码" ng-model="person.invite_code">
-                <br>
-                <p class="tip">输入邀请码可获得额外 <span class="strong">200 美元</span> 赠金</p>
-                <br>
-                <p class="error">{{person.uiRealNameError || person.uiIdNoError || person.uiEmailError || person.uiQQError}}</p>
-                <br>
-                <div class="btn" ng-click="nextStep();">下一步</div>
-                <br>
-            </div>
-            <div ng-if="person.real_name" class="item-body person-info-show" ng-class="{hide: step !== 3}">
-                <div class="wrapper">
-                    <p class="title">真实姓名</p><p class="word">{{person.real_name}}</p><br>
-                    <p class="title">身份证号码</p><p class="word">{{person.id_no}}</p><br>
-                    <p class="title">电子邮件</p><p class="word">{{person.email}}</p><br>
-                    <p class="title">QQ 号码</p><p class="word">{{person.qq}}</p><br>
+<div id="tigerwitRegister" class="row module" ng-keyDown="keyDown($event);">
+    <div class="container container-module">
+
+        <!--注册虚拟账户需要的信息 start-->
+        <div class="container" ng-class="{'hide': (registType === 'virtual2real' || signIn.success == true)}">
+              <h2 class="h2">开通模拟账户</h2>
+              <div class="form-group clearfix">
+                <label for="inputNickname" class="col-sm-2 control-label text-right">昵称：</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="inputNickname"
+                    ng-model="signIn.username"
+                    data-validate="length:4-30 text:en-num-sym"
+                    placeholder="昵称" focus-tip='nickname'>
                 </div>
-                <p class="tip">填写邀请码可额外获得 <span class="strong">200 美元</span> 增金</p>
-            </div>
-        </div>
-        <div class="item">
-            <div class="item-header" ng-class="{hide: step < 3}">3. 提交实名认证</div>
-            <div class="item-body real-info" ng-class="{hide: step !== 3}">
-                <div class="upload">
+                <div class="col-sm-5" focus-tip-type="nickname">
+                  <p class="bg-info help-tip help-tip-single" >4-30个字符，由中英文和数字组成</p>
+                </div>
+              </div>
+              <div class="form-group clearfix">
+                <label for="inputPhone" class="col-sm-2 control-label text-right">验证手机：</label>
+                <div class="col-sm-4">
+                    <input type="phone" class="form-control" id="inputPhone"
+                    data-validate="phone"
+                    placeholder="电话号码" focus-tip="phone" ng-model="signIn.phone">
+                </div>
+                <div class="col-sm-5" focus-tip-type="phone">
+                  <p class="bg-info help-tip help-tip-single">完成验证后，您可以用手机号登录和找回密码</p>
+                </div>
+              </div>
+              <div class="form-group clearfix">
+                <label for="inputVerify" class="col-sm-2 control-label text-right">短信验证码：</label>
+                <div class="col-sm-4">
+                    <div class="col-sm-7 input-verify" focus-tip-type="verify_code">
+                        <input type="text" class="form-control"
+                        data-validate="required"
+                        id="inputVerify" placeholder="短信验证码" ng-model="signIn.verify_code">
+                    </div>
+                    <div class="col-sm-4">
+                        <button  ng-click="verifyPhone();" class="btn btn-info"
+                            ng-class="isDisable">{{countDownNum}}{{countDownText}}</button>
+                    </div>
+                </div>
+              </div>
+             <div class="form-group clearfix">
+                 <label for="inputEmail"
+                    ng-model="signIn.email"
+                     class="col-sm-2 control-label text-right">邮件地址：</label>
+                <div class="col-sm-4">
+                    <input type="email" class="form-control" id="inputEmail" placeholder="邮件地址"
+                    data-validate="option email"
+                    ng-model="signIn.email" focus-tip="email">
+                </div>
+                <div class="col-sm-5" focus-tip-type="email">
+                  <p class="bg-info help-tip help-tip-single">您将收到价值 150 元的外汇电子入门教材</p>
+                </div>
+              </div>
+              <div class="form-group clearfix">
+                <label for="inputPassword" class="col-sm-2 control-label text-right">密码：</label>
+                <div class="col-sm-4">
+                    <input type="password" class="form-control"
+                    data-validate="length:6-15 password"
+                    id="inputPassword" placeholder="密码" ng-model="signIn.password" focus-tip="password">
+                </div>
+                <div class="col-sm-5" focus-tip-type="password">
+                  <p class="bg-info help-tip">6-15位字符，可由大写字母，小写字母，数字，符号组成，且至少包含其中2项</p>
+                </div>
+              </div>
+              <div class="form-group clearfix">
+                <label for="inputPasswordConfirm" class="col-sm-2 control-label text-right">再次确认密码：</label>
+                <div class="col-sm-4">
+                  <input type="password" class="form-control" id="inputPasswordConfirm" placeholder="再次确认密码"  ng-model="signIn.passwordConfirm" focus-tip="passwordconfirm">
+                </div>
+                <div class="col-sm-5" focus-tip-type="passwordconfirm">
+                  <p class="bg-info help-tip help-tip-single">请再次输入密码</p>
+                </div>
+              </div>
+
+              <div class="form-group clearfix">
+                <div class="col-sm-offset-2 col-sm-4 text-center">
+                  <button type="submit" ng-if="registType != 'real'" ng-click="registVirtual();" class="btn btn-primary btn-ex-lg">开通模拟账户</button>
+                  <button type="submit" ng-if="registType === 'real'" ng-click="registVirtual();" class="btn btn-primary btn-lg">下一步</button>
+                </div>
+                <div class="col-sm-5" ng-class="{'show': error_msg !== ''}">
+                    <p class="bg-info help-tip help-tip-single">{{error_msg}}</p>
+                </div>
+              </div>
+        </div><!--注册虚拟账户需要的信息 end -->
+
+        <!--注册真实账户需要的信息 start -->
+        <div class="container real-info hide" ng-class="{'show': (registType === 'virtual2real') || (registType != 'real' && verified === false)}">
+              <h2 class="h2">开通真实账户</h2>
+              <div class="form-group clearfix">
+                <label for="inputName" class="col-sm-2 control-label text-right">真实姓名：</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" id="inputName" placeholder="真实姓名"  ng-model="person.real_name">
+                </div>
+              </div>
+              <div class="form-group clearfix">
+                <label for="inputIDNumber" class="col-sm-2 control-label text-right">身份证号：</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control"
+                    data-validate="id"
+                    id="inputIDNumber" placeholder="身份证号"  ng-model="person.id_no">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputIDNumber" class="col-sm-2 control-label text-right">上传身份证：</label>
+                <div class="upload col-sm-9">
                     <div ng-class="{error: person.uiFrontImageStatus === 3, success: person.uiFrontImageStatus === 2}" class="front" wd-upload-form data-face="front">
                     </div>
                     <div ng-class="{error: uiBackImageStatus === 3, success: person.uiBackImageStatus === 2}" class="back" wd-upload-form data-face="back">
@@ -66,21 +121,12 @@
                         <p ng-if="person.uiBackImageStatus === 3" class="status error">{{person.uiBackImageError}}</p>
                     </div>
                 </div>
-                <div ng-if="(person.uiFrontImageStatus === 2) && (person.uiBackImageStatus === 2)" class="btn" ng-click="nextStep();">开通账户</div>
-            </div>
-            <div class="item-body success" ng-class="{hide: step !== 4}">
-                <div class="tip">
-                    <p>恭喜，您已经成功开通交易账户，<span class="strong">700 美元</span> 赠金已打入您账户</p>
-                    <br>
-                    <p>下载客户端即可开始交易</p>
+              </div>
+              <div class="form-group clearfix">
+                <div class="col-sm-offset-2 col-sm-8 text-center">
+                  <button type="submit"  ng-click="setRealInfo();" class="btn btn-primary btn-ex-lg">开通真实账户</button>
                 </div>
-                <div class="client">
-                    <div class="mt4"></div>
-                    <div class="android"></div>
-                    <div class="qrcode"></div>
-                </div>
-                <div class="btn" ng-click="nextStep();">管理账号</div>
-            </div>
-        </div>
+              </div>
+        </div><!--注册真实账户需要的信息 end -->
     </div>
 </div>

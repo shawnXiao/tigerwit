@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.controller('moneyCtrl',
+.controller('wdWebPersonalController',
 ['$scope', 'wdAccount', '$timeout', '$location', 'wdAccountMoney',
 function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
     var equitySocket;
@@ -16,23 +16,11 @@ function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
     $scope.logout = function() {
         wdAccount.logout().then(function(data) {
             if (data.is_succ) {
-                $location.path('/index');
+                //$location.path('/index');
             }
         }, function() {
         });
     };
-
-    wdAccount.check().then(function(data) {
-        if (data.is_succ) {
-            $scope.loading = false;
-            getInfo();
-        } else {
-            $location.path('/index');
-        }
-    }, function() {
-        $location.path('/index');
-    });
-
     equitySocket = wdAccountMoney.equitySocket();
     equitySocket.onmessage = function(e) {
         var data = JSON.parse(e.data);

@@ -1,1 +1,77 @@
-<div id="tigerwitIndex" class="wd-index" ng-keydown="keyDown($event)"> <!--carousel start--> <div class="row"> <div id="forexCarousel" class="carousel slide" interval="myInterval" wd-carousel> <div ng-repeat="slide in slides" active="slide.active" wd-slide> <img ng-src="http://placehold.it/1170x350&text={{slide.image}}" alt="slide.image"> <div class="carousel-caption"> <h2>Test {{$index}}</h2> </div> </div> </div> </div> <!--carousel end--> <!--form start--> <div class="row row-signin" ng-if="isLogin === false"> <div class="container container-form"> <form class="form-inline center-block" role="form"> <div class="form-group"> <input type="phone" name="phone" ng-model="signIn.phone" data-validate="required phone" placeholder="您的手机号码" class="form-control input-magnet-rt" wd-place-holder autofocus> </div> <button type="submit" class="btn btn-primary btn-magnet-lf" ng-click="goToRegister();">快速开通模拟账号 &gt;</button> <p class="bg-info help-tip help-tip-single hide" ng-class="{'show': error_msg !== ''}">{{error_msg}}</p> </form> </div> </div><!--form end--> <!--marketing start--> <div class="container marketing"> <div class="row"> <div class="col-lg-3 text-center"> <img class="" src="/images/marketing/4_07.png" alt=""> <h3>人人都会"玩"</h3> <ul class="text-left marketing-text"> <li>上百位投资高手“教”你玩</li> <li>上百位投资高手“教”你玩,上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩</li> <li>上百位投资高手“教”你玩</li> </ul> </div> <div class="col-lg-3 text-center"> <img class="" src="/images/marketing/4_09.png" alt=""> <h3>人人都"玩"的起</h3> <ul class="text-left marketing-text"> <li>上百位投资高手“教”你玩</li> <li>上百位投资高手“教”你玩,上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩</li> <li>上百位投资高手“教”你玩</li> </ul> </div> <div class="col-lg-3 text-center"> <img class="" src="/images/marketing/4_11.png" alt=""> <h3>灵活智能的平台</h3> <ul class="text-left marketing-text"> <li>上百位投资高手“教”你玩,上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩</li> <li>上百位投资高手“教”你玩</li> <li>上百位投资高手“教”你玩</li> </ul> </div> <div class="col-lg-3 text-center"> <img class="" src="/images/marketing/4_13.png" alt=""> <h3>大家都在用</h3> <ul class="text-left marketing-text"> <li>上百位投资高手“教”你玩,上“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩</li> <li>上百位投资高手“教”你玩</li> <li>上百位投资高手“教”你玩</li> </ul> </div> </div> </div><!--marketing end--> </div> <hr class="featurette-divider">
+<div id="tigerwitIndex" class="wd-index" ng-keyDown="keyDown($event)">
+    <!--carousel start-->
+    <div class="row">
+        <div id="forexCarousel" class="carousel slide" interval="myInterval" wd-carousel>
+            <div ng-repeat="slide in slides" active="slide.active" wd-slide>
+                <img ng-src="http://placehold.it/1170x350&text={{slide.image}}" alt="slide.image" />
+                <div class="carousel-caption">
+                    <h2>Test {{$index}}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--carousel end-->
+
+    <!--form start-->
+    <div class="row row-signin" ng-if="isLogin === false">
+        <div class="container container-form">
+            <form class="form-inline center-block" role="form">
+                <div class="form-group">
+                    <input type="phone" name="phone"
+                        ng-model="signIn.phone"
+                        data-validate="required phone"
+                        placeholder="您的手机号码" class="form-control input-magnet-rt" wd-place-holder autofocus>
+                </div>
+                <button type="submit" class="btn btn-primary btn-magnet-lf" ng-click="goToRegister();">快速开通模拟账号 &gt;</button>
+                <p class="bg-info help-tip help-tip-single hide" ng-class="{'show': error_msg !== ''}">{{error_msg}}</p>
+            </form>
+        </div>
+    </div><!--form end-->
+
+    <!--marketing start-->
+    <div class="container marketing">
+        <div class="row">
+            <div class="col-lg-3 text-center">
+                <img class="" src="/images/marketing/4_07.png" alt="" />
+                <h3>人人都会"玩"</h3>
+                <ul class="text-left marketing-text">
+                    <li>上百位投资高手“教”你玩</li>
+                    <li>上百位投资高手“教”你玩,上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩</li>
+                    <li>上百位投资高手“教”你玩</li>
+                </ul>
+            </div>
+            <div class="col-lg-3 text-center">
+                <img class="" src="/images/marketing/4_09.png" alt="" />
+                <h3>人人都"玩"的起</h3>
+                <ul class="text-left marketing-text">
+                    <li>上百位投资高手“教”你玩</li>
+                    <li>上百位投资高手“教”你玩,上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩</li>
+                    <li>上百位投资高手“教”你玩</li>
+                </ul>
+            </div>
+
+
+            <div class="col-lg-3 text-center">
+                <img class="" src="/images/marketing/4_11.png" alt="" />
+                <h3>灵活智能的平台</h3>
+                <ul class="text-left marketing-text">
+                    <li>上百位投资高手“教”你玩,上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩</li>
+                    <li>上百位投资高手“教”你玩</li>
+                    <li>上百位投资高手“教”你玩</li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 text-center">
+                <img class="" src="/images/marketing/4_13.png" alt="" />
+                <h3>大家都在用</h3>
+                <ul class="text-left marketing-text">
+                    <li>上百位投资高手“教”你玩,上“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩上百位投资高手“教”你玩</li>
+                    <li>上百位投资高手“教”你玩</li>
+                    <li>上百位投资高手“教”你玩</li>
+                </ul>
+            </div>
+
+        </div>
+    </div><!--marketing end-->
+</div>
+<hr class="featurette-divider">

@@ -216,7 +216,7 @@ angular.module('tigerwitApp')
     replace: true,
     controller: 'wdCarouselController',
     require: 'wdCarousel',
-    templateUrl: 'views/template/carousel/carousel.html',
+    templateUrl: 'views/template/carousel.html',
     scope: {
       interval: '=',
       noTransition: '=',
@@ -272,7 +272,7 @@ function CarouselDemoCtrl($scope) {
     restrict: 'EA',
     transclude: true,
     replace: true,
-    templateUrl: 'views/template/carousel/slide.html',
+    templateUrl: 'views/template/slide.html',
     scope: {
       active: '=?'
     },

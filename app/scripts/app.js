@@ -29,6 +29,10 @@ $routeProvider
         templateUrl: 'views/account/register.html',
         controller: 'registerCtrl'
     })
+    .when('/reset', {
+        templateUrl: 'views/account/reset_password.html',
+        controller: 'registerCtrl'
+    })
     .when('/register_succ', {
         templateUrl: 'views/account/register_succ.html'
     })

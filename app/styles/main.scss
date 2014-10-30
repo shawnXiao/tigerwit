@@ -22,6 +22,7 @@
 @import "common/navbar";
 @import "common/layout";
 @import "common/dropdown";
+@import "common/hd_order";
 
 // Javascript Components
 @import "common/carousel";
@@ -29,7 +30,9 @@
 // Module scss
 @import "tigerwit/index";
 @import "account/register";
+@import "account/login";
 @import "account/register_succ";
+@import "account/reset_password";
 @import "personal/index";
 
 // Third party

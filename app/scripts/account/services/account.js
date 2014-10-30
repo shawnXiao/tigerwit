@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.factory('wdAccount', 
+.factory('wdAccount',
 ['$rootScope', '$http', 'wdStorage',
 function($rootScope, $http, wdStorage) {
     return {
@@ -14,6 +14,22 @@ function($rootScope, $http, wdStorage) {
                     phone: String(num)
                 }
             });
+        },
+        /**
+        * 验证验证码的正确性
+        *
+        * @method verifyCode
+        * @param {Object} {
+        *   phone:
+        *   verify_code:
+        * }
+        * @return {Object} {
+        *   "is_succ": true / false
+        *   "error_msg": ""
+        * }
+        */
+        verifyCode: function(opts) {
+            return $http.post('verifycod', opts)
         },
         register: function(opts) {
             return $http.post('/register', opts);
@@ -42,5 +58,5 @@ function($rootScope, $http, wdStorage) {
             return $http.get('/get_info');
         }
     };
-    // 结束 
+    // 结束
 }]);

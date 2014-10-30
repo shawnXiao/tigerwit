@@ -1,8 +1,5 @@
 #tigerwitRegister {
     .container-module {
-        .col-sm-5 {
-            display: none;
-        }
         .form-group {
             .control-label {
                 top: 10px;
@@ -10,9 +7,35 @@
             .input-verify {
                 padding-left: 0;
             }
+            .register-notice {
+                label {
+                    font-weight: normal;
+                }
+                a {
+                    color: $brand-info;
+                }
+            }
         }
     }
     .real-info {
+        .real-info-input {
+            margin-top: 57px;
+        }
+        .real-info-succ {
+            margin: 120px auto;
+        }
+        .risk-assessment {
+            margin: 90px px 0 150px;
+            input {
+                margin-left: 5px;
+            }
+            label {
+                font-weight: normal;
+            }
+            p {
+                font-weight: bolder;
+            }
+        }
         .upload {
             padding-left: 12px;
             .front {

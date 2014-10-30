@@ -11,7 +11,7 @@ $gray-lightest:           lighten(#000, 96%) !default; // #eee
 $brand-primary:         #fe8a0f !default;
 $brand-success:         #5cb85c !default;
 $brand-info:            #489ecf !default;
-$brand-warning:         #f0ad4e !default;
+$brand-warning:         #feb96f!default;
 $brand-danger:          #d9534f !default;
 
 $standard-black: #1f1f23;
@@ -357,17 +357,18 @@ $state-success-text:             #3c763d !default;
 $state-success-bg:               #dff0d8 !default;
 $state-success-border:           darken(adjust-hue($state-success-bg, -10), 5%) !default;
 
-$state-info-text:                #31708f !default;
-$state-info-bg:                  #d9edf7 !default;
-$state-info-border:              darken(adjust-hue($state-info-bg, -10), 7%) !default;
+
+$state-info-text:                #969696 !default;
+$state-info-bg:                  #edf8ff !default;
+$state-info-border:              #c9e9ff  !default;
 
 $state-warning-text:             #8a6d3b !default;
 $state-warning-bg:               #fcf8e3 !default;
 $state-warning-border:           darken(adjust-hue($state-warning-bg, -10), 5%) !default;
 
-$state-danger-text:              #a94442 !default;
-$state-danger-bg:                #f2dede !default;
-$state-danger-border:            darken(adjust-hue($state-danger-bg, -10), 5%) !default;
+$state-danger-text:              #969696 !default;
+$state-danger-bg:                #ffeded !default;
+$state-danger-border:            #ffcac9 !default;
 
 //** Horizontal line color.
 $hr-border:                   $gray-lighter !default;

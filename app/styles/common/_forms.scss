@@ -371,7 +371,7 @@ input[type="checkbox"] {
   @include form-control-validation($state-warning-text, $state-warning-text, $state-warning-bg);
 }
 .has-error {
-  @include form-control-validation($state-danger-text, $state-danger-text, $state-danger-bg);
+  @include form-control-validation($state-danger-text, $state-danger-border, $state-danger-bg);
 }
 
 
@@ -394,12 +394,13 @@ input[type="checkbox"] {
 }
 
 .help-tip {
-    display: block;
+    display: none;
     margin: 0;
     height: 36px;
     padding: 0 5px;
     font-size: 12px;
-    border: 1px solid $gray-lightest;
+    background-color: $state-info-bg;
+    border: 1px solid $state-info-border;
     &-single {
         line-height: 36px;
     }

@@ -2,8 +2,8 @@
 
 angular.module('tigerwitApp')
 .controller('registerCtrl',
-['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval',
-function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval) {
+['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval', '$rootScope',
+function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval, $rootScope) {
 
     // 通过 query 中的 type 字段来标示注册的类型，默认情况下为
     // 注册虚拟账户
@@ -12,10 +12,21 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // type: virtual2real 虚拟账户转变成真实账户
     var searchObj = $location.search();
     $scope.registType = searchObj.type || "";
+    $rootScope.hideNav = true;
 
+    // 设置真实信息的步骤表示
+    $scope.realInfo = {
+        step: 1
+    };
+
+    // 重置密码步骤
+    $scope.resetInfo = {
+        step: 1
+    };
 
     // 注册虚拟账户
     $scope.signIn = {
+        notice: true,
         verify_code: '',
         phone: '',
         password: '',
@@ -36,28 +47,27 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 进入时的逻辑
     wdAccount.check().then(function(data) {
         data.is_succ = false;
-        console.log(data);
         if (data.is_succ) {
             wdAccount.getInfo().then(function (data) {
-                console.log(data);
                 $scope.verified = data.verified;
             });
             $scope.isLogin = true;
             // 已经完成注册申请过程
             $location.path('/personal');
         }
-
     }, function(data) {});
 
+    // 注册虚拟账号
     $scope.registVirtual = function () {
-        if (validateInput() && ($scope.signIn.password === $scope.signIn.passwordConfirm)) {
+        if (validateInput() && confirmPassword()) {
             register();
         }
     };
 
     // 将虚拟账户转变成真实账户
     $scope.uploadUrl = wdConfig.apiUrl + '/upload';
-    $scope.person = {
+
+    $scope.realInfo.person = {
         real_name: '',
         invite_code: '',
         // 上传状态：0、未上传；1、上传中，2、上传成功；3、上传失败；
@@ -67,17 +77,26 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
         uiBackImageError: ''
     };
 
+    // 设置真实账号信息
     $scope.setRealInfo = function () {
-        if (validateInput()) {
-            setInfo().then(function(data) {
-                if (data.is_succ) {
-                    $location.path("/personal").search("")
-                } else {
-                    console.log("error");
-                }
-            });
-        }
+        $scope.realInfo.step = 2;
+        /*
+         *if (validateInput()) {
+         *    setInfo().then(function(data) {
+         *        if (data.is_succ) {
+         *            $scope.realInfo.step = 2;
+         *        } else {
+         *            console.log("error");
+         *        }
+         *    });
+         *}
+         */
     };
+
+    // 发送风险鉴定
+    $scope.sendAssessment = function () {
+        $scope.realInfo.step = 3;
+    }
 
     // 发送手机验证码
     $scope.verifyPhone = function() {
@@ -85,6 +104,25 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
         coutDown();
     };
 
+    // 验证手机验证码是否正确
+    $scope.verifyCode = function () {
+        $scope.resetInfo.step = 2;
+        wdAccount.verifyCode({
+            phone: $scope.resetInfo.phone,
+            verify_code: $scope.resetInfo.verifyCode
+        }).then(function (msg) {
+            if (msg.is_succ) {
+                //$scope.resetInfo.step = 2;
+            } else {
+
+            }
+        });
+    }
+
+    // 重置密码
+    $scope.resetPassword = function () {
+        $scope.resetInfo.step = 3;
+    }
 
     $scope.keyDown = function(e) {
         if (e.keyCode !== 13) {
@@ -107,6 +145,19 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
         }
     };
 
+    function confirmPassword() {
+        if ($scope.signIn.password === $scope.signIn.passwordConfirm) {
+            return true;
+        }
+
+        var $focusTip = $('[focus-tip-type="passwordconfirm"]');
+        var $focusTipTextWrpper = $('p', $focusTip);
+        $focusTipTextWrpper.show();
+        $focusTipTextWrpper.text("两次输入密码不一致");
+        $focusTip.parent().addClass("has-error");
+        return false;
+    }
+
     function validateInput() {
         var $validateInput = $('#tigerwitRegister [data-validate]:visible');
         var valideAll = true;
@@ -115,22 +166,20 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
             var $elem = $(element);
             var validatorType = $elem.attr("data-validate");
             var validatorVal = $elem.val();
-            console.group();
-            console.log(validatorVal);
-            console.log(validatorType);
-            console.groupEnd();
-            var validateResult = wdValidator.validate(validatorType, validatorVal);
-            if (!validateResult) {
+            var validateResObj = wdValidator.validate(validatorType, validatorVal);
+            if (!validateResObj.validate_result) {
                 var focusTip = $elem.attr("focus-tip");
+
                 if (focusTip) {
-                    debugger;
-                    $('[focus-tip-type="' + focusTip + '"]').show();
-                    $('[focus-tip-type="' + focusTip + '"]').addClass("has-error");
-                } else {
-                    $elem.parent().addClass("has-error");
+                    var $focusTip = $('[focus-tip-type="' + focusTip + '"]');
+                    var $focusTipTextWrpper = $('p', $focusTip);
+                    $focusTip.show();
+                    $focusTipTextWrpper.text(validateResObj.validate_reason);
                 }
+
+                $elem.closest(".form-group").addClass("has-error");
             }
-            valideAll = valideAll && validateResult;
+            valideAll = valideAll && validateResObj.validate_result;
         });
         return valideAll;
     }

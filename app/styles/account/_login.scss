@@ -1,46 +1,30 @@
-.wd-login {
-    position: relative;
-    margin: 0px auto;
-    width: $min-page-width;
-    .header {
-        .logo {
-            @include wd-image('logo-black.png');
-            cursor: pointer;
+#tigerwitLogin {
+    h2 {
+        padding: 0;
+        margin: 0;
+        padding-left: 25px;
+        margin-bottom: 15px;
+    }
+    a {
+        color: $brand-info;
+    }
+    label {
+        font-weight: normal;
+    }
+    .box-slogan {
+        img {
+            margin-bottom: 90px;
+        }
+        p {
+            color: $text-content-color;
+            font-size: $font-size-small;
         }
     }
-    .login-form {
-        text-align: center;
-        margin: 100px auto 0px auto;
-        padding: 25px 0px 30px 0px;
-        width: 268px;
-        border-radius: 5px;
-        background-color: $standard-black;
-        input {
-            margin-bottom: 8px;
-            width: 210px;
-            text-align: center;
-        }
-        .btn {
-            width: 204px;
-            margin-top: 13px;
-        }
-        .tip {
-            margin-top: 5px;
-            font-size: 10px;
-            color: $standard-gray;
-            a {
-                font-size: 10px;
-                color: $standard-gray;
-                text-decoration: underline;
-            }
-        }
+    .box-login {
+        padding: 40px 0 10px 20px;
+        background-color: #fff;
     }
-    .loading {
-        background-color: $standard-white;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
+    .btn-primary {
+        width: 100%;
     }
 }

@@ -1,0 +1,79 @@
+.hd-order {
+    padding: 0;
+    .col-sm-4 {
+        width: 32%;
+    }
+    ol {
+        list-style-type: none;
+        padding: 0;
+        li {
+            color: #666;
+            background-color: #ddd;
+            height: 38px;
+            padding-right: 0;
+            padding-left: 8px;
+            line-height: 38px;
+            position: relative;
+            span {
+                float: left;
+                background-color: #999;
+                color: #fff;
+                border-radius: 14px;
+                width: 20px;
+                height: 20px;
+                line-height: 20px;
+                margin-top: 9px;
+                margin-right: 3px;
+                text-align: center;
+            }
+            &::after {
+                content: "";
+                position: absolute;
+                right: -13px;
+                border-top: 19px solid transparent;
+                border-right: 1px solid transparent;
+                border-bottom: 19px solid transparent;
+                border-left: 12px solid #ddd;
+                height: 38px;
+            }
+            &::before {
+                content: "";
+                position: absolute;
+                left: -13px;
+                border-top: 19px solid #ddd;
+                border-right: 1px solid #ddd;
+                border-bottom: 19px solid #ddd;
+                border-left: 12px solid transparent;
+                height: 38px;
+            }
+            &.active {
+                color: $standard-white;
+                background-color: $brand-warning;
+                &::before {
+                    border-color: $brand-warning $brand-warning $brand-warning transparent;
+                }
+                &::after {
+                    border-color: transparent transparent transparent $brand-warning;
+                }
+                span {
+                    color: #f3c892;
+                    background-color: #fff;
+                }
+            }
+            &.center{
+                margin-right: 16px;
+            }
+            &.left {
+                margin-right: 16px;
+                &::before {
+                    display: none;
+                }
+            }
+            &.right {
+                &::after {
+                    display: none;
+                }
+            }
+        }
+    }
+        }

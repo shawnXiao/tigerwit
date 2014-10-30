@@ -12,10 +12,30 @@ angular.module('tigerwitApp')
             'sym': '\\-\\_'
         },
         number: function (str, type) {
-            return !/\D/.test(str);
+            var validateResult = !/\D/.test(str);
+            var validateReason = "";
+
+            if (!validateResult) {
+                validateReason = '输入项必须为数字！';
+            }
+
+            return {
+                validate_reason: validateReason,
+                validate_result: validate_result
+            };
         },
         id: function (str) {
-            return /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(str);
+            var validateResult = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(str);
+            var validateReason = "";
+
+            if (!validateResult) {
+                validateReason = '输入的身份证号格式不正确';
+            }
+
+            return {
+                validate_reason: validateReason,
+                validate_result: validate_result
+            };
         },
         /*
         *text 书写规则: text:en-zh-sym-num, 是"或"的关系
@@ -31,7 +51,16 @@ angular.module('tigerwitApp')
             textRegStr += ']';
 
             var textReg = new RegExp(textRegStr);
-            return textReg.test(str);
+            var validateResult = textReg.test(str);
+            var validateReason = "";
+            if (!validateResult) {
+                validateReason = "输入项不符合规范！";
+            }
+
+            return {
+                validate_reason: validateReason,
+                validate_result: validateResult
+            };
         },
         /*
          *密码验证：6-15位字符，可由大写字母，小写字母，数字，符号组成，且至少包含其中2项
@@ -60,10 +89,22 @@ angular.module('tigerwitApp')
                 hasBadChar = true;
             }
 
-            if (typeCounter >= 2 && !hasBadChar) {
-                return true;
+            var validateReason = "";
+            var validateResult = true;
+            if (typeCounter < 2) {
+                validateReason = "密码必须包含大写字母，小写字母，数字和符号其中两项";
+                validateResult = false;
             }
-            return false;
+
+            if (hasBadChar){
+                validateReason = "包含非法输入项";
+                validateResult = false;
+            }
+
+            return {
+                validate_reason: validateReason,
+                validate_result: validateResult
+            };
         },
         /*
          * length 书写规则： length:start-end
@@ -72,24 +113,65 @@ angular.module('tigerwitApp')
             var lengthContent = type.split(":")[1];
             var lengthStart = lengthContent.split("-")[0];
             var lengthEnd = lengthContent.split("-")[1];
-            return lengthStart <= str.length <= lengthEnd;
+
+            var validateResult = (lengthStart <= str.length && str.length <= lengthEnd);
+            console.log(str.length);
+            console.log("validateResult", validateResult);
+            console.log(lengthStart <= str.length <= lengthEnd);
+            var validateReason = "";
+            if (!validateResult) {
+                validateReason = "输入项长度应介于 " + lengthStart + " 位和 " + lengthEnd + " 位之间";
+            }
+            return {
+                validate_reason: validateReason,
+                validate_result: validateResult
+            };
         },
         option: function (str) {
-            return true;
+            return {
+                validate_reason: "",
+                validate_result: true
+            };
         },
         required: function (str) {
+            var validateResult = false;
+            var validateReason = "";
             if (str) {
-                return true;
+                validateResult = true;
+            } else {
+                validateReason = "此项为必填项";
             }
-            return false;
+
+            return {
+                validate_reason: validateReason,
+                validate_result: validateResult
+            };
         },
         phone: function (str) {
             var phoneReg = new RegExp(this.regTypes.phone);
-            return phoneReg.test(str);
+            var validateReason = "";
+            var validateResult = phoneReg.test(str);
+            if (!validateResult) {
+                validateReason = "输入的手机号不符合规范！";
+            }
+
+            return {
+                validate_reason: validateReason,
+                validate_result: validateResult
+            };
         },
         email: function (str) {
             var emailReg = new RegExp(this.regTypes.email);
-            return emailReg.test(str);
+            var validateReason = "";
+            var validateResult = emailReg.test(str);
+            if (!validateResult) {
+                validateReason = "输入的邮箱不符合规范！";
+            }
+            console.log("email validateResult", validateResult);
+            return {
+                validate_reason: validateReason,
+                validate_result: validateResult
+            };
         }
     };
 
@@ -97,15 +179,22 @@ angular.module('tigerwitApp')
     return {
         validate: function(type, str) {
             var typeList = type.split(" ");
-            var validateResult = true;
+            var validateResult = {
+                validate_result: true,
+                validate_reason: ""
+            };
 
             if (typeList.indexOf("option") >= 0 && str === "") {
-                return true;
+                console.log(222);
+                return validateResult;
             }
 
             typeList.forEach(function (type) {
                 var funcsType = type.split(":")[0];
-                validateResult = validateResult &&  validateFuns[funcsType](str, type);
+                var temptResultObj = validateFuns[funcsType](str, type);
+                if (!temptResultObj.validate_result) {
+                    validateResult = temptResultObj;
+                }
             });
 
             return validateResult;

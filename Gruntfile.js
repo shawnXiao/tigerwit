@@ -352,12 +352,17 @@ module.exports = function (grunt) {
             'images/{,*/}*.{webp}',
             'fonts/*',
             'base/webuploader-0.1.5/Uploader.swf'
-          ]
-        }, {
+          ]},
+          {
           expand: true,
           cwd: '.tmp/images',
           dest: '<%= yeoman.dist %>/images',
           src: ['generated/*']
+        }, {
+          expand: true,
+          cwd: '.tmp/concat',
+          dest: '<%= yeoman.dist %>',
+          src: ['scripts/*']
         }]
       },
       styles: {
@@ -428,12 +433,12 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    'ngmin',
+    //'ngmin',
     'copy:dist',
     // 'cdnify',
     'cssmin',
-    'uglify',
-    'filerev',
+    //'uglify',
+    //'filerev',
     'usemin',
     'htmlmin'
   ]);

@@ -9,6 +9,7 @@ function($rootScope, $http, wdStorage) {
             return $http.get('/check');
         },
         verifyPhone: function(params) {
+            console.log("params:", params);
             return $http.get('/verify', {
                 params: params
             });

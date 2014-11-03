@@ -40,6 +40,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdStorage, $location) {
     $scope.signIn = {};
     $scope.goToRegister = function() {
         $scope.submit_text = "发送验证码中...";
+        console.log($scope.signIn);
         verifyPhone().then(function(data) {
             if (data.is_succ) {
                 $location.path('/register').search('phone', $scope.signIn.phone);
@@ -51,7 +52,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdStorage, $location) {
 
 
     function verifyPhone() {
-        return wdAccount.verifyPhone($scope.signIn.phone);
+        return wdAccount.verifyPhone($scope.signIn);
     }
 
 }]);

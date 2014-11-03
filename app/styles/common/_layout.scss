@@ -3,6 +3,11 @@
         margin-left: 150px;
         top: 14px;
     }
+    @media (max-width: $screen-xs) {
+        .navbar-login {
+            display: none;
+        }
+    }
     .navbar-tail {
         .btn-magnet-lf {
             margin-left: -5px;
@@ -35,6 +40,11 @@
 
     .ft {
         margin: 30px auto 80px auto;
+        @media (max-width: $screen-xs) {
+            .col-lg-2 {
+                float: left;
+            }
+        }
         h4 {
             color: $text-title-color;
         }
@@ -45,6 +55,16 @@
                 list-style: none;
                 color: $text-content-color;
             }
+        }
+    }
+}
+
+.doc2 {
+    .bd {
+        @extend .container;
+        background-color: $module-bg;
+        .sidebar {
+            @extend .col-lg-4;
         }
     }
 }

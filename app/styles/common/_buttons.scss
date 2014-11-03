@@ -26,12 +26,16 @@
       @include tab-focus();
     }
   }
+
+  @media (min-width: $screen-xs) {
     &.btn-magnet-lf {
       border-radius: 0 $border-radius-base $border-radius-base 0;
     }
     &.btn-magnet-rt {
       border-radius: $border-radius-base 0 0 $border-radius-base;
     }
+  }
+
   &:hover,
   &:focus {
     color: $btn-default-color;
@@ -143,23 +147,28 @@
   // line-height: ensure proper height of button next to small input
   @include button-size($padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $border-radius-small);
     // 贴着 input 的btn
+
+  @media (min-width: $screen-xs) {
     &.btn-magnet-lf {
       border-radius: 0 $border-radius-small $border-radius-small 0;
     }
     &.btn-magnet-rt {
       border-radius: $border-radius-small 0 0 $border-radius-small;
     }
+  }
 }
 
 .btn-xs {
   @include button-size($padding-xs-vertical, $padding-xs-horizontal, $font-size-small, $line-height-small, $border-radius-small);
     // 贴着 input 的btn
+  @media (min-width: $screen-xs) {
     &.btn-magnet-lf {
       border-radius: 0 $border-radius-small $border-radius-small 0;
     }
     &.btn-magnet-rt {
       border-radius: $border-radius-small 0 0 $border-radius-small;
     }
+  }
 }
 
 

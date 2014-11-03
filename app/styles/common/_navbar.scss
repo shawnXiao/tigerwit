@@ -75,6 +75,7 @@
       height: auto !important;
       padding-bottom: 0; // Override default setting
       overflow: visible !important;
+      visibility: visible !important;
     }
 
     &.in {
@@ -90,6 +91,14 @@
       padding-right: 0;
     }
   }
+}
+.collapse {
+    display: none;
+    visibility: hidden;
+    &.in {
+        display: block;
+        visibility: visible;
+    }
 }
 .navbar-tool {
     margin-top: 20px;
@@ -285,7 +294,6 @@
       }
     }
   }
-
   // Uncollapse the nav
   @media (min-width: $grid-float-breakpoint) {
     float: left;

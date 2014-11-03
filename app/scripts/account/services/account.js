@@ -8,11 +8,9 @@ function($rootScope, $http, wdStorage) {
         check: function() {
             return $http.get('/check');
         },
-        verifyPhone: function(num) {
+        verifyPhone: function(params) {
             return $http.get('/verify', {
-                params: {
-                    phone: String(num)
-                }
+                params: params
             });
         },
         /**
@@ -29,7 +27,58 @@ function($rootScope, $http, wdStorage) {
         * }
         */
         verifyCode: function(opts) {
-            return $http.post('verifycod', opts)
+            return $http.post('/verifycode', opts)
+        },
+        /**
+        * 开通真实账户 - 查询客户填写进度
+        *
+        * @method getRealinfoStep
+        * @param {String} ?type=ReliableInformation
+        * @return {Object} {
+        *   "is_succ": true / false,
+        *   "error_msg": "",
+        *   "progress": -1 / 0 / 1/ 2
+        * }
+        */
+        getRealInfoStep: function () {
+            return $http.get('/get_info_progress', {
+                params: {
+                    type: "ReliableInformation"
+                }
+            });
+        },
+        /**
+        * 开通真实账户-调查问卷
+        *
+        * @method submitQuestionnaire
+        * @param {Object} {
+        *   current_situation: 0 / 1 / 2 / 3,
+        *   yearly_income: 0 / 1 / 2 / 3,
+        *   investing_experience: 0 / 1 / 2 / 3 / 4
+        * }
+        * @return {Object} {
+        *   "is_succ": true / false,
+        *   "error_msg": ""
+        * }
+        */
+        submitQuestionnaire: function (opts) {
+            return $http.post('/questionnaire', opts);
+        },
+        /**
+        * 重置密码接口
+        *
+        * @method resetPassword
+        * @param {Object} {
+        *   code: '',
+        *   new_pwd: ""
+        * }
+        * @return {Object} {
+        *   "is_succ": true / false,
+        *   "error_msg": ""
+        * }
+        */
+        resetPassword: function (opts) {
+            return $http.post('/change_password', opts)
         },
         register: function(opts) {
             return $http.post('/register', opts);

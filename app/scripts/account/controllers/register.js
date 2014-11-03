@@ -15,9 +15,12 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     $rootScope.hideNav = true;
 
     // 设置真实信息的步骤表示
-    $scope.realInfo = {
-        step: 1
-    };
+    $scope.realInfo = {};
+    if ($scope.registType === "virtual2real") {
+        wdAccount.getRealInfoStep().then(function (msg) {
+            $scope.realInfo.step = msg.progress + 1;
+        }, function () {})
+    }
 
     // 重置密码步骤
     $scope.resetInfo = {
@@ -67,7 +70,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 将虚拟账户转变成真实账户
     $scope.uploadUrl = wdConfig.apiUrl + '/upload';
 
-    $scope.realInfo.person = {
+    $scope.person = {
         real_name: '',
         invite_code: '',
         // 上传状态：0、未上传；1、上传中，2、上传成功；3、上传失败；
@@ -79,49 +82,68 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     // 设置真实账号信息
     $scope.setRealInfo = function () {
-        $scope.realInfo.step = 2;
-        /*
-         *if (validateInput()) {
-         *    setInfo().then(function(data) {
-         *        if (data.is_succ) {
-         *            $scope.realInfo.step = 2;
-         *        } else {
-         *            console.log("error");
-         *        }
-         *    });
-         *}
-         */
+        if (validateInput()) {
+            setInfo().then(function(data) {
+                if (data.is_succ) {
+                    $scope.realInfo.step = 2;
+                } else {
+                    console.log("error");
+                }
+            });
+        }
     };
 
     // 发送风险鉴定
+    $scope.person.questionnaire = {};
     $scope.sendAssessment = function () {
-        $scope.realInfo.step = 3;
+        if (!checkQuestionaire()) {
+            return;
+        }
+
+        wdAccount.submitQuestionnaire($scope.person.questionnaire).
+            then(function (msg) {
+            console.log(msg);
+            $scope.realInfo.step = 3;
+        }, function () {})
     }
 
-    // 发送手机验证码
-    $scope.verifyPhone = function() {
-        verifyPhone();
+    // 发送手机验证码, 如果是在找回密码的阶段
+    // 发生验证码， isexistphone: true
+    $scope.verifyPhone = function (isExistPhone) {
+        verifyPhone(isExistPhone).then(function (msg) {
+            if (!msg.is_succ) {
+                $scope.countDownText = msg.error_msg;
+            }
+        }, function () {
+
+        });
         coutDown();
     };
 
     // 验证手机验证码是否正确
     $scope.verifyCode = function () {
-        $scope.resetInfo.step = 2;
         wdAccount.verifyCode({
             phone: $scope.resetInfo.phone,
             verify_code: $scope.resetInfo.verifyCode
         }).then(function (msg) {
             if (msg.is_succ) {
-                //$scope.resetInfo.step = 2;
+                $scope.resetInfo.step = 2;
             } else {
-
+                $scope.resetInfo.error_msg = msg.error_msg;
             }
         });
     }
 
     // 重置密码
     $scope.resetPassword = function () {
-        $scope.resetInfo.step = 3;
+        wdAccount.resetPassword({
+            code: $scope.resetInfo.verifyCode,
+            new_pwd: $scope.resetInfo.password
+        }).then(function (msg) {
+            if (msg.is_succ) {
+                $scope.resetInfo.step = 3;
+            }
+        })
     }
 
     $scope.keyDown = function(e) {
@@ -145,6 +167,26 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
         }
     };
 
+    function checkQuestionaire() {
+        var questionnaire = $scope.person.questionnaire;
+        console.log($scope.person.questionnaire);
+        if (questionnaire.current_situation === undefined) {
+            $scope.person.questionnaire.error_msg = "请选择你的就业状况";
+            return false;
+        }
+
+        if (questionnaire.yearly_income === undefined) {
+            $scope.person.questionnaire.error_msg = "请选择你的年收入";
+            return false;
+        }
+
+        if (questionnaire.investing_experience === undefined) {
+            $scope.person.questionnaire.error_msg = "请选择你的投资外汇经验";
+            return false;
+        }
+
+        return true;
+    }
     function confirmPassword() {
         if ($scope.signIn.password === $scope.signIn.passwordConfirm) {
             return true;
@@ -253,13 +295,15 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     });
 
     function setInfo() {
-
         return wdAccount.setInfo($scope.person);
 
     }
 
-    function verifyPhone() {
-        return wdAccount.verifyPhone($scope.signIn.phone);
+    function verifyPhone(isExistPhone) {
+        return wdAccount.verifyPhone({
+            phone: $scope.signIn.phone,
+            exists: isExistPhone
+        });
     }
 
     $scope.error_msg = "";
@@ -273,7 +317,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
             if (searchObj.type === "real") {
                 $location.search("type", "virtual2real");
             } else {
-                $location.path("register_succ")
+                $location.path("regist_succ")
             }
 
         }, function(data) {

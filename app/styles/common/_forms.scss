@@ -146,12 +146,14 @@ output {
     opacity: 1; // iOS fix for unreadable disabled content
   }
 
+  @media (min-width: $screen-xs) {
     &.input-magnet-lf {
       border-radius: 0 $input-border-radius $input-border-radius 0;
     }
     &.input-magnet-rt {
       border-radius: $input-border-radius 0 0 $input-border-radius;
     }
+  }
   // [converter] extracted textarea& to textarea.form-control
 }
 
@@ -316,12 +318,15 @@ input[type="checkbox"] {
 
 @include input-size('.input-sm', $input-height-small, $padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $border-radius-small);
 .input-sm {
+
+  @media (min-width: $screen-xs) {
     &.input-magnet-lf {
       border-radius: 0 $border-radius-small $border-radius-small 0;
     }
     &.input-magnet-rt {
       border-radius: $border-radius-small 0 0 $border-radius-small;
     }
+ }
 }
 
 @include input-size('.input-lg', $input-height-large, $padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $border-radius-large);
@@ -419,7 +424,16 @@ input[type="checkbox"] {
 // Heads up! This is mixin-ed into `.navbar-form` in navbars.less.
 
 .form-inline {
-
+  @media (max-width: $screen-xs) {
+     text-align: center;
+    .form-control {
+      display: block;
+      width: auto; // Prevent labels from stacking above inputs in `.form-group`
+      vertical-align: middle;
+      margin: 0 auto;
+      margin-bottom: 10px;
+      }
+  }
   // Kick in the inline
   @media (min-width: $screen-sm-min) {
     // Inline-block all the things for "inline"

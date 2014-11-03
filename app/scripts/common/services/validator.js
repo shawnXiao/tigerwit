@@ -6,10 +6,11 @@ angular.module('tigerwitApp')
     var validateFuns = {
         regTypes: {
             'phone': '1[0-9]{10}$',
-            'num': '0-9',
             'email': '\\S+@\\S+\\.\\S+',
-            'en': 'a-zA-Z',
-            'sym': '\\-\\_'
+            'num': '[0-9]',
+            'zh': '[^u4e00-u9fa5]',
+            'en': '[a-zA-Z]',
+            'sym': '[\!\@\#\$\%\^\&\*\(\)\_\+]'
         },
         number: function (str, type) {
             var validateResult = !/\D/.test(str);
@@ -21,7 +22,7 @@ angular.module('tigerwitApp')
 
             return {
                 validate_reason: validateReason,
-                validate_result: validate_result
+                validate_result: validateResult
             };
         },
         id: function (str) {
@@ -34,7 +35,7 @@ angular.module('tigerwitApp')
 
             return {
                 validate_reason: validateReason,
-                validate_result: validate_result
+                validate_result: validateResult
             };
         },
         /*
@@ -44,11 +45,11 @@ angular.module('tigerwitApp')
             var textTypes = type.split(":")[1];
             var textTypeList = textTypes.split("-");
 
-            var textRegStr = "[";
+            var textRegStr = "";
             textTypeList.forEach(function (item) {
-                textRegStr += '' + (validateFuns.regTypes[item] || '') + '';
+                textRegStr += '' + (validateFuns.regTypes[item] || '') + '|';
             });
-            textRegStr += ']';
+            console.log("textRegStr:", textRegStr);
 
             var textReg = new RegExp(textRegStr);
             var validateResult = textReg.test(str);

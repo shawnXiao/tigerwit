@@ -8,10 +8,23 @@
             color: $text-title-color;
             font-size: $font-size-large;
         }
+        .btn-md {
+            padding: 6px 66px;
+        }
         .wrapper-btn {
+            .primary-btn-wrapper {
+                display: inline-block;
+                vertical-align: top;
+                p {
+                    font-size: 12px;
+                    color: $brand-primary;
+                    margin: 0;
+                    margin-left: 5px;
+                }
+            }
             margin-top: 20px;
-            .btn {
-                margin-right: 30px;
+            .mg-lf-30 {
+                margin-left: 30px;
             }
         }
     }

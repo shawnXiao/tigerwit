@@ -9,7 +9,7 @@
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="inputNickname"
                     ng-model="signIn.username"
-                    data-validate="length:4-30 text:en-num-sym"
+                    data-validate="length:4-30 text:en-num-sym-zh"
                     placeholder="昵称" focus-tip='nickname'>
                 </div>
                 <div class="col-sm-5" focus-tip-type="nickname">
@@ -34,10 +34,12 @@
                         <input type="text" class="form-control"
                         data-validate="required"
                         focus-tip="verify_code"
-                        id="inputVerify" placeholder="短信验证码" ng-model="signIn.verify_code">
+                        id="inputVerify" placeholder="短信验证码"
+                        ng-model="signIn.verify_code">
                     </div>
                     <div class="col-sm-4">
-                        <button  ng-click="verifyPhone();" class="btn btn-info"
+                        <button  ng-click="verifyPhone();"
+                            class="btn btn-info btn-verify"
                             ng-class="isDisable">{{countDownNum}}{{countDownText}}</button>
                     </div>
                 </div>
@@ -159,13 +161,21 @@
               <div class="form-group clearfix">
                 <p>1.你的就业情况：</p>
                 <div class="col-sm-7">
-                    <input type="radio" name="state-job" id="state-job-online" value="state-job-online" />
+                    <input type="radio" name="state-job" 
+                    ng-model="person.questionnaire.current_situation"
+                    id="state-job-online" value="0"/>
                     <label for="state-job-online">就业</label>
-                    <input type="radio" name="state-job" id="state-job-self" value="state-job-self"/>
+                    <input type="radio" name="state-job"
+                    ng-model="person.questionnaire.current_situation"
+                    id="state-job-self" value="1"/>
                     <label for="state-job-self">自顾</label>
-                    <input type="radio" name="state-job" id="state-job-retire" value="state-job-retire"/>
+                    <input type="radio" name="state-job"
+                    ng-model="person.questionnaire.current_situation"
+                    id="state-job-retire" value="2"/>
                     <label for="state-job-retire">退休</label>
-                    <input type="radio" name="state-job" id="state-job-offline" value="state-job-offline" />
+                    <input type="radio" name="state-job"
+                    ng-model="person.questionnaire.current_situation"
+                    id="state-job-offline" value="3" />
                     <label for="state-job-offline">失业</label>
                 </div>
               </div>
@@ -173,13 +183,21 @@
               <div class="form-group clearfix">
                  <p>2.最近的年收入</p>
                 <div class="col-sm-7">
-                    <input type="radio" name="state-salary" id="state-salary-10000" value="state-salary-10000"/>
+                    <input type="radio" name="state-salary"
+                    ng-model="person.questionnaire.yearly_income"
+                    id="state-salary-10000" value="1"/>
                     <label for="state-salary-10000">&lt;10000</label>
-                    <input type="radio" name="state-salary" id="state-salary-25000" value="state-salary-25000" />
+                    <input type="radio" name="state-salary"
+                    ng-model="person.questionnaire.yearly_income"
+                    id="state-salary-25000" value="2" />
                     <label for="state-salary-25000">10000 - 25000</label>
-                    <input type="radio" name="state-salary" id="state-salary-50000" value="state-salary-50000"/>
+                    <input type="radio" name="state-salary"
+                    ng-model="person.questionnaire.yearly_income"
+                    id="state-salary-50000" value="3"/>
                     <label for="state-salary-50000">25000 - 50000</label>
-                    <input type="radio" name="state-job" id="state-salary-50000-more" value="state-salary-50000-more" />
+                    <input type="radio" name="state-job"
+                    ng-model="person.questionnaire.yearly_income"
+                    id="state-salary-50000-more" value="4" />
                     <label for="state-salary-50000-more">500000+</label>
                 </div>
               </div>
@@ -187,15 +205,29 @@
               <div class="form-group clearfix">
                  <p>3.您曾经是否有投资外汇的经验</p>
                 <div class="col-sm-7">
-                    <input type="radio" name="state-experience" id="state-experience-0" />
-                    <label for="state-experience-without">无</label>
-                    <input type="radio" name="state-experience" id="state-experience-1" />
+                    <input type="radio" name="state-experience"
+                    ng-model="person.questionnaire.investing_experience"
+                    id="state-experience-0" value="0" />
+                    <label for="state-experience-0">无</label>
+
+                    <input type="radio" name="state-experience"
+                    ng-model="person.questionnaire.investing_experience"
+                    id="state-experience-1"  value="1" />
                     <label for="state-experience-1">小于 1 年</label>
-                    <input type="radio" name="state-experience" id="state-experience-3" />
+
+                    <input type="radio" name="state-experience" 
+                    ng-model="person.questionnaire.investing_experience"
+                    id="state-experience-3" value="2"  />
                     <label for="state-experience-3">1 - 3 年</label>
-                    <input type="radio" name="state-experience" id="state-experience-5" />
+
+                    <input type="radio" name="state-experience" 
+                    ng-model="person.questionnaire.investing_experience"
+                    id="state-experience-5" value="3"  />
                     <label for="state-experience-5">3 - 5 年</label>
-                    <input type="radio" name="state-experience" id="state-experience-5-more" />
+
+                    <input type="radio" name="state-experience" 
+                    ng-model="person.questionnaire.investing_experience"
+                    id="state-experience-5-more" value="4"  />
                     <label for="state-experience-5-more">5 年以上</label>
                 </div>
               </div>
@@ -203,6 +235,8 @@
               <div class="form-group clearfix">
                 <div class="col-sm-8 text-center">
                   <button type="submit"  ng-click="sendAssessment();" class="btn btn-primary btn-ex-lg">提交</button>
+                  <p ng-class="{'show': person.questionnaire.error_msg != undefined}"
+                  class="bg-info help-tip help-tip-single">{{person.questionnaire.error_msg }}</p>
                 </div>
               </div>
 

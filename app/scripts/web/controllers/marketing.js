@@ -25,7 +25,6 @@ function ($scope, wdAccount, $timeout, wdConfig, wdStorage, $location) {
     $scope.isLogin = false;
     wdAccount.check().then(function(data) {
         // 已经完成注册申请过程
-        console.log(data);
         if (data.is_succ) {
             $scope.isLogin = true;
             wdAccount.getInfo().then(function (data) {
@@ -40,10 +39,9 @@ function ($scope, wdAccount, $timeout, wdConfig, wdStorage, $location) {
     $scope.signIn = {};
     $scope.goToRegister = function() {
         $scope.submit_text = "发送验证码中...";
-        console.log($scope.signIn);
         verifyPhone().then(function(data) {
             if (data.is_succ) {
-                $location.path('/register').search('phone', $scope.signIn.phone);
+                $location.path('/regist').search('phone', $scope.signIn.phone);
             } else {
                 $scope.error_msg = data.error_msg;
             }

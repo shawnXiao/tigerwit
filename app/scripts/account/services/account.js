@@ -9,7 +9,6 @@ function($rootScope, $http, wdStorage) {
             return $http.get('/check');
         },
         verifyPhone: function(params) {
-            console.log("params:", params);
             return $http.get('/verify', {
                 params: params
             });
@@ -41,12 +40,8 @@ function($rootScope, $http, wdStorage) {
         *   "progress": -1 / 0 / 1/ 2
         * }
         */
-        getRealInfoStep: function () {
-            return $http.get('/get_info_progress', {
-                params: {
-                    type: "ReliableInformation"
-                }
-            });
+        getInfoStep: function (params) {
+            return $http.get('/get_info_progress', { params: params });
         },
         /**
         * 开通真实账户-调查问卷

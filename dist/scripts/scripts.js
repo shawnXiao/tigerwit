@@ -8459,7 +8459,6 @@ angular.module('tigerwitApp')
             textTypeList.forEach(function (item) {
                 textRegStr += '' + (validateFuns.regTypes[item] || '') + '|';
             });
-            console.log("textRegStr:", textRegStr);
 
             var textReg = new RegExp(textRegStr);
             var validateResult = textReg.test(str);
@@ -8526,9 +8525,6 @@ angular.module('tigerwitApp')
             var lengthEnd = lengthContent.split("-")[1];
 
             var validateResult = (lengthStart <= str.length && str.length <= lengthEnd);
-            console.log(str.length);
-            console.log("validateResult", validateResult);
-            console.log(lengthStart <= str.length <= lengthEnd);
             var validateReason = "";
             if (!validateResult) {
                 validateReason = "输入项长度应介于 " + lengthStart + " 位和 " + lengthEnd + " 位之间";
@@ -8578,7 +8574,6 @@ angular.module('tigerwitApp')
             if (!validateResult) {
                 validateReason = "输入的邮箱不符合规范！";
             }
-            console.log("email validateResult", validateResult);
             return {
                 validate_reason: validateReason,
                 validate_result: validateResult
@@ -8596,7 +8591,6 @@ angular.module('tigerwitApp')
             };
 
             if (typeList.indexOf("option") >= 0 && str === "") {
-                console.log(222);
                 return validateResult;
             }
 
@@ -9119,7 +9113,6 @@ function ($scope, wdAccount, $timeout, wdConfig, wdStorage, $location) {
     $scope.isLogin = false;
     wdAccount.check().then(function(data) {
         // 已经完成注册申请过程
-        console.log(data);
         if (data.is_succ) {
             $scope.isLogin = true;
             wdAccount.getInfo().then(function (data) {
@@ -9134,10 +9127,9 @@ function ($scope, wdAccount, $timeout, wdConfig, wdStorage, $location) {
     $scope.signIn = {};
     $scope.goToRegister = function() {
         $scope.submit_text = "发送验证码中...";
-        console.log($scope.signIn);
         verifyPhone().then(function(data) {
             if (data.is_succ) {
-                $location.path('/register').search('phone', $scope.signIn.phone);
+                $location.path('/regist').search('phone', $scope.signIn.phone);
             } else {
                 $scope.error_msg = data.error_msg;
             }
@@ -9197,33 +9189,42 @@ function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
 }]);
 
 'use strict';
+/*
+ * Controller: registerCtrl
+ * Function: 完成了注册真实用户，虚拟用户和找回密码的功能
+ */
 
 angular.module('tigerwitApp')
 .controller('registerCtrl',
 ['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval', '$rootScope',
 function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval, $rootScope) {
-
     // 通过 query 中的 type 字段来标示注册的类型，默认情况下为
     // 注册虚拟账户
     // type: virtual || "" 注册虚拟账户
     // type: real 注册真实账户，但还是先要注册虚拟账户
     // type: virtual2real 虚拟账户转变成真实账户
+    // Model:
+    //      person: 个人真实信息
+    //      signIn: 注册虚拟账户
+    //      resetInfo: 重置密码的步骤信息，包括出错信息和所属步骤
+    //      realInfo: 真实账户的步骤信息，包括出错信息和所属步骤
+
     var searchObj = $location.search();
     $scope.registType = searchObj.type || "";
     $rootScope.hideNav = true;
+    $scope.realInfo = {};
+    $scope.resetInfo = {};
+    $scope.resetInfo.step = 1;
+
 
     // 设置真实信息的步骤表示
-    $scope.realInfo = {};
     if ($scope.registType === "virtual2real") {
-        wdAccount.getRealInfoStep().then(function (msg) {
+        wdAccount.getInfoStep({
+            type: "ReliableInformation"
+        }).then(function (msg) {
             $scope.realInfo.step = msg.progress + 1;
         }, function () {})
     }
-
-    // 重置密码步骤
-    $scope.resetInfo = {
-        step: 1
-    };
 
     // 注册虚拟账户
     $scope.signIn = {
@@ -9260,6 +9261,9 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     // 注册虚拟账号
     $scope.registVirtual = function () {
+        if (!$scope.signIn.notice) {
+            $scope.error_msg = "请勾选 “同意并遵循风险揭露和用户交易须知” ";
+        }
         if (validateInput() && confirmPassword()) {
             register();
         }
@@ -9280,15 +9284,23 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     // 设置真实账号信息
     $scope.setRealInfo = function () {
-        if (validateInput()) {
-            setInfo().then(function(data) {
-                if (data.is_succ) {
-                    $scope.realInfo.step = 2;
-                } else {
-                    console.log("error");
-                }
-            });
-        }
+        var realInfoStep = wdAccount.getInfoStep({type: "IdPicInformation"});
+        realInfoStep.then(function (msg) {
+            if (msg.progress != 3) {
+                $scope.realInfo.error_msg_1 = "请上传身份证正反面";
+                return;
+            }
+            if (validateInput()) {
+                setInfo().then(function(data) {
+                    if (data.is_succ) {
+                        $scope.realInfo.step = 2;
+                    } else {
+                        console.log("error");
+                    }
+                });
+            }
+
+        });
     };
 
     // 发送风险鉴定
@@ -9300,7 +9312,6 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
         wdAccount.submitQuestionnaire($scope.person.questionnaire).
             then(function (msg) {
-            console.log(msg);
             $scope.realInfo.step = 3;
         }, function () {})
     }
@@ -9321,13 +9332,13 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 验证手机验证码是否正确
     $scope.verifyCode = function () {
         wdAccount.verifyCode({
-            phone: $scope.resetInfo.phone,
-            verify_code: $scope.resetInfo.verifyCode
+            phone: $scope.signIn.phone,
+            verify_code: $scope.signIn.verify_code
         }).then(function (msg) {
             if (msg.is_succ) {
                 $scope.resetInfo.step = 2;
             } else {
-                $scope.resetInfo.error_msg = msg.error_msg;
+                $scope.resetInfo.error_msg_1 = msg.error_msg;
             }
         });
     }
@@ -9335,8 +9346,9 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 重置密码
     $scope.resetPassword = function () {
         wdAccount.resetPassword({
-            code: $scope.resetInfo.verifyCode,
-            new_pwd: $scope.resetInfo.password
+            phone: $scope.signIn.phone,
+            code: $scope.signIn.verify_code,
+            new_pwd: $scope.signIn.password
         }).then(function (msg) {
             if (msg.is_succ) {
                 $scope.resetInfo.step = 3;
@@ -9519,7 +9531,6 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
             }
 
         }, function(data) {
-            console.log(data);
         });
     }
 }]);
@@ -9527,7 +9538,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 'use strict';
 
 angular.module('tigerwitApp')
-.controller('loginCtrl', 
+.controller('loginCtrl',
 ['$scope', 'wdAccount', '$timeout', '$location', 'wdStorage',
 function ($scope, wdAccount, $timeout, $location, wdStorage) {
     $scope.login = {
@@ -9535,17 +9546,7 @@ function ($scope, wdAccount, $timeout, $location, wdStorage) {
         password: '',
         uiLoginError: ''
     };
-
-    // 进入时的逻辑
-    // wdAccount.check().then(function(data) {
-    //     if (data.is_succ) {
-    //         $location.path('/index');
-    //     } else {
-    //         $scope.loading = false;
-    //     }
-    // }, function(data) {
-    //     $scope.loading = false;
-    // });
+    $scope.login.expires = "checked";
 
     $scope.loginFun = function() {
         $scope.login.uiLoginError = '';
@@ -9553,11 +9554,10 @@ function ($scope, wdAccount, $timeout, $location, wdStorage) {
             if (data.is_succ) {
                 $location.path('/register');
             } else {
-                $scope.login.uiLoginError = data.error_msg;
+                $scope.login.error_msg = data.error_msg;
             }
         }, function(data) {
-            console.log(data);
-            $scope.login.uiLoginError = '登录失败';
+            $scope.login.error_msg = '登录失败';
         });
     };
 
@@ -9636,7 +9636,6 @@ function($rootScope, $http, wdStorage) {
             return $http.get('/check');
         },
         verifyPhone: function(params) {
-            console.log("params:", params);
             return $http.get('/verify', {
                 params: params
             });
@@ -9668,12 +9667,8 @@ function($rootScope, $http, wdStorage) {
         *   "progress": -1 / 0 / 1/ 2
         * }
         */
-        getRealInfoStep: function () {
-            return $http.get('/get_info_progress', {
-                params: {
-                    type: "ReliableInformation"
-                }
-            });
+        getInfoStep: function (params) {
+            return $http.get('/get_info_progress', { params: params });
         },
         /**
         * 开通真实账户-调查问卷

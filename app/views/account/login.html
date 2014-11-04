@@ -18,7 +18,7 @@
 
               <div class="form-group clearfix">
                 <div class="col-sm-11">
-                    <input type="text" class="form-control"
+                    <input type="password" class="form-control"
                     data-validate="id"
                     id="inputIDNumber" placeholder="登录密码"
                     ng-model="login.password">
@@ -28,22 +28,24 @@
               <div class="form-group clearfix">
                 <div class="col-sm-11 text-center">
                   <button type="submit"  ng-click="loginFun();" class="btn btn-primary btn-ex-lg">登录</button>
+                  <p ng-class="{'show': login.error_msg != undefined}"
+                  class="bg-info help-tip help-tip-single">{{login.error_msg }}</p>
                 </div>
               </div>
 
               <div class="form-group clearfix">
                 <div class="col-sm-11">
                   <div class="pull-left">
-                      <input type="checkbox" name="login-auto" id="login-auto" ng-checked="login.auto" />
+                      <input type="checkbox" name="login-auto"
+                      id="login-auto" ng-checked="login.expires" />
                       <label for="login-auto">自动登录</label>
                   </div>
                   <span class="pull-right">
-                      <a href="#/register" target="_blank">立即注册</a> | 
+                      <a href="#/regist" target="_blank">立即注册</a> | 
                       <a href="#/reset" target="_blank">忘记密码</a>
                   </span>
                 </div>
               </div>
         </div>
-        
     </div>
 </div>

@@ -1,31 +1,40 @@
 'use strict';
+/*
+ * Controller: registerCtrl
+ * Function: 完成了注册真实用户，虚拟用户和找回密码的功能
+ */
 
 angular.module('tigerwitApp')
 .controller('registerCtrl',
 ['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval', '$rootScope',
 function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval, $rootScope) {
-
     // 通过 query 中的 type 字段来标示注册的类型，默认情况下为
     // 注册虚拟账户
     // type: virtual || "" 注册虚拟账户
     // type: real 注册真实账户，但还是先要注册虚拟账户
     // type: virtual2real 虚拟账户转变成真实账户
+    // Model:
+    //      person: 个人真实信息
+    //      signIn: 注册虚拟账户
+    //      resetInfo: 重置密码的步骤信息，包括出错信息和所属步骤
+    //      realInfo: 真实账户的步骤信息，包括出错信息和所属步骤
+
     var searchObj = $location.search();
     $scope.registType = searchObj.type || "";
     $rootScope.hideNav = true;
+    $scope.realInfo = {};
+    $scope.resetInfo = {};
+    $scope.resetInfo.step = 1;
+
 
     // 设置真实信息的步骤表示
-    $scope.realInfo = {};
     if ($scope.registType === "virtual2real") {
-        wdAccount.getRealInfoStep().then(function (msg) {
+        wdAccount.getInfoStep({
+            type: "ReliableInformation"
+        }).then(function (msg) {
             $scope.realInfo.step = msg.progress + 1;
         }, function () {})
     }
-
-    // 重置密码步骤
-    $scope.resetInfo = {
-        step: 1
-    };
 
     // 注册虚拟账户
     $scope.signIn = {
@@ -62,6 +71,9 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     // 注册虚拟账号
     $scope.registVirtual = function () {
+        if (!$scope.signIn.notice) {
+            $scope.error_msg = "请勾选 “同意并遵循风险揭露和用户交易须知” ";
+        }
         if (validateInput() && confirmPassword()) {
             register();
         }
@@ -82,15 +94,23 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     // 设置真实账号信息
     $scope.setRealInfo = function () {
-        if (validateInput()) {
-            setInfo().then(function(data) {
-                if (data.is_succ) {
-                    $scope.realInfo.step = 2;
-                } else {
-                    console.log("error");
-                }
-            });
-        }
+        var realInfoStep = wdAccount.getInfoStep({type: "IdPicInformation"});
+        realInfoStep.then(function (msg) {
+            if (msg.progress != 3) {
+                $scope.realInfo.error_msg_1 = "请上传身份证正反面";
+                return;
+            }
+            if (validateInput()) {
+                setInfo().then(function(data) {
+                    if (data.is_succ) {
+                        $scope.realInfo.step = 2;
+                    } else {
+                        console.log("error");
+                    }
+                });
+            }
+
+        });
     };
 
     // 发送风险鉴定
@@ -102,7 +122,6 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
         wdAccount.submitQuestionnaire($scope.person.questionnaire).
             then(function (msg) {
-            console.log(msg);
             $scope.realInfo.step = 3;
         }, function () {})
     }
@@ -123,13 +142,13 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 验证手机验证码是否正确
     $scope.verifyCode = function () {
         wdAccount.verifyCode({
-            phone: $scope.resetInfo.phone,
-            verify_code: $scope.resetInfo.verifyCode
+            phone: $scope.signIn.phone,
+            verify_code: $scope.signIn.verify_code
         }).then(function (msg) {
             if (msg.is_succ) {
                 $scope.resetInfo.step = 2;
             } else {
-                $scope.resetInfo.error_msg = msg.error_msg;
+                $scope.resetInfo.error_msg_1 = msg.error_msg;
             }
         });
     }
@@ -137,8 +156,9 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 重置密码
     $scope.resetPassword = function () {
         wdAccount.resetPassword({
-            code: $scope.resetInfo.verifyCode,
-            new_pwd: $scope.resetInfo.password
+            phone: $scope.signIn.phone,
+            code: $scope.signIn.verify_code,
+            new_pwd: $scope.signIn.password
         }).then(function (msg) {
             if (msg.is_succ) {
                 $scope.resetInfo.step = 3;
@@ -321,7 +341,6 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
             }
 
         }, function(data) {
-            console.log(data);
         });
     }
 }]);

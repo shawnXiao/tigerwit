@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.controller('loginCtrl', 
+.controller('loginCtrl',
 ['$scope', 'wdAccount', '$timeout', '$location', 'wdStorage',
 function ($scope, wdAccount, $timeout, $location, wdStorage) {
     $scope.login = {
@@ -9,17 +9,7 @@ function ($scope, wdAccount, $timeout, $location, wdStorage) {
         password: '',
         uiLoginError: ''
     };
-
-    // 进入时的逻辑
-    // wdAccount.check().then(function(data) {
-    //     if (data.is_succ) {
-    //         $location.path('/index');
-    //     } else {
-    //         $scope.loading = false;
-    //     }
-    // }, function(data) {
-    //     $scope.loading = false;
-    // });
+    $scope.login.expires = "checked";
 
     $scope.loginFun = function() {
         $scope.login.uiLoginError = '';
@@ -27,11 +17,10 @@ function ($scope, wdAccount, $timeout, $location, wdStorage) {
             if (data.is_succ) {
                 $location.path('/register');
             } else {
-                $scope.login.uiLoginError = data.error_msg;
+                $scope.login.error_msg = data.error_msg;
             }
         }, function(data) {
-            console.log(data);
-            $scope.login.uiLoginError = '登录失败';
+            $scope.login.error_msg = '登录失败';
         });
     };
 

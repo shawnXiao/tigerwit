@@ -49,7 +49,6 @@ angular.module('tigerwitApp')
             textTypeList.forEach(function (item) {
                 textRegStr += '' + (validateFuns.regTypes[item] || '') + '|';
             });
-            console.log("textRegStr:", textRegStr);
 
             var textReg = new RegExp(textRegStr);
             var validateResult = textReg.test(str);
@@ -116,9 +115,6 @@ angular.module('tigerwitApp')
             var lengthEnd = lengthContent.split("-")[1];
 
             var validateResult = (lengthStart <= str.length && str.length <= lengthEnd);
-            console.log(str.length);
-            console.log("validateResult", validateResult);
-            console.log(lengthStart <= str.length <= lengthEnd);
             var validateReason = "";
             if (!validateResult) {
                 validateReason = "输入项长度应介于 " + lengthStart + " 位和 " + lengthEnd + " 位之间";
@@ -168,7 +164,6 @@ angular.module('tigerwitApp')
             if (!validateResult) {
                 validateReason = "输入的邮箱不符合规范！";
             }
-            console.log("email validateResult", validateResult);
             return {
                 validate_reason: validateReason,
                 validate_result: validateResult
@@ -186,7 +181,6 @@ angular.module('tigerwitApp')
             };
 
             if (typeList.indexOf("option") >= 0 && str === "") {
-                console.log(222);
                 return validateResult;
             }
 

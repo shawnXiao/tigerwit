@@ -11,7 +11,6 @@ return {
     function($scope) {
     }],
     link: function($scope, $element, $attrs, $controller) {
-
         // 初始化Web Uploader
         var uploader = $window.WebUploader.create({
 
@@ -34,7 +33,6 @@ return {
                 extensions: 'gif,jpg,jpeg,bmp,png',
                 mimeTypes: 'image/*'
             },
-
             formData: {
                 face: $attrs.face
             }

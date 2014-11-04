@@ -149,21 +149,24 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         url: '/personal',
         views: {
             '': {
-                templateUrl: 'views/layout/doc2.html'
+                templateUrl: 'views/layout/doc2.html',
+                controller: function ($scope) {
+                    $scope.moduleId = "tigerwit-personal-index"
+                }
             },
             'hd@personal': {
                 templateUrl: 'views/navs/navbar_personal.html'
             },
             'sidebar@personal': {
-                templateUrl: 'views/personal/personal_info_side.html',
+                templateUrl: 'views/personal/info_side.html',
                 controller: ''
             },
             'content@personal': {
-                templateUrl: 'views/personal/personal_history.html',
+                templateUrl: 'views/personal/history.html',
                 controller: ''
             },
             'sidebar-ad@personal': {
-                templateUrl: 'views/personal/personal_deposit_side.html',
+                templateUrl: 'views/personal/deposit_side.html',
                 controller: ''
             },
             'ft@personal': {

@@ -1,0 +1,23 @@
+.personal-deposit-side {
+    border: 1px solid red;
+    background-color: #fff;
+    padding: 14px 20px 10px 20px;
+    .hd {
+        padding-bottom: 20px;
+        border-bottom: 1px solid red;
+    }
+    .money-total {
+        font-size: $font-size-h1;
+        font-weight: bolder;
+        color: #000;
+        height: 150px;
+        line-height: 150px;
+        text-align: right;
+    }
+    .btn-wrapper {
+        text-align: center;
+        .btn-md {
+            padding: 9px 36px;
+        }
+    }
+}

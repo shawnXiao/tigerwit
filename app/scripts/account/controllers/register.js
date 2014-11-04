@@ -105,7 +105,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
                     if (data.is_succ) {
                         $scope.realInfo.step = 2;
                     } else {
-                        console.log("error");
+                        $scope.realInfo.error_msg_1 = data.error_msg;
                     }
                 });
             }

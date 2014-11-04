@@ -1,3 +1,6 @@
+body {
+    background-color: #000;
+}
 .doc1 {
     .navbar-lang {
         margin-left: 150px;
@@ -60,11 +63,30 @@
 }
 
 .doc2 {
+    > .row {
+        background-color: $module-bg;
+    }
     .bd {
         @extend .container;
-        background-color: $module-bg;
+        margin-top: 30px;
         .sidebar {
-            @extend .col-lg-4;
+            @extend .col-lg-3;
+            padding: 0;
+            z-index: $zindex-navbar;
+        }
+        .content {
+            padding: 0;
+            margin-left: -2px;
+            background-color: #fff;
+            border: 1px solid red;
+            height: 50px;
+            @extend .col-lg-6;
+        }
+        .sidebar-ad {
+            @extend .col-lg-3;
+            padding: 0;
+            padding-left: 18px;
+            height: 50px;
         }
     }
 }

@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.controller('wdWebPersonalController',
-['$scope', 'wdAccount', '$timeout', '$location', 'wdAccountMoney',
-function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
+.controller('wdPersonalDepositController',
+['$scope', 'wdAccount', '$timeout', '$location', 'wdAccountMoney', 'principal',
+function ($scope, wdAccount, $timeout, $location, wdAccountMoney, principal) {
     var equitySocket;
+    console.log("haha");
+    console.log(principal.isAuthenticated());
     $scope.user = {
         money: {
             available: '0.00',

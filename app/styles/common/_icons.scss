@@ -1,0 +1,45 @@
+.icon {
+    position: absolute;
+}
+.icon-navs {
+    @extend .icon;
+    width: 31px;
+    height: 25px;
+    left: 20px;
+    top: 20px;
+    @include wd-image-url('icons.png');
+}
+
+.icon-btn {
+    @extend .icon;
+    width: 31px;
+    height: 25px;
+    left: 10px;
+    top: 7px;
+    @include wd-image-url('icons.png');
+}
+
+// 侧边栏的导航的icon
+$icon-navs: home, deposit, withdraw, history, notify;
+@each $name in $icon-navs {
+    $i: index($icon-navs, $name) - 1;
+    .icon-nav-#{$name} {
+        @extend .icon-navs;
+        background-position: 0 -68px * $i;
+    }
+    a:hover .icon-nav-#{$name} {
+            background-position: -79px -68px * $i;
+    }
+}
+
+.icon-btn-deposit {
+    @extend .icon-btn;
+    background-position: -155px -67px;
+}
+
+.icon-btn-withdraw {
+    @extend .icon-btn;
+    background-position: -155px -135px;
+}
+
+

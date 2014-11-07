@@ -33,7 +33,6 @@ body {
             background-color: $module-sub-bg;
             border: 1px solid #e7e7e7;
             .h2, .hd {
-                    background-color: $standard-white;
                     padding-left: 70px;
                     padding-bottom: 15px;
                     border-bottom: 1px solid #f3f3f3;
@@ -75,11 +74,9 @@ body {
             z-index: $zindex-navbar;
         }
         .content {
-            padding: 0;
             margin-left: -2px;
             background-color: #fff;
-            border: 1px solid red;
-            height: 50px;
+            padding: 15px;
             @extend .col-lg-6;
         }
         .sidebar-ad {
@@ -87,6 +84,16 @@ body {
             padding: 0;
             padding-left: 18px;
             height: 50px;
+        }
+        .hd-sub {
+            padding-bottom: 5px;
+            border-bottom: 1px solid $module-border;
+            margin-bottom: 10px;
+            color: $text-content-color;
+            .title {
+                font-size: $font-size-large;
+                margin: 0;
+            }
         }
     }
 }

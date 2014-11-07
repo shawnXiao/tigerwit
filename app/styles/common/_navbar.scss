@@ -35,9 +35,51 @@
 
 .navbar-tail {
   position: relative;
+  padding: 15px 0;
   @include clearfix();
   @media (min-width: $grid-float-breakpoint) {
     float: right;
+  }
+  .dropdown-info {
+      .dropdown-menu {
+          right: 0;
+          left: auto;
+          padding: 14px;
+          background-color: $nav-dialog-bg;
+          .row {
+              margin: 0;
+              .col-left {
+                  float: left;
+                  margin-right: 10px;
+              }
+              .col-right {
+                  overflow: hidden;
+                  zoom: 1;
+                  p {
+                      margin-bottom: 5px;
+                      color: $text-nav-dialog-color;
+                  }
+              }
+          }
+          .found-wrapper-sm {
+              width: 180px;
+              padding: 10px;
+              background-color: $nav-dialog-sub-bg;
+              .title {
+                  color: $text-nav-dialog-color;
+              }
+              .money-total {
+                  color: $brand-danger;
+                  font-size: $font-size-large;
+                  font-weight: bold;
+                  text-align: right;
+                  margin: 10px 0;
+              }
+              .btn-wrapper {
+                  text-align: center;
+              }
+          }
+      }
   }
 }
 

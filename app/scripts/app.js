@@ -17,6 +17,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         return {
             'request': function(config) {
                 config.timeout = wdConfig.httpTimeout;
+                console.log(config.url);
                 if (!/^[http|https]/.test(config.url) && !/\.html$/.test(config.url)) {
                     config.url = wdConfig.apiUrl + config.url;
                 }
@@ -34,8 +35,20 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
     $urlRouterProvider.otherwise('/index');
 
+    // 登录验证
+    var authorizResolve =  { authorize: ['authorization', function (authorization) { return authorization.authorize(); }] };
+
     // 下面为 page 的配置
     $stateProvider
+    .state('site', {
+        'abstract': true,
+        templateUrl: 'views/test.html',
+        resolve: {
+            authorize: ['authorization', function (authorization) {
+                return authorization.authorize();
+            }]
+        }
+    })
     .state('index', {
         url: "/index",
         views: {
@@ -126,6 +139,10 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     })
     .state('regist_succ', {
         url: "/regist_succ",
+        parent: 'site',
+        data: {
+            roles: []
+        },
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
@@ -147,6 +164,10 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     })
     .state('personal', {
         url: '/personal',
+        data: {
+            roles: []
+        },
+        resolve: authorizResolve,
         views: {
             '': {
                 templateUrl: 'views/layout/doc2.html',
@@ -163,7 +184,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'content@personal': {
                 templateUrl: 'views/personal/history.html',
-                controller: ''
+                controller: 'wdPersonalHistoryController'
             },
             'sidebar-ad@personal': {
                 templateUrl: 'views/personal/deposit_side.html',
@@ -174,4 +195,45 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
+    .state('deposit', {
+        url: '/deposit',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc2.html',
+                controller: function ($scope) {
+                    $scope.moduleId = "tigerwit-personal-deposit"
+                }
+            },
+            'hd@deposit': {
+                templateUrl: 'views/navs/navbar_personal.html'
+            },
+            'sidebar@deposit': {
+                templateUrl: 'views/personal/info_side.html',
+                controller: ''
+            },
+            'content@deposit': {
+                templateUrl: 'views/personal/deposit.html',
+                controller: 'wdPersonalDepositController'
+            },
+            'sidebar-ad@deposit': {
+                templateUrl: 'views/personal/deposit_side.html',
+                controller: ''
+            },
+            'ft@deposit': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+
 })
+.run(['$rootScope', '$state', '$stateParams', 'authorization', 'principal',
+     function ($rootScope, $state, $stateParams, authorization, principal) {
+         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
+             $rootScope.toState = toState;
+             $rootScope.toStateParams = toStateParams;
+             if (principal.isIdentityResolved()) {
+                 authorization.authorize();
+             }
+         });
+     }
+])

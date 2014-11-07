@@ -10,34 +10,35 @@ $gray-lightest:           lighten(#000, 96%) !default; // #eee
 
 $brand-primary:         #fe8a0f !default;
 $brand-success:         #5cb85c !default;
-$brand-info:            #489ecf !default;
-$brand-warning:         #feb96f!default;
-$brand-danger:          #d9534f !default;
-
-$standard-black: #1f1f23;
-$standard-white: #ffffff;
-$standard-blue: #5c92fb;
-$standard-blue-green: #74aac5;
-$standard-green: #22c064;
-$standard-gray: #f7f7f7;
-$standard-deep-gray: #aaa;
-$standard-red: #ed7161;
-$standard-orange: #faaf46;
-
+$brand-info:            #589eef !default;
+$brand-warning:         #feb96f !default;
+$brand-danger:          #ef4d4d !default;
+$brand-white:           #fff !default;
 
 
 //== Scaffolding
 //
 //## Settings for some of the most global styles.
 //** Background color for `<body>`.
-$body-bg:               #fff !default;
+$body-bg:               #1b161a !default;
+
 $module-bg:             #f4f4f4 !default;
-$module-sub-bg:             #fff !default;
+$module-border:         #e7e7e7 !default;
+
+$module-sub-bg:         $brand-white !default;
+$module-sub-border:     $module-bg !default;
+
+$nav-dialog-bg:         #38383c !default;
+$nav-dialog-sub-bg:     #4c4c50 !default;
 
 //** Global text color on `<body>`.
 $text-color:            $gray-dark !default;
-$text-title-color: #bbbabb !default;
-$text-content-color: #646464 !default;
+$text-inverse-color:    #b4b4b4 !default;
+$text-inverse-title-color:  $brand-white !default;
+$text-title-color:      #333 !default;
+$text-title-sub-color:  #646464 !default;
+$text-content-color:    #969696 !default;
+$text-nav-dialog-color: #c8c8c8 !default;
 
 //** Global textual link color.
 $link-color:            $brand-primary !default;
@@ -56,7 +57,6 @@ $zindex-modal:             1050 !default;
 //== Typography
 //
 //## Font, line-height, and color for body text, headings, and more.
-
 $font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
@@ -67,12 +67,9 @@ $font-size-base:          14px !default;
 $font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
 $font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
 
-$font-size-h1:            floor(($font-size-base * 2.6)) !default; // ~36px
-$font-size-h2:            floor(($font-size-base * 2.15)) !default; // ~30px
-$font-size-h3:            ceil(($font-size-base * 1.7)) !default; // ~24px
-$font-size-h4:            ceil(($font-size-base * 1.25)) !default; // ~18px
-$font-size-h5:            $font-size-base !default;
-$font-size-h6:            ceil(($font-size-base * 0.85)) !default; // ~12px
+$font-size-h1:            floor(($font-size-base * 4.5)) !default; // ~60px
+$font-size-h2:            floor(($font-size-base * 2.6)) !default; // ~30px
+$font-size-h3:            floor(($font-size-base * 1.83)) !default; // ~26px
 
 //** Unit-less `line-height` for use in components like buttons.
 $line-height-base:        1.428571429 !default; // 20/14
@@ -177,7 +174,6 @@ $component-active-bg:       $brand-primary !default;
 //
 //##
 $carousel-text-shadow:                        0 1px 2px rgba(0,0,0,.6) !default;
-
 $carousel-control-color:                      #fff !default;
 $carousel-control-width:                      15% !default;
 $carousel-control-opacity:                    .5 !default;
@@ -282,7 +278,6 @@ $thumbnail-caption-padding:   9px !default;
 //== Navs
 //
 //##
-
 //=== Shared nav styles
 $nav-link-padding:                          10px 15px !default;
 $nav-link-hover-bg:                         $gray-lighter !default;
@@ -380,4 +375,3 @@ $dropdown-border: rgba(0,0,0,.15) !default;
 $dropdown-link-color:            $gray-dark !default;
 $dropdown-link-hover-color:      darken($gray-dark, 5%) !default;
 $dropdown-link-hover-bg:         #f5f5f5 !default;
-

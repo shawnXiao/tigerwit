@@ -1,0 +1,17 @@
+<div id="personal-deposit">
+    <div class="hd-sub">
+        <p class="title">入金</p>
+    </div>
+    <div class="bd-sub">
+        <p>您好，请填写您需要存入账户的资金数，中国国内客户转入人民币根据 Tigerwit 提供转换汇率折算成美元后存入您的账户</p>
+        <div class="deposit-fund">
+            <label for="inputName" class="col-sm-3 control-label text-left">存入金额（美元）：</label>
+            <div class="col-sm-6 col-deposit">
+                <input type="number" class="form-control " id="inputDeposit" placeholder="金额" ng-model="user.money.recharge">
+            </div>
+            <div class="col-sm-3">
+              <button type="submit" class="btn btn-danger" ng-click="pay();" >确定</button>
+            </div>
+        </div>
+    </div>
+</div>

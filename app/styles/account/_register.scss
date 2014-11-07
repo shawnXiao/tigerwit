@@ -57,23 +57,23 @@
                     font-size: 16px;
                     &.error {
                         border: none;
-                        color: $standard-red;
+                        color: $brand-danger;
                     }
                     &.uploading {
-                        color: $standard-black;
+                        color: $brand-warning;
                     }
                     &.success {
                         border: none;
-                        color: $standard-green;
+                        color: $brand-success;
                     }
                 }
             }
             .error {
-                border: 3px solid $standard-red;
+                border: 3px solid $brand-danger;
             }
             .success {
                 margin-top: 0px;
-                border: 3px solid $standard-green;
+                border: 3px solid $brand-success;
             }
         }
         .btn {

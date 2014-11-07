@@ -6,15 +6,16 @@
         .thumbnail {
             padding-top: 30px;
             .img-circle {
-                border: 4px solid $text-title-color;
+                border: 4px solid $module-sub-border;
             }
         }
         .info-detail {
             width: 245px;
             margin: 0 auto;
-            border: 1px solid $standard-gray;
+            border: 1px solid $module-border;
             h4 {
                 background-color: $module-bg;
+                color: $text-title-color;
                 text-align: center;
                 height: 40px;
                 margin: 0;
@@ -22,7 +23,10 @@
             }
             .info-text {
                 padding: 10px 20px 20px 20px;
-                color: $text-title-color;
+                p {
+                    color: $text-title-sub-color;
+                    font-size: $font-size-small;
+                }
             }
             .btn-md {
                 width: 100%;
@@ -31,14 +35,17 @@
         }
     }
     .nav {
+        margin-bottom: 20px;
         > li {
             > a {
                 padding: 20px 0 20px 60px;
                 border-left: 2px solid $module-bg;
                 border-radius: 0;
+                color: $text-content-color;
                 &.active,
                 &:hover {
                     border-left: 2px solid $brand-primary;
+                    color: $text-title-color;
                     background-color: #fff;
                 }
             }

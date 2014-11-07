@@ -47,7 +47,7 @@
                 height: 38px;
             }
             &.active {
-                color: $standard-white;
+                color: $module-sub-bg;
                 background-color: $brand-warning;
                 &::before {
                     border-color: $brand-warning $brand-warning $brand-warning transparent;

@@ -86,6 +86,10 @@ module.exports = function (grunt) {
                 '/dist',
                 connect.static('./dist')
               ),
+              connect().use(
+                '/test',
+                connect.static('./test')
+              ),
               connect.static(appConfig.app)
             ];
           }

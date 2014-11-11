@@ -17,19 +17,19 @@
     </div>
     <ul class="nav nav-pills nav-stacked">
         <li>
-            <a href="" class="active"><span class="icon-nav-home"></span>首页</a>
+            <a href="#/personal" ng-class="{'active': stateName === 'personal'}"><span class="icon-nav-home"></span>首页</a>
         </li>
         <li>
-            <a href=""><span class="icon-nav-deposit"></span> 入金</a>
+            <a href="#/personal/deposit"  ng-class="{'active': stateName === 'deposit'}"><span class="icon-nav-deposit"></span> 入金</a>
         </li>
         <li>
-            <a href=""><span class="icon-nav-withdraw"></span>出金</a>
+            <a href="#/personal/withdraw" ng-class="{'active':  stateName === 'withdraw'}"><span class="icon-nav-withdraw"></span>出金</a>
         </li>
         <li>
-            <a href=""><span class="icon-nav-history"></span>交易历史</a>
+            <a href="#/personal/history" ng-class="{'active': stateName === 'history'}"><span class="icon-nav-history"></span>交易历史</a>
         </li>
         <li class="">
-            <a href=""><span class="icon-nav-notify"></span>通知</a>
+            <a href="#/personal/notify" ng-class="{'active': stateName === 'notify'}"><span class="icon-nav-notify"></span>通知</a>
         </li>
     </ul>
 </div>

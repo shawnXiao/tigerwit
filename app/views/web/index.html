@@ -19,10 +19,11 @@
                 <input type="phone" name="phone"
                     ng-model="signIn.phone"
                     data-validate="required phone"
+                    focus-tip="phone"
                     placeholder="您的手机号码" class="form-control input-magnet-rt" wd-place-holder autofocus>
             </div>
             <button type="submit" class="btn btn-primary btn-magnet-lf" ng-click="goToRegister();">快速开通模拟账号 &gt;</button>
-            <p class="bg-info help-tip help-tip-single hide" ng-class="{'show': error_msg !== ''}">{{error_msg}}</p>
+            <p class="error"  ng-class="{'show': error_msg !== ''}">{{error_msg}}</p>
         </div>
     </div><!--form end-->
 

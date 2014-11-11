@@ -1,9 +1,13 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.controller('wdWebPersonalController',
-['$scope', 'wdAccount', '$timeout', '$location', 'wdAccountMoney',
-function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
+.controller('wdPersonalController',
+['$scope', 'wdAccount', '$timeout', '$location', '$state', 'wdAccountMoney',
+function ($scope, wdAccount, $timeout, $location, $state, wdAccountMoney) {
+    var stateName = $state.current.name;
+    $scope.moduleId =  "tigerwit-" + stateName;
+    $scope.stateName = stateName;
+
     var equitySocket;
     $scope.user = {
         money: {
@@ -21,6 +25,7 @@ function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
         }, function() {
         });
     };
+
     equitySocket = wdAccountMoney.equitySocket();
     equitySocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
@@ -41,4 +46,5 @@ function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
             wdAccountMoney.pay(Number(num).toFixed(2));
         }
     };
+
 }]);

@@ -5,12 +5,13 @@ angular.module('tigerwitApp')
 
     var validateFuns = {
         regTypes: {
-            'phone': '1[0-9]{10}$',
+            'phone': '^(?:\\+86)?(1[0-9]{10}$)',
             'email': '\\S+@\\S+\\.\\S+',
-            'num': '[0-9]',
-            'zh': '[^u4e00-u9fa5]',
-            'en': '[a-zA-Z]',
-            'sym': '[\!\@\#\$\%\^\&\*\(\)\_\+]'
+            'num': '0-9',
+            'zh': '\\u4e00-\\u9fa5',
+            'en': 'a-zA-Z',
+            'sym': '[!@#$%^&*()_+]',
+            'nosym': '[^!@#$%^&*()_+]'
         },
         number: function (str, type) {
             var validateResult = !/\D/.test(str);
@@ -39,19 +40,25 @@ angular.module('tigerwitApp')
             };
         },
         /*
-        *text 书写规则: text:en-zh-sym-num, 是"或"的关系
+        *text 书写规则: text:en-zh-num, 是"或"的关系, 且仅有
         */
         text: function (str, type) {
             var textTypes = type.split(":")[1];
             var textTypeList = textTypes.split("-");
 
-            var textRegStr = "";
+            var regStr = "";
             textTypeList.forEach(function (item) {
-                textRegStr += '' + (validateFuns.regTypes[item] || '') + '|';
+                regStr += '' + (validateFuns.regTypes[item] || '');
             });
+            var textRegStr = "[" + regStr + "]";
+            var antiTextRegStr = "[^" + regStr + "]";
 
+            // trim string
+            str = str.replace(/\s/g, '');
             var textReg = new RegExp(textRegStr);
-            var validateResult = textReg.test(str);
+            var antiTextReg = new RegExp(antiTextRegStr);
+            var validateResult = textReg.test(str) && !antiTextReg.test(str);
+
             var validateReason = "";
             if (!validateResult) {
                 validateReason = "输入项不符合规范！";
@@ -80,12 +87,12 @@ angular.module('tigerwitApp')
                 typeCounter += 1;
             }
 
-            if (str.search(/\!\@\#\$\%\^\&\*\(\)\_\+/) != -1) {
+            if (str.search(/[!@#$%^&*()_+]/) != -1) {
                 typeCounter += 1;
             }
 
             var hasBadChar = false;
-            if (str.search(/^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+/) !=-1) {
+            if (str.search(/[^a-zA-Z0-9!@#$%^&*()_+]/) !=-1) {
                 hasBadChar = true;
             }
 
@@ -173,6 +180,7 @@ angular.module('tigerwitApp')
 
 
     return {
+        validateFuns: validateFuns,
         validate: function(type, str) {
             var typeList = type.split(" ");
             var validateResult = {
@@ -191,7 +199,6 @@ angular.module('tigerwitApp')
                     validateResult = temptResultObj;
                 }
             });
-
             return validateResult;
         }
     };

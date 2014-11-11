@@ -61,6 +61,14 @@
     @include wd-image('logo-gray.png');
 }
 
+.color-danger {
+    color: $brand-danger;
+}
+
+.color-info {
+    color: $brand-info;
+}
+
 .social-list {
     > li {
         display: inline-block;

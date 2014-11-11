@@ -11,6 +11,8 @@ $gray-lightest:           lighten(#000, 96%) !default; // #eee
 $brand-primary:         #fe8a0f !default;
 $brand-success:         #5cb85c !default;
 $brand-info:            #589eef !default;
+$brand-light-info:      #589ecf !default;
+$brand-lightest-info:   #eef5fa !default;
 $brand-warning:         #feb96f !default;
 $brand-danger:          #ef4d4d !default;
 $brand-white:           #fff !default;
@@ -30,6 +32,8 @@ $module-sub-border:     $module-bg !default;
 
 $nav-dialog-bg:         #38383c !default;
 $nav-dialog-sub-bg:     #4c4c50 !default;
+
+$table-nth-bg:          #fafafa !default;
 
 //** Global text color on `<body>`.
 $text-color:            $gray-dark !default;

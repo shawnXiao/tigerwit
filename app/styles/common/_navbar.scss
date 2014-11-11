@@ -41,11 +41,21 @@
     float: right;
   }
   .dropdown-info {
+      .dropdown-toggle {
+          color: $text-nav-dialog-color;
+          &:hover {
+              text-decoration: none;
+          }
+          .caret {
+              color: $brand-primary;
+          }
+      }
       .dropdown-menu {
           right: 0;
           left: auto;
           padding: 14px;
           background-color: $nav-dialog-bg;
+          z-index: $zindex-popover;
           .row {
               margin: 0;
               .col-left {
@@ -77,6 +87,14 @@
               }
               .btn-wrapper {
                   text-align: center;
+              }
+          }
+          .loginout {
+              display: block;
+              padding-top: 10px;
+              color: $text-content-color;
+              &:hover {
+                  text-decoration: none;
               }
           }
       }
@@ -379,6 +397,7 @@
   .navbar-brand {
     color: $navbar-inverse-brand-color;
     &:hover,
+    &.active,
     &:focus {
       color: $navbar-inverse-brand-hover-color;
       background-color: $navbar-inverse-brand-hover-bg;
@@ -395,6 +414,7 @@
       border-bottom: 2px solid $navbar-inverse-link-border-color;
 
       &:hover,
+      &.active,
       &:focus {
         color: $navbar-inverse-link-hover-color;
         border-bottom: 2px solid $navbar-inverse-link-hover-border-color;
@@ -404,6 +424,7 @@
     > .active > a {
       &,
       &:hover,
+      &.active,
       &:focus {
         color: $navbar-inverse-link-active-color;
         background-color: $navbar-inverse-link-active-bg;

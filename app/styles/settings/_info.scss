@@ -1,0 +1,13 @@
+#settings-info {
+    .personal-info {
+        p {
+            color: $text-title-color;
+            span {
+                display: inline-block;
+                width: 50px;
+                text-align: right;
+                color: $text-content-color;
+            }
+        }
+    }
+}

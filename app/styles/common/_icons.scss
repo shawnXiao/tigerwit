@@ -25,10 +25,11 @@ $icon-navs: home, deposit, withdraw, history, notify;
     $i: index($icon-navs, $name) - 1;
     .icon-nav-#{$name} {
         @extend .icon-navs;
-        background-position: 0 -68px * $i;
+        background-position: -79px -68px * $i;
     }
+    a.active .icon-nav-#{$name},
     a:hover .icon-nav-#{$name} {
-            background-position: -79px -68px * $i;
+        background-position: 0 -68px * $i;
     }
 }
 

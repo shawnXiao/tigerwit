@@ -1,0 +1,37 @@
+#personal-notify {
+    a {
+        color: $brand-light-info;
+    }
+    .del-all {
+        padding-left: 5px;
+    }
+    .del-partly {
+        padding-right: 12px;
+        border-right: 1px solid $module-border;
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+        > li {
+            border-bottom: 1px solid $module-border;
+            padding: 10px 0 0 10px;
+            list-style: none;
+            color: $text-inverse-color;
+            &.unread {
+                background-color: $brand-lightest-info;
+                color: $text-title-color;
+                .time {
+                    color: $text-inverse-color;
+                }
+            }
+            .notify-info {
+                float: left;
+                width: 90%;
+                margin-right: 25px;
+            }
+            .del {
+                margin-right: 15px;
+            }
+        }
+    }
+}

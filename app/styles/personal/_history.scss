@@ -1,50 +1,56 @@
 #personal-history {
-    .dropdown {
-        .dropdown-toggle {
-            border-radius: 0;
-            background-color: $module-bg;
-            span {
-                display: inline-block;
+    ul {
+        padding: 0;
+        margin: 0;
+        li {
+            list-style: none;
+            padding: 15px 0;
+            color: $text-title-color;
+            p {
+                margin: 0;
             }
-            .dropdown-toggle-text {
-                border-right: 1px solid $text-nav-dialog-color;
-                padding: 0 15px;
+            .col-sm-2 {
+                top: 10px;
             }
-        }
-        .dropdown-menu {
-            min-width: 100px;
-            width: 100px;
-            > li > a:hover {
-                background-color: $module-bg;
-                text-decoration: none;
-            }
-        }
-    }
-    .table-info {
-        background-color: $module-bg;
-        padding: 15px 15px 0 15px;
-        .row {
-            padding:  15px;
-            margin: 0;
-            &.border {
-                border-bottom: 1px solid $module-border;
-            }
-            .border-right {
-                border-right: 1px solid $module-border;
-            }
-        }
-        p {
-            text-align: center;
-            color: $text-content-color;
-            &.number-info {
+            .currency {
                 font-weight: bolder;
-                font-size: $font-size-h3;
-                color: $brand-info;
+                font-size: $font-size-base;
             }
-            &.number-danger {
-                @extend .number-info; 
+            .forex-type {
+                color: $brand-info;
+                font-weight: bolder;
+                font-size: $font-size-base;
+            }
+            .up {
                 color: $brand-danger;
             }
+            .down {
+                color: $brand-success;
+            }
+            .deal-info {
+                margin-top: 5px;
+                color: $text-content-color;
+                font-size: $font-size-small;
+                .deal-type {
+                    display: inline-block;
+                    width: 72px;
+                    height: 20px;
+                    line-height: 20px;
+                    text-align: center;
+                    margin-right: 4px;
+                    background-color: $module-bg;
+                }
+            }
+        }
+        li:nth-child(2n) {
+            background-color: $table-nth-bg;
+        }
+    }
+    .ft {
+        display: block;
+        color: $brand-info;
+        &:hover {
+            text-decoration: none;
         }
     }
 }

@@ -14,7 +14,7 @@
 
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="#">个人中心</a>
+                            <a href="#/personal" ng-class="{'active':  parentState === 'personal'}">个人中心</a>
                         </li>
                         <li>
                             <a href="#">高手榜</a>
@@ -23,16 +23,18 @@
                             <a href="#">新手指南</a>
                         </li>
                         <li>
-                            <a href="#">设置</a>
+                            <a href="#/setting" ng-class="{'active':  parentState === 'setting'}">设置</a>
                         </li>
                     </ul>
                     <div class="navbar-tail">
-                        <div class="dropdown pull-right dropdown-info">
-                            <a class="dropdown-toggle">
+                        <div class="dropdown pull-right dropdown-info" ng-mouseenter="showInfoDropdown()" ng-mouseleave="hideInfoDropdown()">
+                            <a class="dropdown-toggle" href="javascript:void(0)">
                                 令狐斌
                                 <span class="caret"></span>
                             </a>
-                            <div class="dropdown-menu show">
+                            <div class="dropdown-menu"
+                                ng-class="{'show':  infoDropdownShow}">
+
                                 <div class="row clearfix">
                                     <div class="col-left">
                                         <img class="img-circle"
@@ -45,6 +47,7 @@
                                         <p>模拟账户：linghubin</p>
                                     </div>
                                 </div>
+
                                 <div class="found-wrapper-sm">
                                     <div class="title">
                                         总资产
@@ -59,8 +62,10 @@
                                             type="submit">出金</button>
                                     </div>
                                 </div>
+                                <a href="javascript:void(0)"  class="loginout text-center" ng-click="signOut()">退出</a>
                             </div>
                         </div>
+
                     </div>
                 </div><!--navbar-collapse end-->
             </div>

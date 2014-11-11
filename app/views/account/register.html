@@ -9,11 +9,11 @@
                 <div class="col-sm-4">
                     <input type="text" class="form-control" id="inputNickname"
                     ng-model="signIn.username"
-                    data-validate="length:4-30 text:en-num-sym-zh"
+                    data-validate="length:2-30 text:en-num-zh"
                     placeholder="昵称" focus-tip='nickname'>
                 </div>
                 <div class="col-sm-5" focus-tip-type="nickname">
-                  <p class="bg-info help-tip help-tip-single" data-info="4-30个字符，由中英文和数字组成"></p>
+                  <p class="bg-info help-tip help-tip-single" data-info="2-30个字符，由中英文和数字组成"></p>
                 </div>
               </div>
               <div class="form-group clearfix">
@@ -189,19 +189,19 @@
                 <div class="col-sm-7">
                     <input type="radio" name="state-salary"
                     ng-model="person.questionnaire.yearly_income"
-                    id="state-salary-10000" value="1"/>
+                    id="state-salary-10000" value="0"/>
                     <label for="state-salary-10000">&lt;10000</label>
                     <input type="radio" name="state-salary"
                     ng-model="person.questionnaire.yearly_income"
-                    id="state-salary-25000" value="2" />
+                    id="state-salary-25000" value="1" />
                     <label for="state-salary-25000">10000 - 25000</label>
                     <input type="radio" name="state-salary"
                     ng-model="person.questionnaire.yearly_income"
-                    id="state-salary-50000" value="3"/>
+                    id="state-salary-50000" value="2"/>
                     <label for="state-salary-50000">25000 - 50000</label>
                     <input type="radio" name="state-job"
                     ng-model="person.questionnaire.yearly_income"
-                    id="state-salary-50000-more" value="4" />
+                    id="state-salary-50000-more" value="3" />
                     <label for="state-salary-50000-more">500000+</label>
                 </div>
               </div>

@@ -1,0 +1,50 @@
+#personal-history-chart {
+    .dropdown {
+        .dropdown-toggle {
+            border-radius: 0;
+            background-color: $module-bg;
+            span {
+                display: inline-block;
+            }
+            .dropdown-toggle-text {
+                border-right: 1px solid $text-nav-dialog-color;
+                padding: 0 15px;
+            }
+        }
+        .dropdown-menu {
+            min-width: 100px;
+            width: 100px;
+            > li > a:hover {
+                background-color: $module-bg;
+                text-decoration: none;
+            }
+        }
+    }
+    .table-info {
+        background-color: $module-bg;
+        padding: 15px 15px 0 15px;
+        .row {
+            padding:  15px;
+            margin: 0;
+            &.border {
+                border-bottom: 1px solid $module-border;
+            }
+            .border-right {
+                border-right: 1px solid $module-border;
+            }
+        }
+        p {
+            text-align: center;
+            color: $text-content-color;
+            &.number-info {
+                font-weight: bolder;
+                font-size: $font-size-h3;
+                color: $brand-info;
+            }
+            &.number-danger {
+                @extend .number-info; 
+                color: $brand-danger;
+            }
+        }
+    }
+}

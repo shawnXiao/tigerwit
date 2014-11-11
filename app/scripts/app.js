@@ -40,15 +40,6 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
     // 下面为 page 的配置
     $stateProvider
-    .state('site', {
-        'abstract': true,
-        templateUrl: 'views/test.html',
-        resolve: {
-            authorize: ['authorization', function (authorization) {
-                return authorization.authorize();
-            }]
-        }
-    })
     .state('index', {
         url: "/index",
         views: {
@@ -60,7 +51,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@index': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@index': {
                 templateUrl: 'views/web/index.html',
@@ -71,6 +62,29 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
+    .state('about', {
+        url: "/about",
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc1.html',
+                controller: function ($scope) {
+                    $scope.moduleId = "tigerwit-about"
+                }
+            },
+            'hd@about': {
+                templateUrl: 'views/navs/navbar1.html',
+                controller: 'wdWebNavbarController'
+            },
+            'bd@about': {
+                templateUrl: 'views/web/about.html',
+                controller: 'wdWebMarketingController'
+            },
+            'ft@about': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+
     .state('regist', {
         url: "/regist",
         views: {
@@ -82,7 +96,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@regist': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@regist': {
                templateUrl: 'views/account/register.html',
@@ -104,7 +118,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@login': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@login': {
                 templateUrl: 'views/account/login.html',
@@ -126,7 +140,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@reset': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@reset': {
                 templateUrl: 'views/account/reset_password.html',
@@ -139,10 +153,10 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     })
     .state('regist_succ', {
         url: "/regist_succ",
-        parent: 'site',
         data: {
             roles: []
         },
+        resolve: authorizResolve,
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
@@ -152,7 +166,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@regist_succ': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@regist_succ': {
                 templateUrl: 'views/account/register_succ.html'
@@ -171,19 +185,18 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         views: {
             '': {
                 templateUrl: 'views/layout/doc2.html',
-                controller: function ($scope) {
-                    $scope.moduleId = "tigerwit-personal-index"
-                }
+                controller: 'wdPersonalController'
             },
             'hd@personal': {
-                templateUrl: 'views/navs/navbar_personal.html'
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
             },
             'sidebar@personal': {
                 templateUrl: 'views/personal/info_side.html',
                 controller: ''
             },
             'content@personal': {
-                templateUrl: 'views/personal/history.html',
+                templateUrl: 'views/personal/history_chart.html',
                 controller: 'wdPersonalHistoryController'
             },
             'sidebar-ad@personal': {
@@ -196,16 +209,15 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         }
     })
     .state('deposit', {
-        url: '/deposit',
+        url: '/personal/deposit',
         views: {
             '': {
                 templateUrl: 'views/layout/doc2.html',
-                controller: function ($scope) {
-                    $scope.moduleId = "tigerwit-personal-deposit"
-                }
+                controller: 'wdPersonalController'
             },
             'hd@deposit': {
-                templateUrl: 'views/navs/navbar_personal.html'
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
             },
             'sidebar@deposit': {
                 templateUrl: 'views/personal/info_side.html',
@@ -220,6 +232,130 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
                 controller: ''
             },
             'ft@deposit': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('history', {
+        url: '/personal/history',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc2.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@history': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@history': {
+                templateUrl: 'views/personal/info_side.html',
+                controller: ''
+            },
+            'content@history': {
+                templateUrl: 'views/personal/history.html',
+                controller: 'wdPersonalDepositController'
+            },
+            'sidebar-ad@history': {
+                templateUrl: 'views/personal/deposit_side.html',
+                controller: ''
+            },
+            'ft@history': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('notify', {
+        url: '/personal/notify',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc2.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@notify': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@notify': {
+                templateUrl: 'views/personal/info_side.html',
+                controller: ''
+            },
+            'content@notify': {
+                templateUrl: 'views/personal/notify.html'
+            },
+            'sidebar-ad@notify': {
+                templateUrl: 'views/personal/deposit_side.html',
+                controller: ''
+            },
+            'ft@notify': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('setting', {
+        url: '/setting',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc3.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@setting': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@setting': {
+                templateUrl: 'views/settings/side.html',
+                controller: ''
+            },
+            'content@setting': {
+                templateUrl: 'views/settings/info.html'
+            },
+            'ft@setting': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('settingPassword', {
+        url: '/setting/password',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc3.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@settingPassword': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@settingPassword': {
+                templateUrl: 'views/settings/side.html',
+                controller: ''
+            },
+            'content@settingPassword': {
+                templateUrl: 'views/settings/password.html'
+            },
+            'ft@settingPassword': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('settingGlobal', {
+        url: '/setting/global',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc3.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@settingGlobal': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@settingGlobal': {
+                templateUrl: 'views/settings/side.html',
+                controller: ''
+            },
+            'content@settingGlobal': {
+                templateUrl: 'views/settings/global.html'
+            },
+            'ft@settingGlobal': {
                 templateUrl: 'views/layout/footer.html'
             }
         }

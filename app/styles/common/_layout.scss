@@ -61,6 +61,7 @@ body {
     }
 }
 
+// 三列布局
 .doc2 {
     > .row {
         background-color: $module-bg;
@@ -77,6 +78,7 @@ body {
             margin-left: -2px;
             background-color: #fff;
             padding: 15px;
+            min-height: 700px;
             @extend .col-lg-6;
         }
         .sidebar-ad {
@@ -95,5 +97,45 @@ body {
                 margin: 0;
             }
         }
+    }
+}
+
+// 两列布局
+.doc3 {
+    > .row {
+        background-color: $module-bg;
+    }
+    .bd {
+        @extend .container;
+        margin-top: 30px;
+        .sidebar {
+            @extend .col-lg-3;
+            padding: 0;
+            z-index: $zindex-navbar;
+        }
+        .content {
+            margin-left: -2px;
+            background-color: #fff;
+            padding: 15px;
+            min-height: 700px;
+            @extend .col-lg-9;
+        }
+        .hd-sub {
+            padding-bottom: 5px;
+            border-bottom: 1px solid $module-border;
+            margin-bottom: 10px;
+            color: $text-content-color;
+            .title {
+                font-size: $font-size-large;
+                margin: 0;
+            }
+        }
+    }
+    .col-left {
+        float: left;
+    }
+    .col-right {
+        overflow: hidden;
+        zoom: 1;
     }
 }

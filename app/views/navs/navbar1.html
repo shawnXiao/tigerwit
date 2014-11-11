@@ -17,18 +17,63 @@
             </ul>
         </div>
     </div><!--navbar-header end-->
-    <div class="navbar-tail">
-        <div class="form-group-sm form-inline navbar-login" ng-class="{'hide': login.is_succ}">
-            <input type="phone" name="phone"
-                ng-model="login.phone"
-                data-validate="required phone"
-                placeholder="账号" class="form-control input-sm" wd-place-holder >
-            <input type="password" class="form-control input-sm input-magnet-rt"
-            data-validate="length:6-15 password"
-            id="inputPassword" placeholder="密码" ng-model="login.password" focus-tip="password">
-            <button type="submit" class="btn btn-primary btn-sm btn-magnet-lf" ng-click="login();">&gt;</button>
+    <div class="navbar-tail hide" ng-class="{'show': showTail }">
+        <div ng-if="!authenticated">
+            <div class="form-group-sm form-inline navbar-login" ng-class="{'hide': login.is_succ}">
+                <input type="phone" name="phone"
+                    ng-model="login.phone"
+                    data-validate="required phone"
+                    placeholder="账号" class="form-control input-sm" wd-place-holder >
+                <input type="password" class="form-control input-sm input-magnet-rt"
+                data-validate="length:6-15 password"
+                id="inputPassword" placeholder="密码" ng-model="login.password" focus-tip="loginpassword">
+                <button type="submit"
+                    class="btn btn-primary btn-sm btn-magnet-lf" 
+                    ng-click="loginFun();">&gt;</button>
+            </div>
+            <p class="color-danger text-center" ng-class="{'show': !!login.error_msg }">{{login.error_msg}}</p>
         </div>
-        <p class="bg-info help-tip help-tip-single hide" ng-class="{'show': !!login.error_msg }">{{login.error_msg}}</p>
+
+        <div ng-if="authenticated"
+            ng-mouseenter="showInfoDropdown()" ng-mouseleave="hideInfoDropdown()"
+            class="dropdown pull-right dropdown-info">
+            <a class="dropdown-toggle" href="javascript:void(0)">
+                令狐斌
+                <span class="caret"></span>
+            </a>
+            <div class="dropdown-menu"
+                ng-class="{'show':  infoDropdownShow}">
+                <div class="row clearfix">
+                    <div class="col-left">
+                        <img class="img-circle"
+                        src="http://placehold.it/34x34"
+                        alt="thumbnail" />
+                    </div>
+                    <div class="col-right">
+                        <p>Bin.Linghu</p>
+                        <p>真实账户：令狐斌</p>
+                        <p>模拟账户：linghubin</p>
+                    </div>
+                </div>
+
+                <div class="found-wrapper-sm">
+                    <div class="title">
+                        总资产
+                    </div>
+                    <div class="money-total">
+                        $6812.34
+                    </div>
+                    <div class="btn-wrapper">
+                        <button class="btn btn-md btn-danger" 
+                            type="submit">入金</button>
+                        <button class="btn btn-md btn-info"
+                            type="submit">出金</button>
+                    </div>
+                </div>
+                <a href="javascript:void(0)" class="loginout text-center" ng-click="signOut()">退出</a>
+            </div>
+        </div>
+
     </div>
 </div> <!--toolbar end -->
 

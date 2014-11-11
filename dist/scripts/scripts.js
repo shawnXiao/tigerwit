@@ -8116,6 +8116,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         return {
             'request': function(config) {
                 config.timeout = wdConfig.httpTimeout;
+                console.log(config.url);
                 if (!/^[http|https]/.test(config.url) && !/\.html$/.test(config.url)) {
                     config.url = wdConfig.apiUrl + config.url;
                 }
@@ -8133,6 +8134,9 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
     $urlRouterProvider.otherwise('/index');
 
+    // 登录验证
+    var authorizResolve =  { authorize: ['authorization', function (authorization) { return authorization.authorize(); }] };
+
     // 下面为 page 的配置
     $stateProvider
     .state('index', {
@@ -8146,7 +8150,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@index': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@index': {
                 templateUrl: 'views/web/index.html',
@@ -8157,6 +8161,29 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
+    .state('about', {
+        url: "/about",
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc1.html',
+                controller: function ($scope) {
+                    $scope.moduleId = "tigerwit-about"
+                }
+            },
+            'hd@about': {
+                templateUrl: 'views/navs/navbar1.html',
+                controller: 'wdWebNavbarController'
+            },
+            'bd@about': {
+                templateUrl: 'views/web/about.html',
+                controller: 'wdWebMarketingController'
+            },
+            'ft@about': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+
     .state('regist', {
         url: "/regist",
         views: {
@@ -8168,7 +8195,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@regist': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@regist': {
                templateUrl: 'views/account/register.html',
@@ -8190,7 +8217,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@login': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@login': {
                 templateUrl: 'views/account/login.html',
@@ -8212,7 +8239,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@reset': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@reset': {
                 templateUrl: 'views/account/reset_password.html',
@@ -8225,6 +8252,10 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     })
     .state('regist_succ', {
         url: "/regist_succ",
+        data: {
+            roles: []
+        },
+        resolve: authorizResolve,
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
@@ -8234,7 +8265,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             },
             'hd@regist_succ': {
                 templateUrl: 'views/navs/navbar1.html',
-                controller: ''
+                controller: 'wdWebNavbarController'
             },
             'bd@regist_succ': {
                 templateUrl: 'views/account/register_succ.html'
@@ -8246,23 +8277,26 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     })
     .state('personal', {
         url: '/personal',
+        data: {
+            roles: []
+        },
+        resolve: authorizResolve,
         views: {
             '': {
                 templateUrl: 'views/layout/doc2.html',
-                controller: function ($scope) {
-                    $scope.moduleId = "tigerwit-personal-index"
-                }
+                controller: 'wdPersonalController'
             },
             'hd@personal': {
-                templateUrl: 'views/navs/navbar_personal.html'
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
             },
             'sidebar@personal': {
                 templateUrl: 'views/personal/info_side.html',
                 controller: ''
             },
             'content@personal': {
-                templateUrl: 'views/personal/history.html',
-                controller: ''
+                templateUrl: 'views/personal/history_chart.html',
+                controller: 'wdPersonalHistoryController'
             },
             'sidebar-ad@personal': {
                 templateUrl: 'views/personal/deposit_side.html',
@@ -8273,7 +8307,171 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
+    .state('deposit', {
+        url: '/personal/deposit',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc2.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@deposit': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@deposit': {
+                templateUrl: 'views/personal/info_side.html',
+                controller: ''
+            },
+            'content@deposit': {
+                templateUrl: 'views/personal/deposit.html',
+                controller: 'wdPersonalDepositController'
+            },
+            'sidebar-ad@deposit': {
+                templateUrl: 'views/personal/deposit_side.html',
+                controller: ''
+            },
+            'ft@deposit': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('history', {
+        url: '/personal/history',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc2.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@history': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@history': {
+                templateUrl: 'views/personal/info_side.html',
+                controller: ''
+            },
+            'content@history': {
+                templateUrl: 'views/personal/history.html',
+                controller: 'wdPersonalDepositController'
+            },
+            'sidebar-ad@history': {
+                templateUrl: 'views/personal/deposit_side.html',
+                controller: ''
+            },
+            'ft@history': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('notify', {
+        url: '/personal/notify',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc2.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@notify': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@notify': {
+                templateUrl: 'views/personal/info_side.html',
+                controller: ''
+            },
+            'content@notify': {
+                templateUrl: 'views/personal/notify.html'
+            },
+            'sidebar-ad@notify': {
+                templateUrl: 'views/personal/deposit_side.html',
+                controller: ''
+            },
+            'ft@notify': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('setting', {
+        url: '/setting',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc3.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@setting': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@setting': {
+                templateUrl: 'views/settings/side.html',
+                controller: ''
+            },
+            'content@setting': {
+                templateUrl: 'views/settings/info.html'
+            },
+            'ft@setting': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('settingPassword', {
+        url: '/setting/password',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc3.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@settingPassword': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@settingPassword': {
+                templateUrl: 'views/settings/side.html',
+                controller: ''
+            },
+            'content@settingPassword': {
+                templateUrl: 'views/settings/password.html'
+            },
+            'ft@settingPassword': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+    .state('settingGlobal', {
+        url: '/setting/global',
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc3.html',
+                controller: 'wdPersonalController'
+            },
+            'hd@settingGlobal': {
+                templateUrl: 'views/navs/navbar_personal.html',
+                controller: 'wdWebNavbarController'
+            },
+            'sidebar@settingGlobal': {
+                templateUrl: 'views/settings/side.html',
+                controller: ''
+            },
+            'content@settingGlobal': {
+                templateUrl: 'views/settings/global.html'
+            },
+            'ft@settingGlobal': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+
 })
+.run(['$rootScope', '$state', '$stateParams', 'authorization', 'principal',
+     function ($rootScope, $state, $stateParams, authorization, principal) {
+         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
+             $rootScope.toState = toState;
+             $rootScope.toStateParams = toStateParams;
+             if (principal.isIdentityResolved()) {
+                 authorization.authorize();
+             }
+         });
+     }
+])
 
 'use strict';
 
@@ -8417,12 +8615,13 @@ angular.module('tigerwitApp')
 
     var validateFuns = {
         regTypes: {
-            'phone': '1[0-9]{10}$',
+            'phone': '^(?:\\+86)?(1[0-9]{10}$)',
             'email': '\\S+@\\S+\\.\\S+',
-            'num': '[0-9]',
-            'zh': '[^u4e00-u9fa5]',
-            'en': '[a-zA-Z]',
-            'sym': '[\!\@\#\$\%\^\&\*\(\)\_\+]'
+            'num': '0-9',
+            'zh': '\\u4e00-\\u9fa5',
+            'en': 'a-zA-Z',
+            'sym': '[!@#$%^&*()_+]',
+            'nosym': '[^!@#$%^&*()_+]'
         },
         number: function (str, type) {
             var validateResult = !/\D/.test(str);
@@ -8451,19 +8650,25 @@ angular.module('tigerwitApp')
             };
         },
         /*
-        *text 书写规则: text:en-zh-sym-num, 是"或"的关系
+        *text 书写规则: text:en-zh-num, 是"或"的关系, 且仅有
         */
         text: function (str, type) {
             var textTypes = type.split(":")[1];
             var textTypeList = textTypes.split("-");
 
-            var textRegStr = "";
+            var regStr = "";
             textTypeList.forEach(function (item) {
-                textRegStr += '' + (validateFuns.regTypes[item] || '') + '|';
+                regStr += '' + (validateFuns.regTypes[item] || '');
             });
+            var textRegStr = "[" + regStr + "]";
+            var antiTextRegStr = "[^" + regStr + "]";
 
+            // trim string
+            str = str.replace(/\s/g, '');
             var textReg = new RegExp(textRegStr);
-            var validateResult = textReg.test(str);
+            var antiTextReg = new RegExp(antiTextRegStr);
+            var validateResult = textReg.test(str) && !antiTextReg.test(str);
+
             var validateReason = "";
             if (!validateResult) {
                 validateReason = "输入项不符合规范！";
@@ -8492,12 +8697,12 @@ angular.module('tigerwitApp')
                 typeCounter += 1;
             }
 
-            if (str.search(/\!\@\#\$\%\^\&\*\(\)\_\+/) != -1) {
+            if (str.search(/[!@#$%^&*()_+]/) != -1) {
                 typeCounter += 1;
             }
 
             var hasBadChar = false;
-            if (str.search(/^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+/) !=-1) {
+            if (str.search(/[^a-zA-Z0-9!@#$%^&*()_+]/) !=-1) {
                 hasBadChar = true;
             }
 
@@ -8585,6 +8790,7 @@ angular.module('tigerwitApp')
 
 
     return {
+        validateFuns: validateFuns,
         validate: function(type, str) {
             var typeList = type.split(" ");
             var validateResult = {
@@ -8603,8 +8809,114 @@ angular.module('tigerwitApp')
                     validateResult = temptResultObj;
                 }
             });
-
             return validateResult;
+        }
+    };
+    // 结束
+}]);
+
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name tigerwitApp
+ * @description
+ * # tigerwitApp
+ *
+ * 用于验证用户是否登录以及用户角色
+ */
+angular.module('tigerwitApp')
+.factory('principal', ['$q', '$http', '$timeout',
+     function ($q, $http, $timeout) {
+         var _identify = undefined;
+         var _authenticated = false;
+         return {
+             isIdentityResolved: function () {
+                 return angular.isDefined(_identify);
+             },
+             isAuthenticated: function () {
+                 return _authenticated;
+             },
+             isInRole: function (role) {
+                 if (!_authenticated || !_identify.roles) {
+                     return false;
+                 }
+
+                 return _identify.roles.indexOf(role) != -1;
+             },
+             isInAnyRole: function (roles) {
+                 if (!_authenticated || !_identify.roles) {
+                     return false;
+                 }
+
+                 for (var i = 0; i < roles.length; i++) {
+                     if (this.isInRole(roles[i])) {
+                         return true;
+                     }
+                 }
+             },
+             authenticate: function (identity) {
+                 _identify = identity;
+                 _authenticated = identity != null;
+             },
+             identity: function (force) {
+                 var deferred = $q.defer();
+                 if (force) {
+                     _identify = undefined;
+                 }
+
+                 if (angular.isDefined(_identify)) {
+                     deferred.resolve(_identify);
+                     return deferred.promise;
+                 }
+                 $http.get('/check').then(function (data) {
+                     if (data.is_succ) {
+                         _authenticated = true;
+                     }
+                     _identify = data;
+                     deferred.resolve(_identify)
+                 }, function () {
+                     _identify = null;
+                     _authenticated = false;
+                     deferred.resolve(_identify)
+                 });
+                 return deferred.promise;
+             }
+         }
+ }])
+ .factory('authorization', ['$rootScope', '$state', 'principal',
+    function ($rootScope, $state, principal) {
+        return {
+            authorize: function () {
+                return principal.identity()
+                .then(function () {
+                    var isAuthenticated = principal.isAuthenticated();
+                    if ($rootScope.toState.data.roles &&
+                        $rootScope.toState.data.roles.length > 0 &&
+                       !principal.isInAnyRole($rootScope.toState.data.roles)) {
+                        if (isAuthenticated) {
+                            $state.go('login');
+                        } else {
+                            $rootScope.returnToState = $rootScope.toState;
+                            $rootScope.returnToStateParams  = $rootScope.toStateParams;
+                            $state.go('regist');
+                        }
+                    }
+                })
+            }
+        }
+    }
+ ])
+
+'use strict';
+
+angular.module('tigerwitApp')
+.factory('wdStock',
+['$rootScope', '$http', 'wdStorage',
+function($rootScope, $http, wdStorage) {
+    return {
+        getTestData: function () {
+            return $http.get('http://0.0.0.0:9000/test/stock.json')
         }
     };
     // 结束
@@ -9086,14 +9398,115 @@ angular.module('tigerwitApp')
     };
 }]);
 
+angular.module('tigerwitApp')
+.directive('highchartsStock', function () {
+    return {
+        restrict: 'A',
+        replace: true,
+        template: '<div id="container" style="width: 480px; height: 200px;">not working</div>',
+        link: function (scope, elemnt, attrs) {
+            scope.$on("personal_history", function (event, data) {
+                data = Highcharts.map(data, function (config) {
+                    return {
+                        x: config[0],
+                        open: config[1],
+                        high: config[2],
+                        low: config[3],
+                        close: config[4],
+                        y: config[4]
+                    }
+                });
+                var options = {
+                    chart: {
+                        renderTo: 'container',
+                        type: 'StockChart'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            enabled: false
+                        }
+                    },
+                    xAxis: {
+                        gapGridLineWidth: 0,
+                        type: 'datetime'
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    rangeSelector : {
+                        buttons : [{
+                            type : 'hour',
+                            count : 1,
+                            text : '1h'
+                        }, {
+                            type : 'day',
+                            count : 1,
+                            text : '1D'
+                        }, {
+                            type : 'all',
+                            count : 1,
+                            text : 'All'
+                        }],
+                        selected : 1,
+                        inputEnabled : false
+                    },
+                    tooltip: {
+                        useHTML: true,
+                        formatter: function () {
+                            var dateStamp = new Date(this.x);
+                            var date = dateStamp.getFullYear() + '/' + (dateStamp.getMonth() + 1) + "/" + (dateStamp.getDate()) + " " +
+                                dateStamp.getHours() + ":" + dateStamp.getMinutes();
+                            return '<p>' + date + '</p><p>' + this.y + '</p>';
+                        }
+                    },
+                    series : [{
+                        name : 'PL',
+                        type: 'area',
+                        data : data,
+                        gapSize: 5,
+                        tooltip: {
+                            valueDecimals: 2
+                        },
+                        fillColor : {
+                            linearGradient : {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops : [
+                                [0, Highcharts.getOptions().colors[0]],
+                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        },
+                        turboThreshold: 4000,
+                        threshold: null
+                    }]
+                };
+                var charts = new Highcharts.Chart(options);
+            });
+        }
+    }
+});
+
 'use strict';
 
 angular.module('tigerwitApp')
 .controller('wdWebMarketingController',
-['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdStorage', '$location',
-function ($scope, wdAccount, $timeout, wdConfig, wdStorage, $location) {
+['$scope', 'wdAccount', '$timeout', 'wdValidator', 'wdStorage', '$location',
+function ($scope, wdAccount, $timeout, wdValidator, wdStorage, $location) {
     var slides = $scope.slides = [];
     $scope.myInterval = 3000;
+    $scope.moduleId = "tigerwitIndex";
 
     $scope.addSlide = function () {
         var newWidth = 600 + slides.length;
@@ -9108,8 +9521,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdStorage, $location) {
 
     // 进入时的逻辑
     // 判断用户是否登录和用户的属性
-    // 登录用户：去掉提醒用户开户的横条，去掉提醒用户登录注册的安妮
-    // 登录的虚拟用户：增加虚拟用户转位真实账户的入口
+    // 登录用户：去掉提醒用户开户的横条
     $scope.isLogin = false;
     wdAccount.check().then(function(data) {
         // 已经完成注册申请过程
@@ -9126,29 +9538,102 @@ function ($scope, wdAccount, $timeout, wdConfig, wdStorage, $location) {
     $scope.error_msg = "";
     $scope.signIn = {};
     $scope.goToRegister = function() {
-        $scope.submit_text = "发送验证码中...";
-        verifyPhone().then(function(data) {
-            if (data.is_succ) {
-                $location.path('/regist').search('phone', $scope.signIn.phone);
-            } else {
-                $scope.error_msg = data.error_msg;
-            }
-        });
+        var validatePhone = wdValidator.validateFuns.phone($scope.signIn.phone);
+
+        if (!validatePhone.validate_result) {
+            $scope.error_msg = validatePhone.validate_reason;
+            return;
+        }
+
+        $location.path('/regist').search('phone', $scope.signIn.phone);
     };
 
 
     function verifyPhone() {
         return wdAccount.verifyPhone($scope.signIn);
     }
+}]);
+
+'use strict';
+
+angular.module('tigerwitApp')
+.controller('wdWebNavbarController',
+['$scope', 'wdAccount', '$state', '$timeout', 'wdStorage', 'principal', '$location', '$window',
+function ($scope, wdAccount, $state, $timeout, wdStorage, principal, $location, $window) {
+    var stateUrl = $state.current.url;
+    var stateUrlList = stateUrl.split("/");
+    $scope.parentState = stateUrlList[1];
+
+    $scope.showTail = false;
+    principal.identity().then(function () {
+        // 验证用户是否登录
+        $scope.authenticated = principal.isAuthenticated();
+        $scope.showTail = true;
+    });
+
+
+    // 登录相关操作
+    $scope.login = {
+        phone: '',
+        password: '',
+        uiLoginError: ''
+    };
+
+    // 是否 cookie 过期
+    $scope.login.expires = "checked";
+    $scope.loginFun = function() {
+        $scope.login.uiLoginError = '';
+        wdAccount.login($scope.login).then(function(data) {
+            // 登录成功后跳转到个人页面
+            if (data.is_succ) {
+                $location.path('/personal');
+                $window.location.reload();
+            } else {
+                $scope.login.error_msg = data.error_msg;
+            }
+        }, function(data) {
+            $scope.login.error_msg = '登录失败';
+        });
+    };
+
+    // 退出
+    $scope.signOut = function () {
+        wdAccount.logout().then(function (data) {
+            if (data.is_succ) {
+                $location.path('/index');
+                $window.location.reload();
+            }
+        });
+    };
+
+    // 个人信息 hover 框
+    $scope.infoDropdownShow = false;
+    var hideTimerPromise;
+    $scope.showInfoDropdown = function () {
+        if (hideTimerPromise) {
+            $timeout.cancel(hideTimerPromise);
+        }
+        $scope.infoDropdownShow = true;
+    };
+
+    $scope.hideInfoDropdown = function () {
+        hideTimerPromise = $timeout(function () {
+            $scope.infoDropdownShow = false;
+        }, 300);
+    };
 
 }]);
 
 'use strict';
 
 angular.module('tigerwitApp')
-.controller('wdWebPersonalController',
-['$scope', 'wdAccount', '$timeout', '$location', 'wdAccountMoney',
-function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
+.controller('wdPersonalController',
+['$scope', 'wdAccount', '$timeout', '$location', '$state', 'wdAccountMoney',
+function ($scope, wdAccount, $timeout, $location, $state, wdAccountMoney) {
+    var stateName = $state.current.name;
+    $scope.moduleId =  "tigerwit-" + stateName;
+    $scope.stateName = stateName;
+
     var equitySocket;
     $scope.user = {
         money: {
@@ -9166,6 +9651,7 @@ function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
         }, function() {
         });
     };
+
     equitySocket = wdAccountMoney.equitySocket();
     equitySocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
@@ -9186,6 +9672,80 @@ function ($scope, wdAccount, $timeout, $location, wdAccountMoney) {
             wdAccountMoney.pay(Number(num).toFixed(2));
         }
     };
+
+}]);
+
+'use strict';
+
+angular.module('tigerwitApp')
+.controller('wdPersonalDepositController',
+['$scope', 'wdAccount', '$timeout', '$location', 'wdAccountMoney', 'principal',
+function ($scope, wdAccount, $timeout, $location, wdAccountMoney, principal) {
+    var equitySocket;
+    console.log("haha");
+    console.log(principal.isAuthenticated());
+    $scope.user = {
+        money: {
+            available: '0.00',
+            recharge: '1.00',
+            uiRecharge: false
+        },
+    };
+
+    $scope.logout = function() {
+        wdAccount.logout().then(function(data) {
+            if (data.is_succ) {
+                //$location.path('/index');
+            }
+        }, function() {
+        });
+    };
+
+    equitySocket = wdAccountMoney.equitySocket();
+    equitySocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        console.log(data);
+    };
+
+    function getInfo() {
+        wdAccount.getInfo().then(function(data) {
+            console.log(data);
+            $scope.user.money.available = data.money.available;
+        });
+    }
+
+    // 金额要增加两位小数
+    $scope.pay = function() {
+        var num = Number($scope.user.money.recharge);
+        if (String(typeof(num)).toLocaleLowerCase() === 'number') {
+            wdAccountMoney.pay(Number(num).toFixed(2));
+        }
+    };
+}]);
+
+'use strict';
+
+angular.module('tigerwitApp')
+.controller('wdPersonalHistoryController',
+['$scope', 'wdStock',
+function ($scope, wdStock) {
+
+    // 绘画中间历史净收益图
+    $scope.rePaintStock = function (count) {
+        wdStock.getTestData().then(function (data) {
+            var temptData = data.slice(0, count);
+            $scope.$broadcast("personal_history", temptData);
+        });
+    };
+
+    $scope.showDropdown = false;
+    $scope.toggleDropdown  = function () {
+        $scope.showDropdown = !$scope.showDropdown;
+    }
+
+    wdStock.getTestData().then(function (data) {
+        $scope.$broadcast("personal_history", data);
+    });
 }]);
 
 'use strict';
@@ -9238,12 +9798,10 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     // 如果从其他页面带有电话号码跳到注册页面
     // 那么自动填充到手机输入框，并且开始倒计时
-    if (searchObj.phone) {
+    $scope.isDisable = "";
+    $scope.countDownText = "获取验证码";
+    if (searchObj.phone && wdValidator.validateFuns.phone(searchObj.phone).validate_result) {
         $scope.signIn.phone = searchObj.phone;
-        coutDown();
-    } else {
-        $scope.isDisable = "";
-        $scope.countDownText = "获取验证码";
     }
 
     // 进入时的逻辑
@@ -9263,6 +9821,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     $scope.registVirtual = function () {
         if (!$scope.signIn.notice) {
             $scope.error_msg = "请勾选 “同意并遵循风险揭露和用户交易须知” ";
+            return;
         }
         if (validateInput() && confirmPassword()) {
             register();
@@ -9319,16 +9878,24 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 发送手机验证码, 如果是在找回密码的阶段
     // 发生验证码， isexistphone: true
     $scope.verifyPhone = function (isExistPhone) {
+
+        // 对手机号码进行验证 和 当输入为 +861******** 去掉前面的 +86
+        var phoneNum = $scope.signIn.phone.match(/^(?:\+86)?(1[0-9]{10}$)/);
+        if (phoneNum && phoneNum.length === 2) {
+            $scope.signIn.phone = phoneNum[1];
+        } else {
+            setVerfiyErrorMsg("手机号码格式不正确，请检验");
+            return;
+        }
+
         verifyPhone(isExistPhone).then(function (msg) {
             if (!msg.is_succ) {
-                $scope.countDownText = msg.error_msg;
+                setVerfiyErrorMsg(msg.error_msg);
             }
-        }, function () {
+        }, function () {});
 
-        });
         coutDown();
     };
-
     // 验证手机验证码是否正确
     $scope.verifyCode = function () {
         wdAccount.verifyCode({
@@ -9440,7 +10007,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     function coutDown() {
         $scope.isDisable = "disabled";
         $scope.countDownNum = 30;
-        $scope.countDownText = "秒重新获取";
+        $scope.countDownText = "秒";
         countDownTimer = $interval(function () {
             if ($scope.countDownNum === 0) {
                 $interval.cancel(countDownTimer);
@@ -9506,8 +10073,20 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     function setInfo() {
         return wdAccount.setInfo($scope.person);
-
     }
+
+    function setVerfiyErrorMsg(error_msg) {
+        $timeout(function () {
+                $scope.isDisable = "";
+                $scope.countDownText = "重新获取";
+        }, 2000);
+        $scope.countDownText =error_msg;
+        $scope.countDownNum = "";
+        if (countDownTimer) {
+            $interval.cancel(countDownTimer);
+        }
+    }
+
 
     function verifyPhone(isExistPhone) {
         return wdAccount.verifyPhone({

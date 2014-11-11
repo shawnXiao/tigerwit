@@ -53,8 +53,10 @@ angular.module('tigerwitApp')
                      return deferred.promise;
                  }
                  $http.get('/check').then(function (data) {
+                     if (data.is_succ) {
+                         _authenticated = true;
+                     }
                      _identify = data;
-                     _authenticated = true;
                      deferred.resolve(_identify)
                  }, function () {
                      _identify = null;

@@ -48,12 +48,10 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     // 如果从其他页面带有电话号码跳到注册页面
     // 那么自动填充到手机输入框，并且开始倒计时
-    if (searchObj.phone) {
+    $scope.isDisable = "";
+    $scope.countDownText = "获取验证码";
+    if (searchObj.phone && wdValidator.validateFuns.phone(searchObj.phone).validate_result) {
         $scope.signIn.phone = searchObj.phone;
-        coutDown();
-    } else {
-        $scope.isDisable = "";
-        $scope.countDownText = "获取验证码";
     }
 
     // 进入时的逻辑
@@ -73,6 +71,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     $scope.registVirtual = function () {
         if (!$scope.signIn.notice) {
             $scope.error_msg = "请勾选 “同意并遵循风险揭露和用户交易须知” ";
+            return;
         }
         if (validateInput() && confirmPassword()) {
             register();
@@ -129,16 +128,24 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 发送手机验证码, 如果是在找回密码的阶段
     // 发生验证码， isexistphone: true
     $scope.verifyPhone = function (isExistPhone) {
+
+        // 对手机号码进行验证 和 当输入为 +861******** 去掉前面的 +86
+        var phoneNum = $scope.signIn.phone.match(/^(?:\+86)?(1[0-9]{10}$)/);
+        if (phoneNum && phoneNum.length === 2) {
+            $scope.signIn.phone = phoneNum[1];
+        } else {
+            setVerfiyErrorMsg("手机号码格式不正确，请检验");
+            return;
+        }
+
         verifyPhone(isExistPhone).then(function (msg) {
             if (!msg.is_succ) {
-                $scope.countDownText = msg.error_msg;
+                setVerfiyErrorMsg(msg.error_msg);
             }
-        }, function () {
+        }, function () {});
 
-        });
         coutDown();
     };
-
     // 验证手机验证码是否正确
     $scope.verifyCode = function () {
         wdAccount.verifyCode({
@@ -250,7 +257,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     function coutDown() {
         $scope.isDisable = "disabled";
         $scope.countDownNum = 30;
-        $scope.countDownText = "秒重新获取";
+        $scope.countDownText = "秒";
         countDownTimer = $interval(function () {
             if ($scope.countDownNum === 0) {
                 $interval.cancel(countDownTimer);
@@ -316,8 +323,20 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     function setInfo() {
         return wdAccount.setInfo($scope.person);
-
     }
+
+    function setVerfiyErrorMsg(error_msg) {
+        $timeout(function () {
+                $scope.isDisable = "";
+                $scope.countDownText = "重新获取";
+        }, 2000);
+        $scope.countDownText =error_msg;
+        $scope.countDownNum = "";
+        if (countDownTimer) {
+            $interval.cancel(countDownTimer);
+        }
+    }
+
 
     function verifyPhone(isExistPhone) {
         return wdAccount.verifyPhone({

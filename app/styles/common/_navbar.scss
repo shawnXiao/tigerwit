@@ -325,6 +325,7 @@
     padding-top:    10px;
     padding-bottom: 10px;
     line-height: $line-height-computed;
+    font-size: $font-size-large;
     text-decoration: none;
   }
   .open .dropdown-menu {
@@ -358,7 +359,7 @@
   @media (min-width: $grid-float-breakpoint) {
     float: left;
     margin: 0;
-    margin-left: 127px;
+    margin-left: 31px;
     > li {
       float: left;
       > a {

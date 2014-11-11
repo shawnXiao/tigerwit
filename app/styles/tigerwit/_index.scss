@@ -1,3 +1,8 @@
+#tigerwit-index {
+    .bd {
+        background-color: #000;
+    }
+}
 #tigerwitIndex {
    .container-form {
         padding-top: 40px;
@@ -34,7 +39,7 @@
     .marketing{
         margin-top: 50px;
         h3 {
-            color: $text-title-color;
+            color: $text-inverse-title-color;
         }
         .marketing-text {
             color: $text-content-color;

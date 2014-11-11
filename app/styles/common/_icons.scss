@@ -43,4 +43,62 @@ $icon-navs: home, deposit, withdraw, history, notify;
     background-position: -155px -135px;
 }
 
+.magnet-icon {
+    height: 87px;
+    margin: 40px auto 0;
+    @include wd-image-url('icons-marketing.png');
+}
 
+//  关于我们 的icon
+$icon-navs: security, transparency, service, free, product, platform, deal, cooperation;
+@each $name in $icon-navs {
+    $i: index($icon-navs, $name) - 1;
+    .magnet-icon-#{$name} {
+        @extend .magnet-icon;
+        background-position: -150px * $i 0;
+    }
+    li.active .magnet-icon-#{$name},
+    li:hover .magnet-icon-#{$name} {
+        background-position: -150px * $i -150px;
+    }
+}
+.magnet-icon-security {
+    width: 70px;
+}
+.magnet-icon-transparency{
+    width: 85px;
+}
+.magnet-icon-service{
+    width: 71px;
+}
+.magnet-icon-free{
+    width: 82px;
+}
+.magnet-icon-product{
+    width: 74px;
+}
+.magnet-icon-platform{
+    width: 69px;
+}
+.magnet-icon-deal{
+    width: 86px;
+}
+.magnet-icon-cooperation{
+    width: 94px;
+}
+
+.contact-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    @include wd-image-url('icons-marketing.png');
+    display: block;
+}
+.contact-icon-phone {
+    @extend .contact-icon;
+    background-position: -170px 0;
+}
+.contact-icon-online {
+    @extend .contact-icon;
+    background-position: -170px 0;
+}

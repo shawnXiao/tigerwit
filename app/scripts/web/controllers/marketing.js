@@ -2,20 +2,22 @@
 
 angular.module('tigerwitApp')
 .controller('wdWebMarketingController',
-['$scope', 'wdAccount', '$timeout', 'wdValidator', 'wdStorage', '$location',
-function ($scope, wdAccount, $timeout, wdValidator, wdStorage, $location) {
+['$scope', 'wdAccount', '$timeout', '$state', 'wdValidator', 'wdStorage', '$location',
+function ($scope, wdAccount, $timeout, $state, wdValidator, wdStorage, $location) {
+    var stateName = $state.current.name;
+    $scope.moduleId =  "tigerwit-" + stateName;
+    $scope.stateName = stateName;
+
     var slides = $scope.slides = [];
     $scope.myInterval = 3000;
-    $scope.moduleId = "tigerwitIndex";
-
     $scope.addSlide = function () {
         var newWidth = 600 + slides.length;
         slides.push({
-            image: "haha"
+            image: "hh"
         });
     };
 
-    for (var i = 0; i < 4; i ++) {
+    for (var i = 0; i < 2; i ++) {
         $scope.addSlide();
     }
 

@@ -1,6 +1,39 @@
 body {
     background-color: #000;
 }
+
+.ft {
+    margin: 30px auto ;
+    @media (max-width: $screen-xs) {
+        .col-lg-2 {
+            float: left;
+        }
+    }
+    .container {
+        margin-bottom: 20px;
+    }
+    .ft-risk-tip {
+        p {
+            margin-bottom: 0;
+        }
+    }
+    h4 {
+        color: $text-inverse-title-color;
+        font-size: $font-size-base;
+        margin-bottom: 14px;
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+        li {
+            list-style: none;
+            a {
+                color: $text-content-color;
+            }
+        }
+    }
+}
+
 .doc1 {
     .navbar-lang {
         margin-left: 150px;
@@ -19,6 +52,7 @@ body {
             position: absolute;
         }
     }
+
     .module {
         background-color: $module-bg;
         padding: 30px 0;
@@ -39,23 +73,117 @@ body {
             }
         }
     }
-
-    .ft {
-        margin: 30px auto 80px auto;
-        @media (max-width: $screen-xs) {
-            .col-lg-2 {
-                float: left;
-            }
+    .bd {
+        background-color: $module-bg;
+        .hd-sub {
+            background-color: $module-bg;
+            height: 40px;
+            line-height: 40px;
+            border-bottom: 1px solid $module-border;
         }
-        h4 {
-            color: $text-title-color;
-        }
-        ul {
-            margin: 0;
+        .bd-sub {
             padding: 0;
-            li {
-                list-style: none;
-                color: $text-content-color;
+            margin-top: 15px;
+            background-color: #fff;
+            .banner {
+                img {
+                    width: 100%;
+                }
+            }
+            .content {
+                padding: 20px 375px 40px 72px;
+                h4 {
+                    margin: 20px 0;
+                    font-size: $font-size-large;
+                }
+                a {
+                    color: $brand-info;
+                }
+                .define {
+                    background: $module-bg;
+                    padding: 10px 10px 5px 10px;
+                    .define-title {
+                        color: $text-title-color;
+                        font-size: $font-size-large;
+                    }
+                    .define-content {
+                        color: $text-title-sub-color;
+                    }
+                }
+                .contact {
+                    @extend .clearfix;
+                    padding: 20px;
+                    background-color: $module-bg;
+                    float: left;
+                    > li {
+                        width: 248px;
+                        list-style-type: none;
+                        height: 90px;
+                        float: left;
+                        text-align: center;
+                        p {
+                            margin-top: 20px;
+                        }
+                        &.bd-right {
+                            border-right: 1px solid $module-border;
+                        }
+                    }
+                }
+                .magnet {
+                    margin: 0;
+                    padding: 0;
+                    > li {
+                        float: left;
+                        list-style: none;
+                        margin-top: 30px;
+                        width: 215px;
+                        height: 215px;
+                        position: relative;
+                        cursor: pointer;
+                        border: 1px solid $module-border;
+                    }
+                    .magnet-slogan {
+                        padding: 50px 0;
+                        background-color: $module-bg;
+                        color: $text-title-color;
+                        .magnet-title-normal {
+                            font-size: $font-size-h2;
+                            padding-left: 16px;
+                        }
+                        .magnet-title-primary{
+                            font-size: $font-size-h1;
+                            font-weight: bolder;
+                            color: $brand-primary;
+                            padding-left: 24px;
+                        }
+                    }
+                    .magnet-item {
+                        padding: 25px 0 50px;
+                        text-align: center;
+                        .magnet-fragment {
+                            display: none;
+                            position: absolute;
+                            left: 0;
+                            bottom: 0;
+                            width: 100%;
+                            height: 77px;
+                            padding: 10px 15px;
+                            color: $text-inverse-title-color;
+                            background-color: rgba($nav-dialog-bg, 0.8);
+                        }
+                        &:hover, &.active {
+                            .magnet-fragment {
+                                display: block;
+                            }
+                        }
+                    }
+                    .mg-rt-30 {
+                        margin-right: 30px;
+                    }
+                    .mg-lt-30 {
+                        margin-left: 30px;
+                    }
+                }
             }
         }
     }

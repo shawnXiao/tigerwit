@@ -8144,9 +8144,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
-                controller: function ($scope) {
-                    $scope.moduleId = "tigerwit-index"
-                }
+                controller: 'wdWebMarketingController'
             },
             'hd@index': {
                 templateUrl: 'views/navs/navbar1.html',
@@ -8161,14 +8159,13 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
+
     .state('about', {
         url: "/about",
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
-                controller: function ($scope) {
-                    $scope.moduleId = "tigerwit-about"
-                }
+                controller: 'wdWebMarketingController'
             },
             'hd@about': {
                 templateUrl: 'views/navs/navbar1.html',
@@ -8184,14 +8181,75 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         }
     })
 
+    .state('security', {
+        url: "/security",
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc1.html',
+                controller: 'wdWebMarketingController'
+            },
+            'hd@security': {
+                templateUrl: 'views/navs/navbar1.html',
+                controller: 'wdWebNavbarController'
+            },
+            'bd@security': {
+                templateUrl: 'views/web/security.html',
+                controller: 'wdWebMarketingController'
+            },
+            'ft@security': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+
+    .state('contact', {
+        url: "/contact",
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc1.html',
+                controller: 'wdWebMarketingController'
+            },
+            'hd@contact': {
+                templateUrl: 'views/navs/navbar1.html',
+                controller: 'wdWebNavbarController'
+            },
+            'bd@contact': {
+                templateUrl: 'views/web/contact.html',
+                controller: 'wdWebMarketingController'
+            },
+            'ft@contact': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+
+    .state('advantage', {
+        url: "/advantage",
+        views: {
+            '': {
+                templateUrl: 'views/layout/doc1.html',
+                controller: 'wdWebMarketingController'
+            },
+            'hd@advantage': {
+                templateUrl: 'views/navs/navbar1.html',
+                controller: 'wdWebNavbarController'
+            },
+            'bd@advantage': {
+                templateUrl: 'views/web/advantage.html',
+                controller: 'wdWebMarketingController'
+            },
+            'ft@advantage': {
+                templateUrl: 'views/layout/footer.html'
+            }
+        }
+    })
+
     .state('regist', {
         url: "/regist",
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
-                controller: function ($scope) {
-                    $scope.moduleId = "tigerwit-regist"
-                }
+                controller: 'wdWebMarketingController'
             },
             'hd@regist': {
                 templateUrl: 'views/navs/navbar1.html',
@@ -8206,14 +8264,13 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
+
     .state('login', {
         url: "/login",
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
-                controller: function ($scope) {
-                    $scope.moduleId = "tigerwit-login"
-                }
+                controller: 'wdWebMarketingController'
             },
             'hd@login': {
                 templateUrl: 'views/navs/navbar1.html',
@@ -8228,14 +8285,13 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
+
     .state('reset', {
         url: "/reset",
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
-                controller: function ($scope) {
-                    $scope.moduleId = "tigerwit-index"
-                }
+                controller: 'wdWebMarketingController'
             },
             'hd@reset': {
                 templateUrl: 'views/navs/navbar1.html',
@@ -8250,6 +8306,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
+
     .state('regist_succ', {
         url: "/regist_succ",
         data: {
@@ -8259,9 +8316,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
-                controller: function ($scope) {
-                    $scope.moduleId = "tigerwit-regist-succ"
-                }
+                controller: 'wdWebMarketingController'
             },
             'hd@regist_succ': {
                 templateUrl: 'views/navs/navbar1.html',
@@ -9502,20 +9557,22 @@ angular.module('tigerwitApp')
 
 angular.module('tigerwitApp')
 .controller('wdWebMarketingController',
-['$scope', 'wdAccount', '$timeout', 'wdValidator', 'wdStorage', '$location',
-function ($scope, wdAccount, $timeout, wdValidator, wdStorage, $location) {
+['$scope', 'wdAccount', '$timeout', '$state', 'wdValidator', 'wdStorage', '$location',
+function ($scope, wdAccount, $timeout, $state, wdValidator, wdStorage, $location) {
+    var stateName = $state.current.name;
+    $scope.moduleId =  "tigerwit-" + stateName;
+    $scope.stateName = stateName;
+
     var slides = $scope.slides = [];
     $scope.myInterval = 3000;
-    $scope.moduleId = "tigerwitIndex";
-
     $scope.addSlide = function () {
         var newWidth = 600 + slides.length;
         slides.push({
-            image: "haha"
+            image: "hh"
         });
     };
 
-    for (var i = 0; i < 4; i ++) {
+    for (var i = 0; i < 2; i ++) {
         $scope.addSlide();
     }
 

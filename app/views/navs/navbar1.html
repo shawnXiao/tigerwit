@@ -84,32 +84,11 @@
                 <!--navbar-collapse start-->
             <div class="navbar navbar-inverse navbar-static-top navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">老虎汇</a>
-                    </li>
-                    <li>
-                        <a href="#">跟单</a>
-                    </li>
-                    <li>
-                        <a href="#">热门话题</a>
-                    </li>
-                    <li>
-                        <a href="#">交易</a>
-                    </li>
-                    <li>
-                        <a href="#">排行榜</a>
-                    </li>
-                    <li>
-                        <a href="#">下载</a>
-                    </li>
-                    <li>
-                        <a href="#">合作伙伴</a>
-                    </li>
                     <li class="dropdown"
-                        ng-mouseenter="navDrop = navDrop + 1" ng-init="navDrop=0"
-                        ng-mouseleave="navDrop = navDrop - 1"
-                        ng-class="{'open': !!navDrop}">
-                    <a href="#" class="dropdown-toggle">更多</a>
+                        ng-mouseenter="navDropIndex = navDropIndex + 1" ng-init="navDropIndex=0"
+                        ng-mouseleave="navDropIndex = navDropIndex - 1"
+                        ng-class="{'open': !!navDropIndex}">
+                    <a href="#" class="dropdown-toggle">老虎汇</a>
                         <ul class="dropdown-menu" >
                             <li>
                                 <a href="#/about" target="_blank">关于我们</a>
@@ -123,8 +102,63 @@
                             <li>
                                 <a href="#/contact" target="_blank">联系我们</a>
                             </li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown"
+                        ng-mouseenter="navDropCopy = navDropCopy + 1" ng-init="navDropCopy=0"
+                        ng-mouseleave="navDropCopy = navDropCopy - 1"
+                        ng-class="{'open': !!navDropCopy}">
+                        <a href="#" class="dropdown-toggle">跟单</a>
+                        <ul class="dropdown-menu" >
                             <li>
-                                <a href="">媒体报告</a>
+                                <a href="#/about" target="_blank">新手教程</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="#">热门话题</a>
+                    </li>
+
+                    <li>
+                        <a href="#">交易</a>
+                    </li>
+
+                    <li>
+                        <a href="#">排行榜</a>
+                    </li>
+
+                    <li class="dropdown"
+                        ng-mouseenter="navDropFriends = navDropFriends + 1" ng-init="navDropFriends=0"
+                        ng-mouseleave="navDropFriends = navDropFriends - 1"
+                        ng-class="{'open': !!navDropFriends}">
+                        <a href="#" class="dropdown-toggle">合作伙伴</a>
+                        <ul class="dropdown-menu" >
+                            <li>
+                                <a href="#/about" target="_blank">代理加盟</a>
+                            </li>
+                            <li>
+                                <a href="#/about" target="_blank">推荐好友</a>
+                            </li>
+                            <li>
+                                <a href="#/about" target="_blank">成为高手</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown"
+                        ng-mouseenter="navDropMore = navDropMore + 1" ng-init="navDropMore=0"
+                        ng-mouseleave="navDropMore = navDropMore - 1"
+                        ng-class="{'open': !!navDropMore}">
+                        <a href="#" class="dropdown-toggle">更多</a>
+                        <ul class="dropdown-menu" >
+                            <li>
+                                <a href="">常见问题</a>
+                            </li>
+                            <li>
+                                <a href="">交易规则</a>
                             </li>
                         </ul>
                     </li>

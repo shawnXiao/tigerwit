@@ -88,17 +88,17 @@ $icon-navs: security, transparency, service, free, product, platform, deal, coop
 }
 
 .contact-icon {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 53px;
     margin: 0 auto;
     @include wd-image-url('icons-marketing.png');
     display: block;
 }
 .contact-icon-phone {
     @extend .contact-icon;
-    background-position: -170px 0;
+    background-position: -1210px 0;
 }
 .contact-icon-online {
     @extend .contact-icon;
-    background-position: -170px 0;
+    background-position: -1270px 0;
 }

@@ -35,7 +35,6 @@
 
 .navbar-tail {
   position: relative;
-  padding: 15px 0;
   @include clearfix();
   @media (min-width: $grid-float-breakpoint) {
     float: right;
@@ -330,6 +329,13 @@
   }
   .open .dropdown-menu {
       top: 50px;
+      border-radius: 0 0 $border-radius-base $border-radius-base;
+      > li > a {
+          &:hover {
+              background-color: $module-bg;
+              text-decoration: none;
+          }
+      }
   }
 
   @media (max-width: $grid-float-breakpoint-max) {

@@ -7,9 +7,10 @@ function ($scope, wdStock) {
 
     // 绘画中间历史净收益图
     $scope.rePaintStock = function (count) {
-        wdStock.getTestData().then(function (data) {
-            var temptData = data.slice(0, count);
-            $scope.$broadcast("personal_history", temptData);
+        wdStock.getEquityReport({
+            period: count
+        }).then(function (data) {
+            $scope.$broadcast("personal_history", data);
         });
     };
 
@@ -18,7 +19,11 @@ function ($scope, wdStock) {
         $scope.showDropdown = !$scope.showDropdown;
     }
 
-    wdStock.getTestData().then(function (data) {
+    wdStock.getEquityReport({
+        period: 7
+    }).then(function (data) {
         $scope.$broadcast("personal_history", data);
     });
+
+
 }]);

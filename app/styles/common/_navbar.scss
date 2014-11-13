@@ -27,18 +27,13 @@
 
 .navbar-header {
   @include clearfix();
-
-  @media (min-width: $grid-float-breakpoint) {
-    float: left;
-  }
+  float: left;
 }
 
 .navbar-tail {
   position: relative;
   @include clearfix();
-  @media (min-width: $grid-float-breakpoint) {
-    float: right;
-  }
+  float: right;
   .dropdown-info {
       .dropdown-toggle {
           color: $text-nav-dialog-color;
@@ -124,7 +119,6 @@
     overflow-y: auto;
   }
 
-  @media (min-width: $grid-float-breakpoint) {
     width: auto;
     border-top: 0;
     box-shadow: none;
@@ -149,7 +143,6 @@
       padding-left: 0;
       padding-right: 0;
     }
-  }
 }
 .collapse {
     display: none;
@@ -338,31 +331,6 @@
       }
   }
 
-  @media (max-width: $grid-float-breakpoint-max) {
-    // Dropdowns get custom display when collapsed
-    .open .dropdown-menu {
-      position: static;
-      float: none;
-      width: auto;
-      margin-top: 0;
-      background-color: transparent;
-      border: 0;
-      box-shadow: none;
-      > li > a,
-      .dropdown-header {
-        padding: 5px 15px 5px 25px;
-      }
-      > li > a {
-        line-height: $line-height-computed;
-        &:hover,
-        &:focus {
-          background-image: none;
-        }
-      }
-    }
-  }
-  // Uncollapse the nav
-  @media (min-width: $grid-float-breakpoint) {
     float: left;
     margin: 0;
     margin-left: 31px;
@@ -377,7 +345,6 @@
     &.navbar-right:last-child {
       margin-right: -$navbar-padding-horizontal;
     }
-  }
 }
 
 

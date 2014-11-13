@@ -17,7 +17,6 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         return {
             'request': function(config) {
                 config.timeout = wdConfig.httpTimeout;
-                console.log(config.url);
                 if (!/^[http|https]/.test(config.url) && !/\.html$/.test(config.url)) {
                     config.url = wdConfig.apiUrl + config.url;
                 }

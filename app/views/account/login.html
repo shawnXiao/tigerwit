@@ -12,6 +12,7 @@
                 <div class="col-sm-11">
                     <input type="text" class="form-control"
                     id="inputName" placeholder="手机号码"
+                    data-validate="phone"
                     ng-model="login.phone">
                 </div>
               </div>
@@ -29,7 +30,7 @@
                 <div class="col-sm-11 text-center">
                   <button type="submit"  ng-click="loginFun();" class="btn btn-primary btn-ex-lg">登录</button>
                   <p ng-class="{'show': login.error_msg != undefined}"
-                  class="bg-info help-tip help-tip-single">{{login.error_msg }}</p>
+                  class="color-danger text-center hide">{{login.error_msg }}</p>
                 </div>
               </div>
 

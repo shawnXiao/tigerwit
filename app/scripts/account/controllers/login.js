@@ -2,8 +2,8 @@
 
 angular.module('tigerwitApp')
 .controller('loginCtrl',
-['$scope', 'wdAccount', '$timeout', '$location', 'wdStorage',
-function ($scope, wdAccount, $timeout, $location, wdStorage) {
+['$scope', 'wdAccount', '$timeout', '$location', 'wdStorage', 'wdValidator',
+function ($scope, wdAccount, $timeout, $location, wdStorage, wdValidator) {
     $scope.login = {
         phone: '',
         password: '',
@@ -12,7 +12,12 @@ function ($scope, wdAccount, $timeout, $location, wdStorage) {
     $scope.login.expires = "checked";
 
     $scope.loginFun = function() {
-        $scope.login.uiLoginError = '';
+        var validateResObj = wdValidator.validate('phone', $scope.login.phone);
+        if (!validateResObj.validate_result) {
+            $scope.login.error_msg = validateResObj.validate_reason;
+            return;
+        }
+
         wdAccount.login($scope.login).then(function(data) {
             if (data.is_succ) {
                 $location.path('/register');

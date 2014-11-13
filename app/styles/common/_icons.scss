@@ -102,3 +102,21 @@ $icon-navs: security, transparency, service, free, product, platform, deal, coop
     @extend .contact-icon;
     background-position: -1270px 0;
 }
+.icon-succ-lg {
+    height: 97px;
+    width: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-position: -171px -200px;
+    @include wd-image-url('icons.png');
+}
+.phone-num-icon-small {
+    width: 158px;
+    height: 20px;
+    position: absolute;
+    top: 12px;
+    right: 0;
+    background-position: 0 -364px;
+    @include wd-image-url('icons.png');
+}

@@ -2,8 +2,8 @@
 
 angular.module('tigerwitApp')
 .controller('wdWebNavbarController',
-['$scope', 'wdAccount', '$state', '$timeout', 'wdStorage', 'principal', '$location', '$window',
-function ($scope, wdAccount, $state, $timeout, wdStorage, principal, $location, $window) {
+['$scope', 'wdAccount', '$state', '$timeout', 'wdStorage', 'principal', '$location', '$window', 'wdValidator',
+function ($scope, wdAccount, $state, $timeout, wdStorage, principal, $location, $window, wdValidator) {
     var stateUrl = $state.current.url;
     var stateUrlList = stateUrl.split("/");
     $scope.parentState = stateUrlList[1];
@@ -26,7 +26,12 @@ function ($scope, wdAccount, $state, $timeout, wdStorage, principal, $location, 
     // 是否 cookie 过期
     $scope.login.expires = "checked";
     $scope.loginFun = function() {
-        $scope.login.uiLoginError = '';
+        var validateResObj = wdValidator.validate('phone', $scope.login.phone);
+        if (!validateResObj.validate_result) {
+            $scope.login.error_msg = validateResObj.validate_reason;
+            return;
+        }
+
         wdAccount.login($scope.login).then(function(data) {
             // 登录成功后跳转到个人页面
             if (data.is_succ) {

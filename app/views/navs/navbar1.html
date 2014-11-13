@@ -6,6 +6,7 @@
             <h1 class="logo-color"></h1>
         </a>
         <div class="dropdown navbar-lang clearfix"
+                ng-if="i18n"
                 ng-class="{'open': !!toolDrop}"
                 ng-mouseenter="toolDrop = toolDrop + 1" ng-init="toolDrop=0"
                 ng-mouseleave="toolDrop = toolDrop - 1">
@@ -17,7 +18,7 @@
             </ul>
         </div>
     </div><!--navbar-header end-->
-    <div class="navbar-tail hide" ng-class="{'show': showTail }">
+    <div class="navbar-tail hide" ng-class="{'show': showTail }" ng-if="!hideNav">
         <div ng-if="!authenticated">
             <div class="form-group-sm form-inline navbar-login" ng-class="{'hide': login.is_succ}">
                 <input type="phone" name="phone"
@@ -73,7 +74,9 @@
                 <a href="javascript:void(0)" class="loginout text-center" ng-click="signOut()">退出</a>
             </div>
         </div>
-
+    </div>
+    <div class="navbar-tail" ng-if="hideNav">
+        <span class="phone-num-icon-small"></span>
     </div>
 </div> <!--toolbar end -->
 
@@ -164,10 +167,7 @@
                     </li>
                 </ul>
                 <div class="navbar-tail">
-                    <div class="contact-lg">
-                        <i class='icon-phone'></i>
-                            400-809-8509
-                    </div>
+                    <span class="phone-num-icon-small"></span>
                 </div>
             </div><!--navbar-collapse end-->
         </div>

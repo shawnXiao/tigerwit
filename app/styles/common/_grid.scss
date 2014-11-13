@@ -9,7 +9,7 @@
 
 .container {
   @include container-fixed();
-
+  width: $container-lg;
   @media (min-width: $screen-sm-min) {
     width: $container-sm;
   }
@@ -61,6 +61,7 @@
 // Columns, offsets, pushes, and pulls for the small device range, from phones
 // to tablets.
 
+@include make-grid(sm);
 @media (min-width: $screen-sm-min) {
   @include make-grid(sm);
 }
@@ -70,6 +71,7 @@
 //
 // Columns, offsets, pushes, and pulls for the desktop device range.
 
+@include make-grid(md);
 @media (min-width: $screen-md-min) {
   @include make-grid(md);
 }
@@ -79,6 +81,7 @@
 //
 // Columns, offsets, pushes, and pulls for the large desktop device range.
 
+@include make-grid(lg);
 @media (min-width: $screen-lg-min) {
   @include make-grid(lg);
 }

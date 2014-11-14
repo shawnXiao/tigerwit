@@ -20,7 +20,7 @@ function ($scope, wdAccount, $timeout, $location, $state, wdAccountMoney) {
     $scope.logout = function() {
         wdAccount.logout().then(function(data) {
             if (data.is_succ) {
-                //$location.path('/index');
+                $location.path('/index');
             }
         }, function() {
         });

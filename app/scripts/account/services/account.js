@@ -8,6 +8,13 @@ function($rootScope, $http, wdStorage) {
         check: function() {
             return $http.get('/check');
         },
+        exits: function (key) {
+            return $http.get('/exists', {
+                params: {
+                    key: key
+                }
+            });
+        },
         verifyPhone: function(params) {
             return $http.get('/verify', {
                 params: params

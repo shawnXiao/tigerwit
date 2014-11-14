@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.directive('focusTip', ['wdValidator', function(wdValidator) {
+.directive('focusTip', ['wdValidator','wdAccount', function(wdValidator, wdAccount) {
     return {
         restrict: 'A',
         scope: true,
@@ -19,15 +19,25 @@ angular.module('tigerwitApp')
 
             element.bind('blur', function () {
                 var validatorType = attributes.validate;
+                var exitsInfo = attributes.exits;
                 if (!!!validatorType) {
                     $focusTipTextWrpper.hide();
                     return;
                 }
-
+                // 验证是否已经存在
                 // 验证输入的有效性
                 var validateResObj = wdValidator.validate(validatorType, element.val());
                 if (validateResObj.validate_result) {
                     $focusTipTextWrpper.hide();
+                    if (exitsInfo) {
+                        wdAccount.exits(element.val()).then(function (msg) {
+                            if (msg.data) {
+                                $focusTipTextWrpper.show();
+                                $focusTipTextWrpper.text(exitsInfo);
+                                $focusTip.parent().addClass("has-error");
+                            }
+                        });
+                    }
                 } else {
                     $focusTipTextWrpper.text(validateResObj.validate_reason);
                     $focusTip.parent().addClass("has-error");

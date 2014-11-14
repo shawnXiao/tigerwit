@@ -5,13 +5,34 @@ angular.module('tigerwitApp')
 
     var validateFuns = {
         regTypes: {
-            'phone': '^(?:\\+86)?(1[0-9]{10}$)',
-            'email': '\\S+@\\S+\\.\\S+',
-            'num': '0-9',
-            'zh': '\\u4e00-\\u9fa5',
-            'en': 'a-zA-Z',
-            'sym': '[!@#$%^&*()_+]',
-            'nosym': '[^!@#$%^&*()_+]'
+            'phone': {
+                tips: "请输入正确的手机号",
+                reg:'^(?:\\+86)?(1[0-9]{10}$)'
+            },
+            'email': {
+                tips: '请输入正确的邮箱',
+                reg:'\\S+@\\S+\\.\\S+'
+            },
+            'num': {
+                tips: '输入项不能包含数字',
+                type: '数字',
+                reg: '0-9'
+            },
+            'zh': {
+                tips: "输入项不能包含中文",
+                type: '中文',
+                reg: '\\u4e00-\\u9fa5'
+            },
+            'en': {
+                tips: "输入项不能包含英文",
+                type: '英文',
+                reg: 'a-zA-Z'
+            },
+            'sym': {
+                tips: "输入项不能包含特殊符号",
+                type: "特殊符号",
+                reg: '[!@#$%^&*()_+]'
+            }
         },
         number: function (str, type) {
             var validateResult = !/\D/.test(str);
@@ -27,13 +48,15 @@ angular.module('tigerwitApp')
             };
         },
         id: function (str) {
-            var validateResult = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(str);
+            var validateResult = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X)$)/.test(str);
             var validateReason = "";
 
             if (!validateResult) {
                 validateReason = '输入的身份证号格式不正确';
+                if (/x$/.test(str)) {
+                    validateReason = '输入的身份证号最后一位应为大写X';
+                }
             }
-
             return {
                 validate_reason: validateReason,
                 validate_result: validateResult
@@ -48,20 +71,28 @@ angular.module('tigerwitApp')
 
             var regStr = "";
             textTypeList.forEach(function (item) {
-                regStr += '' + (validateFuns.regTypes[item] || '');
+                regStr += '' + (validateFuns.regTypes[item].reg || '');
             });
             var textRegStr = "[" + regStr + "]";
             var antiTextRegStr = "[^" + regStr + "]";
-
             // trim string
-            str = str.replace(/\s/g, '');
             var textReg = new RegExp(textRegStr);
             var antiTextReg = new RegExp(antiTextRegStr);
             var validateResult = textReg.test(str) && !antiTextReg.test(str);
 
             var validateReason = "";
             if (!validateResult) {
-                validateReason = "输入项不符合规范！";
+                if (antiTextReg.test(str)) {
+                    validateReason = "输入项只能包含";
+                    textTypeList.forEach(function (item) {
+                        validateReason += '' + (validateFuns.regTypes[item].type);
+                    });
+                }
+            }
+
+            if (/\s/.test(str)) {
+                validateResult = false;
+                validateReason = "请勿包含空格";
             }
 
             return {
@@ -152,11 +183,11 @@ angular.module('tigerwitApp')
             };
         },
         phone: function (str) {
-            var phoneReg = new RegExp(this.regTypes.phone);
+            var phoneReg = new RegExp(this.regTypes.phone.reg);
             var validateReason = "";
             var validateResult = phoneReg.test(str);
             if (!validateResult) {
-                validateReason = "输入的手机号不符合规范！";
+                validateReason = this.regTypes.phone.tips;
             }
 
             return {
@@ -165,11 +196,11 @@ angular.module('tigerwitApp')
             };
         },
         email: function (str) {
-            var emailReg = new RegExp(this.regTypes.email);
+            var emailReg = new RegExp(this.regTypes.email.reg);
             var validateReason = "";
             var validateResult = emailReg.test(str);
             if (!validateResult) {
-                validateReason = "输入的邮箱不符合规范！";
+                validateReason = this.regTypes.email.tips;
             }
             return {
                 validate_reason: validateReason,
@@ -192,11 +223,15 @@ angular.module('tigerwitApp')
                 return validateResult;
             }
 
+            var isbreak = false;
             typeList.forEach(function (type) {
-                var funcsType = type.split(":")[0];
-                var temptResultObj = validateFuns[funcsType](str, type);
-                if (!temptResultObj.validate_result) {
-                    validateResult = temptResultObj;
+                if (!isbreak) {
+                    var funcsType = type.split(":")[0];
+                    var temptResultObj = validateFuns[funcsType](str, type);
+                    if (!temptResultObj.validate_result) {
+                        isbreak = true;
+                        validateResult = temptResultObj;
+                    }
                 }
             });
             return validateResult;

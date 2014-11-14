@@ -41,13 +41,22 @@ function ($scope, wdAccount, $timeout, $state, wdValidator, wdStorage, $location
     $scope.signIn = {};
     $scope.goToRegister = function() {
         var validatePhone = wdValidator.validateFuns.phone($scope.signIn.phone);
-
+        if (!$scope.signIn.phone) {
+            $scope.error_msg = "手机号码为空，请输入手机号码";
+            return;
+        }
         if (!validatePhone.validate_result) {
             $scope.error_msg = validatePhone.validate_reason;
             return;
+        } else {
+            wdAccount.exits($scope.signIn.phone).then(function (msg) {
+                if (msg.data) {
+                    $scope.error_msg = "该号码已经注册过一次";
+                } else {
+                    $location.path('/regist').search('phone', $scope.signIn.phone);
+                }
+            });
         }
-
-        $location.path('/regist').search('phone', $scope.signIn.phone);
     };
 
 

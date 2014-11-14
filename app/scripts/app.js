@@ -10,6 +10,14 @@
  */
 var routerApp = angular.module('tigerwitApp', ['ngCookies', 'ngResource', 'ngRoute', 'ngSanitize', 'ui.router']);
 
+// 在 IE 8 中请求会被缓存，通过下面来阻止缓存
+routerApp.config(['$httpProvider', function ($httpProvider) {
+    if (!$httpProvider.defaults.headers.get) {
+        $httpProvider.defaults.headers.get = {};
+    }
+    $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
+}]);
+
 routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
     // 全局 $http 请求配置。

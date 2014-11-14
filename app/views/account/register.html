@@ -11,6 +11,7 @@
                         <input type="text" class="form-control" id="inputNickname"
                         ng-model="signIn.username"
                         data-validate="length:2-30 text:en-num-zh"
+                        data-exits="已存在该昵称，请重新设置"
                         placeholder="昵称" focus-tip='nickname'>
                     </div>
                     <div class="col-sm-5" focus-tip-type="nickname">
@@ -21,7 +22,7 @@
                     <label for="inputPhone" class="col-sm-2 control-label text-right">验证手机</label>
                     <div class="col-sm-4">
                         <input type="phone" class="form-control" id="inputPhone"
-                        data-validate="phone"
+                        data-validate="phone" data-exits="已存在该用户"
                         placeholder="电话号码" focus-tip="phone" ng-model="signIn.phone">
                     </div>
                     <div class="col-sm-5" focus-tip-type="phone">
@@ -54,7 +55,7 @@
                          class="col-sm-2 control-label text-right">邮件地址</label>
                     <div class="col-sm-4">
                         <input type="email" class="form-control" id="inputEmail" placeholder="邮件地址"
-                        data-validate="required email"
+                        data-validate="required email" data-exits="已存在该邮箱地址，请重新输入"
                         ng-model="signIn.email" focus-tip="email">
                     </div>
                     <div class="col-sm-5" focus-tip-type="email">
@@ -97,12 +98,11 @@
                       <label for="regist-notice">同意并遵循<a href="" target="_blank">风险揭露</a>和<a href="" target="_blank">用户交易须知</a></label>
                     </div>
                   </div>
-                  
               </div>
         </div><!--注册虚拟账户需要的信息 end -->
 
         <!--注册真实账户需要的信息 start -->
-        <div class="container real-info hide" ng-class="{'show': registType === 'virtual2real'}">
+        <div class="container real-info hide" ng-class="{'show': realInfo.step > 0 }">
             <div class="hd hd-order">
                 <ol class="clearfix">
                     <li class="col-sm-4 left" ng-class="{'active': realInfo.step === 1 }">
@@ -134,7 +134,8 @@
                     <label for="inputIDNumber" class="col-sm-2 control-label text-right">身份证号</label>
                     <div class="col-sm-4">
                         <input type="text" class="form-control"
-                        data-validate="id" focus-tip="id_num"
+                        data-validate="required id" focus-tip="id_num"
+                        data-exits="已存在该身份证号，请重现输入"
                         id="inputIDNumber" placeholder="身份证号"  ng-model="person.id_no">
                     </div>
                     <div class="col-sm-5" focus-tip-type="id_num">
@@ -222,10 +223,10 @@
                     ng-model="person.questionnaire.yearly_income"
                     id="state-salary-50000" value="2"/>
                     <label for="state-salary-50000">25000 - 50000</label>
-                    <input type="radio" name="state-job"
-                    ng-model="person.questionnaire.yearly_income"
-                    id="state-salary-50000-more" value="3" />
-                    <label for="state-salary-50000-more">500000+</label>
+                    <input type="radio" name="state-salary"
+                        ng-model="person.questionnaire.yearly_income"
+                        id="state-salary-more" value="3" />
+                    <label for="state-salary-more">500000+</label>
                 </div>
               </div>
 
@@ -263,7 +264,7 @@
                 <div class="col-sm-8 text-center">
                   <button type="submit"  ng-click="sendAssessment();" class="btn btn-primary btn-ex-lg">提交</button>
                   <p ng-class="{'show': person.questionnaire.error_msg != undefined}"
-                  class="bg-info help-tip help-tip-single">{{person.questionnaire.error_msg }}</p>
+                  class="color-danger text-center hide">{{person.questionnaire.error_msg }}</p>
                 </div>
               </div>
 
@@ -275,7 +276,7 @@
                 <p class="success-tip">恭喜您已经开通真实账户</p>
                 <div class="wrapper-btn">
                   <div class="primary-btn-wrapper">
-                      <a href="#/" class="btn btn-md btn-primary">马上入金进行真实交易</a>
+                      <a href="#/personal/deposit" class="btn btn-md btn-primary">马上入金进行真实交易</a>
                       <p>立刻入金既可获取20美金开户赠金</p>
                   </div>
                   <a href="#/personal" target="_blank" class="mg-lf-30 btn btn-md btn-default">暂不入金，进入个人中心</a>

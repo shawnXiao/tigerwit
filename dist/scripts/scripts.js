@@ -8109,6 +8109,14 @@
  */
 var routerApp = angular.module('tigerwitApp', ['ngCookies', 'ngResource', 'ngRoute', 'ngSanitize', 'ui.router']);
 
+// 在 IE 8 中请求会被缓存，通过下面来阻止缓存
+routerApp.config(['$httpProvider', function ($httpProvider) {
+    if (!$httpProvider.defaults.headers.get) {
+        $httpProvider.defaults.headers.get = {};
+    }
+    $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
+}]);
+
 routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
     // 全局 $http 请求配置。
@@ -8669,13 +8677,34 @@ angular.module('tigerwitApp')
 
     var validateFuns = {
         regTypes: {
-            'phone': '^(?:\\+86)?(1[0-9]{10}$)',
-            'email': '\\S+@\\S+\\.\\S+',
-            'num': '0-9',
-            'zh': '\\u4e00-\\u9fa5',
-            'en': 'a-zA-Z',
-            'sym': '[!@#$%^&*()_+]',
-            'nosym': '[^!@#$%^&*()_+]'
+            'phone': {
+                tips: "请输入正确的手机号",
+                reg:'^(?:\\+86)?(1[0-9]{10}$)'
+            },
+            'email': {
+                tips: '请输入正确的邮箱',
+                reg:'\\S+@\\S+\\.\\S+'
+            },
+            'num': {
+                tips: '输入项不能包含数字',
+                type: '数字',
+                reg: '0-9'
+            },
+            'zh': {
+                tips: "输入项不能包含中文",
+                type: '中文',
+                reg: '\\u4e00-\\u9fa5'
+            },
+            'en': {
+                tips: "输入项不能包含英文",
+                type: '英文',
+                reg: 'a-zA-Z'
+            },
+            'sym': {
+                tips: "输入项不能包含特殊符号",
+                type: "特殊符号",
+                reg: '[!@#$%^&*()_+]'
+            }
         },
         number: function (str, type) {
             var validateResult = !/\D/.test(str);
@@ -8691,13 +8720,15 @@ angular.module('tigerwitApp')
             };
         },
         id: function (str) {
-            var validateResult = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(str);
+            var validateResult = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X)$)/.test(str);
             var validateReason = "";
 
             if (!validateResult) {
                 validateReason = '输入的身份证号格式不正确';
+                if (/x$/.test(str)) {
+                    validateReason = '输入的身份证号最后一位应为大写X';
+                }
             }
-
             return {
                 validate_reason: validateReason,
                 validate_result: validateResult
@@ -8712,20 +8743,28 @@ angular.module('tigerwitApp')
 
             var regStr = "";
             textTypeList.forEach(function (item) {
-                regStr += '' + (validateFuns.regTypes[item] || '');
+                regStr += '' + (validateFuns.regTypes[item].reg || '');
             });
             var textRegStr = "[" + regStr + "]";
             var antiTextRegStr = "[^" + regStr + "]";
-
             // trim string
-            str = str.replace(/\s/g, '');
             var textReg = new RegExp(textRegStr);
             var antiTextReg = new RegExp(antiTextRegStr);
             var validateResult = textReg.test(str) && !antiTextReg.test(str);
 
             var validateReason = "";
             if (!validateResult) {
-                validateReason = "输入项不符合规范！";
+                if (antiTextReg.test(str)) {
+                    validateReason = "输入项只能包含";
+                    textTypeList.forEach(function (item) {
+                        validateReason += '' + (validateFuns.regTypes[item].type);
+                    });
+                }
+            }
+
+            if (/\s/.test(str)) {
+                validateResult = false;
+                validateReason = "请勿包含空格";
             }
 
             return {
@@ -8816,11 +8855,11 @@ angular.module('tigerwitApp')
             };
         },
         phone: function (str) {
-            var phoneReg = new RegExp(this.regTypes.phone);
+            var phoneReg = new RegExp(this.regTypes.phone.reg);
             var validateReason = "";
             var validateResult = phoneReg.test(str);
             if (!validateResult) {
-                validateReason = "输入的手机号不符合规范！";
+                validateReason = this.regTypes.phone.tips;
             }
 
             return {
@@ -8829,11 +8868,11 @@ angular.module('tigerwitApp')
             };
         },
         email: function (str) {
-            var emailReg = new RegExp(this.regTypes.email);
+            var emailReg = new RegExp(this.regTypes.email.reg);
             var validateReason = "";
             var validateResult = emailReg.test(str);
             if (!validateResult) {
-                validateReason = "输入的邮箱不符合规范！";
+                validateReason = this.regTypes.email.tips;
             }
             return {
                 validate_reason: validateReason,
@@ -8856,11 +8895,15 @@ angular.module('tigerwitApp')
                 return validateResult;
             }
 
+            var isbreak = false;
             typeList.forEach(function (type) {
-                var funcsType = type.split(":")[0];
-                var temptResultObj = validateFuns[funcsType](str, type);
-                if (!temptResultObj.validate_result) {
-                    validateResult = temptResultObj;
+                if (!isbreak) {
+                    var funcsType = type.split(":")[0];
+                    var temptResultObj = validateFuns[funcsType](str, type);
+                    if (!temptResultObj.validate_result) {
+                        isbreak = true;
+                        validateResult = temptResultObj;
+                    }
                 }
             });
             return validateResult;
@@ -9476,7 +9519,7 @@ function CarouselDemoCtrl($scope) {
 'use strict';
 
 angular.module('tigerwitApp')
-.directive('focusTip', ['wdValidator', function(wdValidator) {
+.directive('focusTip', ['wdValidator','wdAccount', function(wdValidator, wdAccount) {
     return {
         restrict: 'A',
         scope: true,
@@ -9494,15 +9537,25 @@ angular.module('tigerwitApp')
 
             element.bind('blur', function () {
                 var validatorType = attributes.validate;
+                var exitsInfo = attributes.exits;
                 if (!!!validatorType) {
                     $focusTipTextWrpper.hide();
                     return;
                 }
-
+                // 验证是否已经存在
                 // 验证输入的有效性
                 var validateResObj = wdValidator.validate(validatorType, element.val());
                 if (validateResObj.validate_result) {
                     $focusTipTextWrpper.hide();
+                    if (exitsInfo) {
+                        wdAccount.exits(element.val()).then(function (msg) {
+                            if (msg.data) {
+                                $focusTipTextWrpper.show();
+                                $focusTipTextWrpper.text(exitsInfo);
+                                $focusTip.parent().addClass("has-error");
+                            }
+                        });
+                    }
                 } else {
                     $focusTipTextWrpper.text(validateResObj.validate_reason);
                     $focusTip.parent().addClass("has-error");
@@ -9655,13 +9708,22 @@ function ($scope, wdAccount, $timeout, $state, wdValidator, wdStorage, $location
     $scope.signIn = {};
     $scope.goToRegister = function() {
         var validatePhone = wdValidator.validateFuns.phone($scope.signIn.phone);
-
+        if (!$scope.signIn.phone) {
+            $scope.error_msg = "手机号码为空，请输入手机号码";
+            return;
+        }
         if (!validatePhone.validate_result) {
             $scope.error_msg = validatePhone.validate_reason;
             return;
+        } else {
+            wdAccount.exits($scope.signIn.phone).then(function (msg) {
+                if (msg.data) {
+                    $scope.error_msg = "该号码已经注册过一次";
+                } else {
+                    $location.path('/regist').search('phone', $scope.signIn.phone);
+                }
+            });
         }
-
-        $location.path('/regist').search('phone', $scope.signIn.phone);
     };
 
 
@@ -9767,7 +9829,7 @@ function ($scope, wdAccount, $timeout, $location, $state, wdAccountMoney) {
     $scope.logout = function() {
         wdAccount.logout().then(function(data) {
             if (data.is_succ) {
-                //$location.path('/index');
+                $location.path('/index');
             }
         }, function() {
         });
@@ -9882,8 +9944,8 @@ function ($scope, wdStock) {
 
 angular.module('tigerwitApp')
 .controller('registerCtrl',
-['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval', '$rootScope', '$window',
-function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval, $rootScope, $window) {
+['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval', '$rootScope', '$window', '$state',
+function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval, $rootScope, $window, $state) {
     // 通过 query 中的 type 字段来标示注册的类型，默认情况下为
     // 注册虚拟账户
     // type: virtual || "" 注册虚拟账户
@@ -9902,6 +9964,10 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     $scope.resetInfo = {};
     $scope.resetInfo.step = 1;
 
+    var stateName = $state.current.name;
+    if (stateName === 'regist') {
+        registCheck();
+    }
 
     // 设置真实信息的步骤表示
     // 注册虚拟账户
@@ -9914,6 +9980,36 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
         username: ''
     };
 
+    function registCheck() {
+        // 进入时的逻辑
+        wdAccount.check().then(function(data) {
+            // 如果是登录用户，需要对身份做出判别
+            // 真实用户： 直接跳转到个人中心
+            // 虚拟用户： 查询转化为真实账户的步骤
+            if (data.is_succ) {
+                $scope.isLogin = true;
+                wdAccount.getInfo().then(function (data) {
+                    $scope.verified = data.verified;
+                    if (data.verified) {
+                        $location.path('/personal').search("");
+                    }
+                    if ($scope.registType === "virtual2real") {
+                        wdAccount.getInfoStep({
+                            type: "ReliableInformation"
+                        }).then(function (msg) {
+                            $scope.realInfo.step = msg.progress + 1;
+                        }, function () {})
+                    }
+                });
+            } else {
+                if ($scope.registType === "virtual2real") {
+                    $location.path('/regist').search("");
+                    $scope.registType = "";
+                }
+            }
+        }, function(data) {});
+    }
+
     // 如果从其他页面带有电话号码跳到注册页面
     // 那么自动填充到手机输入框，并且开始倒计时
     $scope.isDisable = "";
@@ -9921,37 +10017,9 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     if (searchObj.phone && wdValidator.validateFuns.phone(searchObj.phone).validate_result) {
         $scope.signIn.phone = searchObj.phone;
     }
-
-    // 进入时的逻辑
-    wdAccount.check().then(function(data) {
-        // 如果是登录用户，需要对身份做出判别
-        // 真实用户： 直接跳转到个人中心
-        // 虚拟用户： 查询转化为真实账户的步骤
-        if (data.is_succ) {
-            $scope.isLogin = true;
-            wdAccount.getInfo().then(function (data) {
-                $scope.verified = data.verified;
-                if (data.verified) {
-                    $location.path('/personal').search("");
-                }
-                if ($scope.registType === "virtual2real") {
-                    wdAccount.getInfoStep({
-                        type: "ReliableInformation"
-                    }).then(function (msg) {
-                        $scope.realInfo.step = msg.progress + 1;
-                    }, function () {})
-                }
-            });
-        } else {
-            if ($scope.registType === "virtual2real") {
-                $location.path('/regist').search("");
-                $window.location.reload();
-            }
-        }
-    }, function(data) {});
-
     // 注册虚拟账号
     $scope.registVirtual = function () {
+        $scope.error_msg = "";
         if (!$scope.signIn.notice) {
             $scope.error_msg = "请勾选 “同意并遵循风险揭露和用户交易须知” ";
             return;
@@ -9977,11 +10045,18 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 设置真实账号信息
     $scope.setRealInfo = function () {
         var realInfoStep = wdAccount.getInfoStep({type: "IdPicInformation"});
+        $scope.realInfo.error_msg_1 = "";
         realInfoStep.then(function (msg) {
-            if (msg.progress != 3) {
-                $scope.realInfo.error_msg_1 = "请上传身份证正反面";
+            if (!(msg.progress & 0 | 1)) {
+                $scope.realInfo.error_msg_1 = "请上传身份证反面";
                 return;
             }
+
+            if (!(msg.progress & 0 | 2)) {
+                $scope.realInfo.error_msg_1 = "请上传身份证正面";
+                return;
+            }
+
             if (validateInput('tigerwitRegister')) {
                 setInfo().then(function(data) {
                     if (data.is_succ) {
@@ -10012,12 +10087,17 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 发生验证码， isexistphone: true
     $scope.verifyPhone = function (isExistPhone) {
 
+        if (!$scope.signIn.phone) {
+            setVerfiyErrorMsg("请输入手机号");
+            return;
+        }
+
         // 对手机号码进行验证 和 当输入为 +861******** 去掉前面的 +86
         var phoneNum = $scope.signIn.phone.match(/^(?:\+86)?(1[0-9]{10}$)/);
         if (phoneNum && phoneNum.length === 2) {
             $scope.signIn.phone = phoneNum[1];
         } else {
-            setVerfiyErrorMsg("手机号码格式不正确，请检验");
+            setVerfiyErrorMsg("获取失败");
             return;
         }
 
@@ -10049,15 +10129,17 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     // 重置密码
     $scope.resetPassword = function () {
-        wdAccount.resetPassword({
-            phone: $scope.signIn.phone,
-            code: $scope.signIn.verify_code,
-            new_pwd: $scope.signIn.password
-        }).then(function (msg) {
-            if (msg.is_succ) {
-                $scope.resetInfo.step = 3;
-            }
-        })
+        if (validateInput('tigerwitResetPassword') && confirmPassword()) {
+            wdAccount.resetPassword({
+                phone: $scope.signIn.phone,
+                code: $scope.signIn.verify_code,
+                new_pwd: $scope.signIn.password
+            }).then(function (msg) {
+                if (msg.is_succ) {
+                    $scope.resetInfo.step = 3;
+                }
+            });
+        }
     }
 
     $scope.keyDown = function(e) {
@@ -10083,7 +10165,6 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     function checkQuestionaire() {
         var questionnaire = $scope.person.questionnaire;
-        console.log($scope.person.questionnaire);
         if (questionnaire.current_situation === undefined) {
             $scope.person.questionnaire.error_msg = "请选择你的就业状况";
             return false;
@@ -10125,18 +10206,23 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
             var validateResObj = wdValidator.validate(validatorType, validatorVal);
             if (!validateResObj.validate_result) {
                 var focusTip = $elem.attr("focus-tip");
-
                 if (focusTip) {
                     var $focusTip = $('[focus-tip-type="' + focusTip + '"]');
                     var $focusTipTextWrpper = $('p', $focusTip);
-                    $focusTip.show();
+                    $focusTipTextWrpper.show();
                     $focusTipTextWrpper.text(validateResObj.validate_reason);
                 }
-
                 $elem.closest(".form-group").addClass("has-error");
+            } else {
+
             }
             valideAll = valideAll && validateResObj.validate_result;
         });
+
+        if (valideAll && $('#' + moduelId + ' .has-error').length === 0) {
+            valideAll = true;
+        }
+
         return valideAll;
     }
 
@@ -10255,8 +10341,8 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
 angular.module('tigerwitApp')
 .controller('loginCtrl',
-['$scope', 'wdAccount', '$timeout', '$location', 'wdStorage', 'wdValidator',
-function ($scope, wdAccount, $timeout, $location, wdStorage, wdValidator) {
+['$scope', '$window', 'wdAccount', '$timeout', '$location', 'wdStorage', 'wdValidator',
+function ($scope, $window, wdAccount, $timeout, $location, wdStorage, wdValidator) {
     $scope.login = {
         phone: '',
         password: '',
@@ -10264,19 +10350,25 @@ function ($scope, wdAccount, $timeout, $location, wdStorage, wdValidator) {
     };
     $scope.login.expires = "checked";
 
-    $scope.loginFun = function() {
+    $scope.loginFun = function () {
         var validateResObj = wdValidator.validate('phone', $scope.login.phone);
         if (!validateResObj.validate_result) {
             $scope.login.error_msg = validateResObj.validate_reason;
             return;
         }
+        if (!$scope.login.expires) {
+            $scope.login.expires = 0;
+        }
 
         wdAccount.login($scope.login).then(function(data) {
+            // 登录成功后跳转到个人页面
             if (data.is_succ) {
-                $location.path('/register');
+                $location.path('/personal');
+                $window.location.reload();
             } else {
                 $scope.login.error_msg = data.error_msg;
             }
+
         }, function(data) {
             $scope.login.error_msg = '登录失败';
         });
@@ -10355,6 +10447,13 @@ function($rootScope, $http, wdStorage) {
     return {
         check: function() {
             return $http.get('/check');
+        },
+        exits: function (key) {
+            return $http.get('/exists', {
+                params: {
+                    key: key
+                }
+            });
         },
         verifyPhone: function(params) {
             return $http.get('/verify', {

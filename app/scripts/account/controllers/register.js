@@ -6,8 +6,8 @@
 
 angular.module('tigerwitApp')
 .controller('registerCtrl',
-['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval', '$rootScope', '$window',
-function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval, $rootScope, $window) {
+['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval', '$rootScope', '$window', '$state',
+function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval, $rootScope, $window, $state) {
     // 通过 query 中的 type 字段来标示注册的类型，默认情况下为
     // 注册虚拟账户
     // type: virtual || "" 注册虚拟账户
@@ -26,6 +26,10 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     $scope.resetInfo = {};
     $scope.resetInfo.step = 1;
 
+    var stateName = $state.current.name;
+    if (stateName === 'regist') {
+        registCheck();
+    }
 
     // 设置真实信息的步骤表示
     // 注册虚拟账户
@@ -38,6 +42,36 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
         username: ''
     };
 
+    function registCheck() {
+        // 进入时的逻辑
+        wdAccount.check().then(function(data) {
+            // 如果是登录用户，需要对身份做出判别
+            // 真实用户： 直接跳转到个人中心
+            // 虚拟用户： 查询转化为真实账户的步骤
+            if (data.is_succ) {
+                $scope.isLogin = true;
+                wdAccount.getInfo().then(function (data) {
+                    $scope.verified = data.verified;
+                    if (data.verified) {
+                        $location.path('/personal').search("");
+                    }
+                    if ($scope.registType === "virtual2real") {
+                        wdAccount.getInfoStep({
+                            type: "ReliableInformation"
+                        }).then(function (msg) {
+                            $scope.realInfo.step = msg.progress + 1;
+                        }, function () {})
+                    }
+                });
+            } else {
+                if ($scope.registType === "virtual2real") {
+                    $location.path('/regist').search("");
+                    $scope.registType = "";
+                }
+            }
+        }, function(data) {});
+    }
+
     // 如果从其他页面带有电话号码跳到注册页面
     // 那么自动填充到手机输入框，并且开始倒计时
     $scope.isDisable = "";
@@ -45,37 +79,9 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     if (searchObj.phone && wdValidator.validateFuns.phone(searchObj.phone).validate_result) {
         $scope.signIn.phone = searchObj.phone;
     }
-
-    // 进入时的逻辑
-    wdAccount.check().then(function(data) {
-        // 如果是登录用户，需要对身份做出判别
-        // 真实用户： 直接跳转到个人中心
-        // 虚拟用户： 查询转化为真实账户的步骤
-        if (data.is_succ) {
-            $scope.isLogin = true;
-            wdAccount.getInfo().then(function (data) {
-                $scope.verified = data.verified;
-                if (data.verified) {
-                    $location.path('/personal').search("");
-                }
-                if ($scope.registType === "virtual2real") {
-                    wdAccount.getInfoStep({
-                        type: "ReliableInformation"
-                    }).then(function (msg) {
-                        $scope.realInfo.step = msg.progress + 1;
-                    }, function () {})
-                }
-            });
-        } else {
-            if ($scope.registType === "virtual2real") {
-                $location.path('/regist').search("");
-                $window.location.reload();
-            }
-        }
-    }, function(data) {});
-
     // 注册虚拟账号
     $scope.registVirtual = function () {
+        $scope.error_msg = "";
         if (!$scope.signIn.notice) {
             $scope.error_msg = "请勾选 “同意并遵循风险揭露和用户交易须知” ";
             return;
@@ -101,11 +107,18 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 设置真实账号信息
     $scope.setRealInfo = function () {
         var realInfoStep = wdAccount.getInfoStep({type: "IdPicInformation"});
+        $scope.realInfo.error_msg_1 = "";
         realInfoStep.then(function (msg) {
-            if (msg.progress != 3) {
-                $scope.realInfo.error_msg_1 = "请上传身份证正反面";
+            if (!(msg.progress & 0 | 1)) {
+                $scope.realInfo.error_msg_1 = "请上传身份证反面";
                 return;
             }
+
+            if (!(msg.progress & 0 | 2)) {
+                $scope.realInfo.error_msg_1 = "请上传身份证正面";
+                return;
+            }
+
             if (validateInput('tigerwitRegister')) {
                 setInfo().then(function(data) {
                     if (data.is_succ) {
@@ -136,12 +149,17 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 发生验证码， isexistphone: true
     $scope.verifyPhone = function (isExistPhone) {
 
+        if (!$scope.signIn.phone) {
+            setVerfiyErrorMsg("请输入手机号");
+            return;
+        }
+
         // 对手机号码进行验证 和 当输入为 +861******** 去掉前面的 +86
         var phoneNum = $scope.signIn.phone.match(/^(?:\+86)?(1[0-9]{10}$)/);
         if (phoneNum && phoneNum.length === 2) {
             $scope.signIn.phone = phoneNum[1];
         } else {
-            setVerfiyErrorMsg("手机号码格式不正确，请检验");
+            setVerfiyErrorMsg("获取失败");
             return;
         }
 
@@ -173,15 +191,17 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     // 重置密码
     $scope.resetPassword = function () {
-        wdAccount.resetPassword({
-            phone: $scope.signIn.phone,
-            code: $scope.signIn.verify_code,
-            new_pwd: $scope.signIn.password
-        }).then(function (msg) {
-            if (msg.is_succ) {
-                $scope.resetInfo.step = 3;
-            }
-        })
+        if (validateInput('tigerwitResetPassword') && confirmPassword()) {
+            wdAccount.resetPassword({
+                phone: $scope.signIn.phone,
+                code: $scope.signIn.verify_code,
+                new_pwd: $scope.signIn.password
+            }).then(function (msg) {
+                if (msg.is_succ) {
+                    $scope.resetInfo.step = 3;
+                }
+            });
+        }
     }
 
     $scope.keyDown = function(e) {
@@ -207,7 +227,6 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
 
     function checkQuestionaire() {
         var questionnaire = $scope.person.questionnaire;
-        console.log($scope.person.questionnaire);
         if (questionnaire.current_situation === undefined) {
             $scope.person.questionnaire.error_msg = "请选择你的就业状况";
             return false;
@@ -249,18 +268,23 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
             var validateResObj = wdValidator.validate(validatorType, validatorVal);
             if (!validateResObj.validate_result) {
                 var focusTip = $elem.attr("focus-tip");
-
                 if (focusTip) {
                     var $focusTip = $('[focus-tip-type="' + focusTip + '"]');
                     var $focusTipTextWrpper = $('p', $focusTip);
-                    $focusTip.show();
+                    $focusTipTextWrpper.show();
                     $focusTipTextWrpper.text(validateResObj.validate_reason);
                 }
-
                 $elem.closest(".form-group").addClass("has-error");
+            } else {
+
             }
             valideAll = valideAll && validateResObj.validate_result;
         });
+
+        if (valideAll && $('#' + moduelId + ' .has-error').length === 0) {
+            valideAll = true;
+        }
+
         return valideAll;
     }
 

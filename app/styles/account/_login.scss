@@ -23,6 +23,13 @@
     .box-login {
         padding: 40px 0 10px 20px;
         background-color: #fff;
+        .pull-left {
+            width: 90px;
+            label {
+                width: 56px;
+                vertical-align: top;
+            }
+        }
     }
     .btn-primary {
         width: 100%;

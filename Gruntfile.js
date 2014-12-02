@@ -246,9 +246,10 @@ module.exports = function (grunt) {
 
     // Performs rewrites based on filerev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
+      html: ['<%= yeoman.dist %>/{,*/}*.html', '<%= yeoman.dist %>/views/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
+        cdnDomain: "http://tigerwit01.qiniudn.com",
         assetsDirs: ['<%= yeoman.dist %>','<%= yeoman.dist %>/images']
       }
     },
@@ -322,7 +323,7 @@ module.exports = function (grunt) {
     // ngmin tries to make the code safe for minification automatically by
     // using the Angular long form for dependency injection. It doesn't work on
     // things like resolve or inject so those have to be done manually.
-    ngmin: {
+    ngAnnotate: {
       dist: {
         files: [{
           expand: true,
@@ -354,6 +355,7 @@ module.exports = function (grunt) {
             '*.html',
             'views/{,*/}*.html',
             'images/{,*/}*.{webp}',
+            'ngsrc/*.{png,jpg,jpeg,gif,webp,svg}',
             'fonts/*',
             'base/webuploader-0.1.5/Uploader.swf'
           ]},
@@ -437,12 +439,12 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    //'ngmin',
+    'ngAnnotate',
     'copy:dist',
-    // 'cdnify',
+     //'cdnify',
     'cssmin',
     'uglify',
-    //'filerev',
+    'filerev',
     'usemin',
     'htmlmin'
   ]);

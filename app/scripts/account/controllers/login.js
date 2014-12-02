@@ -2,8 +2,9 @@
 
 angular.module('tigerwitApp')
 .controller('loginCtrl',
-['$scope', '$window', 'wdAccount', '$timeout', '$location', 'wdStorage', 'wdValidator',
-function ($scope, $window, wdAccount, $timeout, $location, wdStorage, wdValidator) {
+['$scope', '$window', 'wdAccount', '$timeout', '$location', 'wdStorage', 'wdValidator', '$rootScope',
+function ($scope, $window, wdAccount, $timeout, $location, wdStorage, wdValidator, $rootScope) {
+    $rootScope.hideNav = true;
     $scope.login = {
         phone: '',
         password: '',
@@ -24,8 +25,7 @@ function ($scope, $window, wdAccount, $timeout, $location, wdStorage, wdValidato
         wdAccount.login($scope.login).then(function(data) {
             // 登录成功后跳转到个人页面
             if (data.is_succ) {
-                $location.path('/personal');
-                $window.location.reload();
+                $location.path('/personal/index');
             } else {
                 $scope.login.error_msg = data.error_msg;
             }

@@ -6,8 +6,8 @@
 
 angular.module('tigerwitApp')
 .controller('registerCtrl',
-['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval', '$rootScope', '$window', '$state',
-function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval, $rootScope, $window, $state) {
+['$scope', 'wdAccount', '$timeout', 'wdConfig', 'wdValidator', '$location', '$interval', '$rootScope', '$window', '$state', '$modal',
+function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interval, $rootScope, $window, $state, $modal) {
     // 通过 query 中的 type 字段来标示注册的类型，默认情况下为
     // 注册虚拟账户
     // type: virtual || "" 注册虚拟账户
@@ -41,6 +41,17 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
         email: '',
         username: ''
     };
+    $scope.signIn.invite_code = searchObj.invite_code || '';
+
+    $scope.person = {
+        real_name: '',
+        invite_code: '',
+        // 上传状态：0、未上传；1、上传中，2、上传成功；3、上传失败；
+        uiFrontImageStatus: 0,
+        uiBackImageStatus: 0,
+        uiFrontImageError: '',
+        uiBackImageError: ''
+    };
 
     function registCheck() {
         // 进入时的逻辑
@@ -55,12 +66,23 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
                     if (data.verified) {
                         $location.path('/personal').search("");
                     }
+
                     if ($scope.registType === "virtual2real") {
+                        if ($window.hasNoFlash) {
+                            var downloadConfirm = confirm("你好，上传身份证需要安装 Flash ! 点击 '确定' 安装");
+                            if (downloadConfirm) {
+                                $window.open('http://get.adobe.com/cn/flashplayer/', '_self');
+                            }
+                        }
+                        if (data.fork_code) {
+                            $scope.person.fork_code = data.fork_code;
+                            $scope.person.withForkCode = true;
+                        }
                         wdAccount.getInfoStep({
                             type: "ReliableInformation"
                         }).then(function (msg) {
                             $scope.realInfo.step = msg.progress + 1;
-                        }, function () {})
+                        }, function () {});
                     }
                 });
             } else {
@@ -86,7 +108,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
             $scope.error_msg = "请勾选 “同意并遵循风险揭露和用户交易须知” ";
             return;
         }
-        if (validateInput('tigerwitRegister') && confirmPassword()) {
+        if (validateInput('tigerwit-regist') && confirmPassword()) {
             register();
         }
     };
@@ -94,32 +116,27 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
     // 将虚拟账户转变成真实账户
     $scope.uploadUrl = wdConfig.apiUrl + '/upload';
 
-    $scope.person = {
-        real_name: '',
-        invite_code: '',
-        // 上传状态：0、未上传；1、上传中，2、上传成功；3、上传失败；
-        uiFrontImageStatus: 0,
-        uiBackImageStatus: 0,
-        uiFrontImageError: '',
-        uiBackImageError: ''
-    };
-
     // 设置真实账号信息
     $scope.setRealInfo = function () {
         var realInfoStep = wdAccount.getInfoStep({type: "IdPicInformation"});
         $scope.realInfo.error_msg_1 = "";
         realInfoStep.then(function (msg) {
-            if (!(msg.progress & 0 | 1)) {
+            if (msg.progress === 0) {
+                $scope.realInfo.error_msg_1 = "请上传身份证";
+                return;
+            }
+
+            if (!(msg.progress & 1)) {
                 $scope.realInfo.error_msg_1 = "请上传身份证反面";
                 return;
             }
 
-            if (!(msg.progress & 0 | 2)) {
+            if (!(msg.progress & 2)) {
                 $scope.realInfo.error_msg_1 = "请上传身份证正面";
                 return;
             }
 
-            if (validateInput('tigerwitRegister')) {
+            if (validateInput('tigerwit-regist')) {
                 setInfo().then(function(data) {
                     if (data.is_succ) {
                         $scope.realInfo.step = 2;
@@ -280,9 +297,8 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
             }
             valideAll = valideAll && validateResObj.validate_result;
         });
-
-        if (valideAll && $('#' + moduelId + ' .has-error').length === 0) {
-            valideAll = true;
+        if ($('#' + moduelId + ' .has-error').length > 0) {
+            valideAll = false;
         }
 
         return valideAll;
@@ -343,14 +359,31 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
         switch(data.face) {
             case 'front':
                 $scope.$apply(function() {
-                    $scope.person.uiFrontImageError = '上传失败';
+                    $scope.person.uiFrontImageError = '图片太大，上传失败! 请上传小于 3MB 的图片';
                     $scope.person.uiFrontImageStatus = 3;
                 });
             break;
             case 'back':
                 $scope.$apply(function() {
-                    $scope.person.uiBackImageError = '上传失败';
+                    $scope.person.uiBackImageError = '图片太大，上传失败! 请上传小于 3MB 的图片';
                     $scope.person.uiBackImageStatus = 3;
+                });
+            break;
+        }
+    });
+
+    $scope.$on('wd-upload-form-type-error', function(e, data) {
+        switch(data.face) {
+            case 'front':
+                $scope.$apply(function() {
+                    $scope.person.uiFrontImageError = '上传的类型不正确，只支持 jpg, jpeg, png 三种格式';
+                    $scope.person.uiFrontImageStatus = 4;
+                });
+            break;
+            case 'back':
+                $scope.$apply(function() {
+                    $scope.person.uiBackImageError = '上传失败';
+                    $scope.person.uiBackImageStatus = 4;
                 });
             break;
         }

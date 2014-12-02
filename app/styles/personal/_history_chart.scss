@@ -1,28 +1,45 @@
 #personal-history-chart {
+    .chart-title {
+        padding-left: 5px;
+        margin: 0;
+    }
+    .chart-money {
+        margin: 0;
+        padding: 0;
+        padding-top: 10px;
+        padding-left: 5px;
+        color: $brand-info;
+        font-weight: bolder;
+    }
     .dropdown {
         .dropdown-toggle {
-            border-radius: 0;
+            border-radius: 2px;
             background-color: $module-bg;
             span {
                 display: inline-block;
             }
             .dropdown-toggle-text {
                 border-right: 1px solid $text-nav-dialog-color;
-                padding: 0 15px;
+                width: 62px;
+                margin-right: 7px;
             }
         }
         .dropdown-menu {
             min-width: 100px;
             width: 100px;
-            > li > a:hover {
-                background-color: $module-bg;
-                text-decoration: none;
+            > li > a {
+                &.active,
+                &:hover {
+                    background-color: $module-bg;
+                    text-decoration: none;
+                }
             }
         }
     }
     .table-info {
         background-color: $module-bg;
         padding: 15px 15px 0 15px;
+        margin-top: 30px;
         .row {
             padding:  15px;
             margin: 0;

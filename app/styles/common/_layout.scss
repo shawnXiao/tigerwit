@@ -17,6 +17,7 @@ body {
         margin-bottom: 20px;
     }
     .ft-risk-tip {
+        color: $text-title-sub-color;
         p {
             margin-bottom: 0;
         }
@@ -24,6 +25,7 @@ body {
     h4 {
         color: $text-inverse-title-color;
         font-size: $font-size-base;
+        margin-top: 6px;
         margin-bottom: 14px;
     }
     ul {
@@ -31,6 +33,7 @@ body {
         padding: 0;
         li {
             list-style: none;
+            margin-bottom: 4px;
             a {
                 color: $text-content-color;
             }
@@ -75,8 +78,7 @@ body {
                     border-bottom: 1px solid #f3f3f3;
             }
             .form-wrapper {
-                margin-top: 64px;
-                margin-left: 119px;
+                margin: 64px 0 64px 119px;
                 .col-sm-4 {
                     width: 28%;
                     padding-left: 4px;
@@ -108,106 +110,28 @@ body {
             margin-top: 21px;
             margin-bottom: 46px;
             background-color: #fff;
-            .banner {
-                img {
-                    width: 100%;
-                }
+            .sidebar {
+                @extend .col-lg-3;
+                padding: 0;
             }
             .content {
-                padding: 20px 375px 40px 72px;
-                h4 {
-                    margin: 20px 0;
-                    font-size: $font-size-large;
-                }
-                a {
-                    color: $brand-info;
-                }
-                .define {
-                    background: $module-bg;
-                    padding: 10px 10px 5px 10px;
-                    .define-title {
-                        color: $text-title-color;
+                margin-left: -2px;
+                background-color: #fff;
+                padding: 15px;
+                min-height: 700px;
+                @extend .col-lg-9;
+                .hd-title {
+                    padding-bottom: 5px;
+                    border-bottom: 1px solid $module-border;
+                    margin-bottom: 10px;
+                    color: $text-title-color;
+                    .title {
                         font-size: $font-size-large;
-                    }
-                    .define-content {
-                        color: $text-title-sub-color;
-                    }
-                }
-                .contact {
-                    @extend .clearfix;
-                    padding: 20px;
-                    background-color: $module-bg;
-                    float: left;
-                    > li {
-                        width: 248px;
-                        list-style-type: none;
-                        height: 90px;
-                        float: left;
-                        text-align: center;
-                        p {
-                            margin-top: 20px;
-                        }
-                        &.bd-right {
-                            border-right: 1px solid $module-border;
-                        }
-                    }
-                }
-                .magnet {
-                    margin: 0;
-                    padding: 0;
-                    > li {
-                        float: left;
-                        list-style: none;
-                        margin-top: 30px;
-                        width: 215px;
-                        height: 215px;
-                        position: relative;
-                        cursor: pointer;
-                        border: 1px solid $module-border;
-                    }
-                    .magnet-slogan {
-                        padding: 50px 0;
-                        background-color: $module-bg;
-                        color: $text-title-color;
-                        .magnet-title-normal {
-                            font-size: $font-size-h2;
-                            padding-left: 16px;
-                        }
-                        .magnet-title-primary{
-                            font-size: $font-size-h1;
-                            font-weight: bolder;
-                            color: $brand-primary;
-                            padding-left: 24px;
-                        }
-                    }
-                    .magnet-item {
-                        padding: 25px 0 50px;
-                        text-align: center;
-                        .magnet-fragment {
-                            display: none;
-                            position: absolute;
-                            left: 0;
-                            bottom: 0;
-                            width: 100%;
-                            height: 77px;
-                            padding: 10px 15px;
-                            color: $text-inverse-title-color;
-                            background-color: rgba($nav-dialog-bg, 0.8);
-                        }
-                        &:hover, &.active {
-                            .magnet-fragment {
-                                display: block;
-                            }
-                        }
-                    }
-                    .mg-rt-30 {
-                        margin-right: 30px;
-                    }
-                    .mg-lt-30 {
-                        margin-left: 30px;
+                        margin: 0;
                     }
                 }
             }
+
         }
     }
 }
@@ -230,9 +154,11 @@ body {
             background-color: #fff;
             padding: 15px;
             min-height: 700px;
+            border-radius: 2px;
+            @include box-shadow(0 1px 3px rgba(0,0,0,.15));
             @extend .col-lg-6;
         }
-        .sidebar-ad {
+        .sidebar-other {
             @extend .col-lg-3;
             padding: 0;
             padding-left: 18px;
@@ -262,7 +188,6 @@ body {
         .sidebar {
             @extend .col-lg-3;
             padding: 0;
-            z-index: $zindex-navbar;
         }
         .content {
             margin-left: -2px;
@@ -282,11 +207,11 @@ body {
             }
         }
     }
-    .col-left {
-        float: left;
-    }
-    .col-right {
-        overflow: hidden;
-        zoom: 1;
-    }
+}
+.col-left {
+    float: left;
+}
+.col-right {
+    overflow: hidden;
+    zoom: 1;
 }

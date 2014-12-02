@@ -1,13 +1,32 @@
-#settings-info {
+#settings-index {
+    .bd-sub {
+        margin: 25px 40px;
+        .col-left {
+            margin-right: 30px;
+        }
+    }
     .personal-info {
         p {
             color: $text-title-color;
             span {
                 display: inline-block;
-                width: 50px;
+                width: 80px;
                 text-align: right;
                 color: $text-content-color;
+                margin-right: 10px;
             }
+            .verified-tip {
+                color: $text-content-color;
+                margin-left: 10px;
+                font-style: normal;
+                .icon-verfied {
+                    margin-right: 2px;
+                    vertical-align: middle;
+                }
+            }
+        }
+        .btn-wrapper {
+            padding-left: 38px;
         }
     }
 }

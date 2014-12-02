@@ -24,6 +24,9 @@
 @import "common/dropdown";
 @import "common/hd_order";
 @import "common/icons";
+@import "common/modal";
+@import "common/content";
+@import "common/table";
 
 // Javascript Components
 @import "common/carousel";
@@ -36,12 +39,17 @@
 @import "account/reset_password";
 @import "account/common";
 @import "personal/index";
-@import "personal/deposit_side";
+@import "personal/personal_side";
 @import "personal/history";
+@import "personal/deposit";
 @import "personal/history_chart";
 @import "personal/notify";
+@import "personal/withdraw";
 @import "personal/info_side";
 @import "settings/info";
+@import "settings/password";
+@import "master/index";
+@import "guides/index";
 
 
 // Third party

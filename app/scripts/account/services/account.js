@@ -8,12 +8,30 @@ function($rootScope, $http, wdStorage) {
         check: function() {
             return $http.get('/check');
         },
-        exits: function (key) {
+        exits: function (key, type) {
+            var param = {};
+            var type = type || 'key';
+            param[type] = key;
             return $http.get('/exists', {
-                params: {
-                    key: key
-                }
+                params: param
             });
+        },
+        getNotification: function (params) {
+            return $http.get('/get_notification', {
+                params: params
+            });
+        },
+        getMasterList: function () {
+            return $http.get('/master_list');
+        },
+        getParity: function () {
+            return $http.get('/get_parity');
+        },
+        getDepositLimit: function () {
+            return $http.get('/pay_limit');
+        },
+        getInviteLink: function (params) {
+            return $http.get('/get_invite_url');
         },
         verifyPhone: function(params) {
             return $http.get('/verify', {
@@ -106,8 +124,12 @@ function($rootScope, $http, wdStorage) {
         setInfo: function(opts) {
             return $http.post('/set_info', opts);
         },
-        getInfo: function() {
-            return $http.get('/get_info');
+        getInfo: function(type) {
+            return $http.get('/get_info', {
+                params: {
+                    type: type || ''
+                }
+            });
         }
     };
     // 结束

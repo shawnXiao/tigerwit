@@ -69,6 +69,14 @@
     color: $brand-info;
 }
 
+.mg-lf-30 {
+    margin-left: 30px;
+}
+
+.mg-rt-30 {
+    margin-right: 30px;
+}
+
 .social-list {
     > li {
         display: inline-block;
@@ -87,17 +95,48 @@
         }
         .social-item-weibo {
             @extend .social-item;
-                background-position: -28px 0;
-            &:hover {
                 background-position: -28px -27px;
+            &:hover {
+                background-position: -28px 0;
             }
         }
         .social-item-email {
             @extend .social-item;
-            background-position: -54px 0;
-            &:hover {
                 background-position: -54px -27px;
+                margin-left: 18px;
+            &:hover {
+                background-position: -54px 0;
             }
         }
     }
+}
+.close {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    &:hover,
+    &:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        filter: alpha(opacity=50);
+        opacity: .5;
+    }
+}
+
+.h2 {
+    font-size: $font-size-h3;
+    padding-bottom: 21px;
+    padding-left: 60px;
+    border-bottom: 1px solid #f3f3f3;
 }

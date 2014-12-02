@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.factory('wdAccountMoney', 
+.factory('wdAccountMoney',
 ['$window', '$location', 'wdConfig', '$http',
 function($window, $location, wdConfig, $http) {
-    var equitySocketUrl = wdConfig.webSocketUrl + '/equity';
-    console.log(equitySocketUrl);
+    //var equitySocketUrl = wdConfig.webSocketUrl + '/equity';
+    var equitySocketUrl = 'ws://test.tigerwit.com/api/v1/equity';
 
     // 当前接口的 socket 对象
     var equitySocket;
@@ -14,12 +14,26 @@ function($window, $location, wdConfig, $http) {
             if (equitySocket) {
                 return equitySocket;
             } else {
-                equitySocket = new WebSocket(equitySocketUrl);
-                return equitySocket;
+                if ('WebSocket' in window) {
+                    equitySocket = new WebSocket(equitySocketUrl);
+                    return equitySocket;
+                } else {
+
+                }
             }
         },
+        equityLast: function () {
+            return $http.get('/equity/last');
+        },
         pay: function(money) {
-            $window.open(wdConfig.apiUrl + '/pay?amount=' + money);
+            return $http.get('/pay', {
+                params: {
+                    amount: money
+                }
+            });
+        },
+        withdraw: function (opts) {
+            return $http.post('/withdraw', opts)
         }
     };
 // 结束

@@ -17,6 +17,9 @@ angular.module('tigerwitApp')
              isIdentityResolved: function () {
                  return angular.isDefined(_identify);
              },
+             isLogined: function () {
+                 return angular.isDefined(_identify)  && _identify !== null && _identify.is_succ;
+             },
              isAuthenticated: function () {
                  return _authenticated;
              },
@@ -47,15 +50,8 @@ angular.module('tigerwitApp')
                  if (force) {
                      _identify = undefined;
                  }
-
-                 if (angular.isDefined(_identify)) {
-                     deferred.resolve(_identify);
-                     return deferred.promise;
-                 }
                  $http.get('/check').then(function (data) {
-                     if (data.is_succ) {
-                         _authenticated = true;
-                     }
+                     _authenticated = true;
                      _identify = data;
                      deferred.resolve(_identify)
                  }, function () {
@@ -73,19 +69,12 @@ angular.module('tigerwitApp')
             authorize: function () {
                 return principal.identity()
                 .then(function () {
-                    var isAuthenticated = principal.isAuthenticated();
-                    if ($rootScope.toState.data.roles &&
-                        $rootScope.toState.data.roles.length > 0 &&
-                       !principal.isInAnyRole($rootScope.toState.data.roles)) {
-                        if (isAuthenticated) {
-                            $state.go('login');
-                        } else {
-                            $rootScope.returnToState = $rootScope.toState;
-                            $rootScope.returnToStateParams  = $rootScope.toStateParams;
-                            $state.go('regist');
-                        }
+                    var isLogined = principal.isLogined();
+                    var shouldAuthenticated = $rootScope.toState.authenticate;
+                    if (shouldAuthenticated && !isLogined) {
+                        $state.go('login');
                     }
-                })
+               })
             }
         }
     }

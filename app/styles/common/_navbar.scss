@@ -28,6 +28,7 @@
 .navbar-header {
   @include clearfix();
   float: left;
+  margin-top: -7px;
 }
 
 .navbar-tail {
@@ -35,6 +36,7 @@
   @include clearfix();
   float: right;
   .dropdown-info {
+      top: 18px;
       .dropdown-toggle {
           color: $text-nav-dialog-color;
           &:hover {
@@ -55,18 +57,25 @@
               .col-left {
                   float: left;
                   margin-right: 10px;
+                  .img-circle {
+                      height: 34px;
+                  }
               }
               .col-right {
                   overflow: hidden;
                   zoom: 1;
                   p {
                       margin-bottom: 5px;
+                      word-break: break-all;
+                      max-width: 160px;
+                      max-height: 40px;
+                      overflow: hidden;
                       color: $text-nav-dialog-color;
                   }
               }
           }
           .found-wrapper-sm {
-              width: 180px;
+              width: 200px;
               padding: 10px;
               background-color: $nav-dialog-sub-bg;
               .title {
@@ -196,8 +205,6 @@
 // Static top (unfixed, but 100% wide) navbar
 .navbar-static-top {
   z-index: $zindex-navbar;
-  border-width: 0 0 1px;
-
   @media (min-width: $grid-float-breakpoint) {
     border-radius: 0;
   }
@@ -322,6 +329,7 @@
   }
   .open .dropdown-menu {
       top: 50px;
+      left: -1px;
       border-radius: 0 0 $border-radius-base $border-radius-base;
       > li > a {
           &:hover {
@@ -385,13 +393,14 @@
   .navbar-nav {
     > li > a {
       color: $navbar-inverse-link-color;
-      border-bottom: 2px solid $navbar-inverse-link-border-color;
+      border-bottom: 3px solid $navbar-inverse-link-border-color;
+      margin-right: 15px;
 
       &:hover,
       &.active,
       &:focus {
         color: $navbar-inverse-link-hover-color;
-        border-bottom: 2px solid $navbar-inverse-link-hover-border-color;
+        border-bottom: 3px solid $navbar-inverse-link-hover-border-color;
         background-color: $navbar-inverse-link-hover-bg;
       }
     }
@@ -401,6 +410,7 @@
       &.active,
       &:focus {
         color: $navbar-inverse-link-active-color;
+        border-bottom: 3px solid $navbar-inverse-link-hover-border-color;
         background-color: $navbar-inverse-link-active-bg;
       }
     }
@@ -438,6 +448,15 @@
       &:hover,
       &:focus {
         background-color: $navbar-inverse-link-active-bg;
+        color: $navbar-inverse-link-active-color;
+      }
+    }
+    > .on > a {
+      &,
+      &:hover,
+      &:focus {
+        background-color: $navbar-inverse-link-active-bg;
+        border-bottom: 3px solid $navbar-inverse-link-hover-border-color;
         color: $navbar-inverse-link-active-color;
       }
     }
@@ -500,4 +519,26 @@
       }
     }
   }
+}
+
+.navbar-personal .navbar-brand {
+    margin-top: 15px;
+}
+.navbar-light {
+    background-color: #eaeff5;
+    margin: 0;
+    height: 100%;
+    > li {
+        > a {
+                padding: 20px 0 20px 30px;
+                border-radius: 0;
+                color: $text-title-color;
+                &.active,
+                &:hover {
+                    color: $brand-info;
+                    background-color: #fff;
+                }
+
+        }
+    }
 }

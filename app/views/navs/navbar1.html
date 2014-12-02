@@ -10,24 +10,29 @@
                 ng-class="{'open': !!toolDrop}"
                 ng-mouseenter="toolDrop = toolDrop + 1" ng-init="toolDrop=0"
                 ng-mouseleave="toolDrop = toolDrop - 1">
-            <a href="" class="dropdown-toggle">中文 <span class="caret"></span></a>
+                <a href="" class="dropdown-toggle">{{ i18nLang === 'cn' ? '中文' : 'English'}}<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="">英文 <i class="icon-lang-en"></i></a>
+                <a href="javascript:void(0)" ng-click="changeLang('us')"
+                    ng-class="{'active':  i18nLang === 'us'}">English <i class="icon-lang-en"></i></a>
+                </li>
+                <li>
+                <a href="javascript:void(0)" ng-click="changeLang('cn')"
+                    ng-class="{'active':  i18nLang === 'cn'}">中文 <i class="icon-lang-en"></i></a>
                 </li>
             </ul>
         </div>
     </div><!--navbar-header end-->
-    <div class="navbar-tail hide" ng-class="{'show': showTail }" ng-if="!hideNav">
-        <div ng-if="!authenticated">
+    <div class="navbar-tail"  ng-if="!hideNav">
+        <div ng-if="isLogin !== undefined && !isLogin">
             <div class="form-group-sm form-inline navbar-login" ng-class="{'hide': login.is_succ}">
                 <input type="phone" name="phone"
-                    ng-model="login.phone"
+                    ng-model="login.phone" auto-fill
                     data-validate="required phone"
-                    placeholder="账号" class="form-control input-sm" wd-place-holder >
-                <input type="password" class="form-control input-sm input-magnet-rt"
+                    placeholder="{{i18nConf['000061'][i18nLang]}}" class="form-control input-sm" >
+                <input type="password" auto-fill class="form-control input-sm input-magnet-rt"
                 data-validate="length:6-15 password"
-                id="inputPassword" placeholder="密码" ng-model="login.password" focus-tip="loginpassword">
+                id="inputPassword" placeholder="{{i18nConf['000062'][i18nLang]}}" ng-model="login.password" focus-tip="loginpassword">
                 <button type="submit"
                     class="btn btn-primary btn-sm btn-magnet-lf" 
                     ng-click="loginFun();">&gt;</button>
@@ -35,11 +40,11 @@
             <p class="color-danger text-center" ng-class="{'show': !!login.error_msg }">{{login.error_msg}}</p>
         </div>
 
-        <div ng-if="authenticated"
+        <div ng-if="isLogin"
             ng-mouseenter="showInfoDropdown()" ng-mouseleave="hideInfoDropdown()"
             class="dropdown pull-right dropdown-info">
-            <a class="dropdown-toggle" href="javascript:void(0)">
-                令狐斌
+            <a class="dropdown-toggle" href="#/personal/index">
+                {{profile.username}}
                 <span class="caret"></span>
             </a>
             <div class="dropdown-menu"
@@ -47,13 +52,13 @@
                 <div class="row clearfix">
                     <div class="col-left">
                         <img class="img-circle"
-                        src="http://placehold.it/34x34"
+                        ng-src="ngsrc/photo-{{ profile.sex ? 'man' : 'woman'}}.png"
                         alt="thumbnail" />
                     </div>
                     <div class="col-right">
-                        <p>Bin.Linghu</p>
-                        <p>真实账户：令狐斌</p>
-                        <p>模拟账户：linghubin</p>
+                        <p>{{profile.username}}</p>
+                        <p ng-class="{'show':  profile.verified }" class="hide">真实账户：{{profile.real_id}}</p>
+                        <p>模拟账户：{{profile.demo_id}}</p>
                     </div>
                 </div>
 
@@ -62,13 +67,11 @@
                         总资产
                     </div>
                     <div class="money-total">
-                        $6812.34
+                        ${{equityInfo.equity || 0}}
                     </div>
                     <div class="btn-wrapper">
-                        <button class="btn btn-md btn-danger" 
-                            type="submit">入金</button>
-                        <button class="btn btn-md btn-info"
-                            type="submit">出金</button>
+                        <a href="#/personal/deposit" class="btn btn-md btn-danger">入金</a>
+                        <a href="#/personal/withdraw"class="btn btn-md btn-info">出金</a>
                     </div>
                 </div>
                 <a href="javascript:void(0)" class="loginout text-center" ng-click="signOut()">退出</a>
@@ -90,63 +93,62 @@
                     <li class="dropdown"
                         ng-mouseenter="navDropIndex = navDropIndex + 1" ng-init="navDropIndex=0"
                         ng-mouseleave="navDropIndex = navDropIndex - 1"
-                        ng-class="{'open': !!navDropIndex}">
-                    <a href="#" class="dropdown-toggle">老虎汇</a>
+                        ng-class="{'open': !!navDropIndex, 'on': ['about', 'advantage', 'security', 'contact'].indexOf(stateName) >= 0}">
+                        <a href="#" class="dropdown-toggle">{{i18nConf["00001"][i18nLang]}}</a>
                         <ul class="dropdown-menu" >
                             <li>
-                                <a href="#/about" target="_blank">关于我们</a>
+                                <a href="#/static/about">{{i18nConf["000039"][i18nLang]}}</a>
                             </li>
                             <li>
-                                <a href="#/advantage" target="_blank">公司优势</a>
+                                <a href="#/static/advantage">{{i18nConf["000040"][i18nLang]}}</a>
                             </li>
                             <li>
-                                <a href="#/security" target="_blank">监管安全</a>
+                                <a href="#/static/security">{{i18nConf["000041"][i18nLang]}}</a>
                             </li>
                             <li>
-                                <a href="#/contact" target="_blank">联系我们</a>
+                                <a href="#/static/contact">{{i18nConf["000042"][i18nLang]}}</a>
                             </li>
                         </ul>
                     </li>
-
                     <li class="dropdown"
                         ng-mouseenter="navDropCopy = navDropCopy + 1" ng-init="navDropCopy=0"
                         ng-mouseleave="navDropCopy = navDropCopy - 1"
-                        ng-class="{'open': !!navDropCopy}">
-                        <a href="#" class="dropdown-toggle">跟单</a>
+                        ng-class="{'open': !!navDropCopy, 'on': ['guides'].indexOf(stateName) >= 0}">
+                        <a href="#/static/guides" class="dropdown-toggle">{{i18nConf["00002"][i18nLang]}}</a>
                         <ul class="dropdown-menu" >
                             <li>
-                                <a href="#/about" target="_blank">新手教程</a>
+                                <a href="#/static/guides">{{i18nConf["000043"][i18nLang]}}</a>
                             </li>
                         </ul>
                     </li>
 
 
                     <li>
-                        <a href="#">热门话题</a>
+                        <a href="#/static/ing">{{i18nConf["00003"][i18nLang]}}</a>
                     </li>
 
                     <li>
-                        <a href="#">交易</a>
+                        <a href="#/static/ing">{{i18nConf["00004"][i18nLang]}}</a>
                     </li>
 
                     <li>
-                        <a href="#">排行榜</a>
+                        <a href="#/static/ing">{{i18nConf["00005"][i18nLang]}}</a>
                     </li>
 
                     <li class="dropdown"
                         ng-mouseenter="navDropFriends = navDropFriends + 1" ng-init="navDropFriends=0"
                         ng-mouseleave="navDropFriends = navDropFriends - 1"
-                        ng-class="{'open': !!navDropFriends}">
-                        <a href="#" class="dropdown-toggle">合作伙伴</a>
+                        ng-class="{'open': !!navDropFriends, 'on': ['agency', 'bonus', 'master'].indexOf(stateName) >= 0}">
+                        <a href="#/static/agency" class="dropdown-toggle">{{i18nConf["00006"][i18nLang]}}</a>
                         <ul class="dropdown-menu" >
                             <li>
-                                <a href="#/about" target="_blank">代理加盟</a>
+                                <a href="#/static/agency">{{i18nConf["000028"][i18nLang]}}</a>
                             </li>
                             <li>
-                                <a href="#/about" target="_blank">推荐好友</a>
+                                <a href="#/static/bonus">{{i18nConf["000044"][i18nLang]}}</a>
                             </li>
                             <li>
-                                <a href="#/about" target="_blank">成为高手</a>
+                                <a href="#/static/master">{{i18nConf["000029"][i18nLang]}}</a>
                             </li>
                         </ul>
                     </li>
@@ -154,14 +156,14 @@
                     <li class="dropdown"
                         ng-mouseenter="navDropMore = navDropMore + 1" ng-init="navDropMore=0"
                         ng-mouseleave="navDropMore = navDropMore - 1"
-                        ng-class="{'open': !!navDropMore}">
-                        <a href="#" class="dropdown-toggle">更多</a>
+                        ng-class="{'open': !!navDropMore, 'on': ['rules'].indexOf(stateName) >= 0 || primaryPage == 'faq'}">
+                        <a href="#/faq/index" class="dropdown-toggle">{{i18nConf["00007"][i18nLang]}}</a>
                         <ul class="dropdown-menu" >
                             <li>
-                                <a href="">常见问题</a>
+                                <a href="#/faq/index">{{i18nConf["000048"][i18nLang]}}</a>
                             </li>
                             <li>
-                                <a href="">交易规则</a>
+                                <a href="#/static/rules">{{i18nConf["000049"][i18nLang]}}</a>
                             </li>
                         </ul>
                     </li>

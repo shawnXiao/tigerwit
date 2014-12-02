@@ -2,49 +2,25 @@
 
 angular.module('tigerwitApp')
 .controller('wdPersonalController',
-['$scope', 'wdAccount', '$timeout', '$location', '$state', 'wdAccountMoney',
-function ($scope, wdAccount, $timeout, $location, $state, wdAccountMoney) {
-    var stateName = $state.current.name;
-    $scope.moduleId =  "tigerwit-" + stateName;
-    $scope.stateName = stateName;
+['$rootScope', '$scope', 'wdAccount', 'wdAccountMoney', '$state', '$timeout', 'i18nConf',
+function ($rootScope, $scope, wdAccount, wdAccountMoney, $state, $timeout, i18nConf) {
 
-    var equitySocket;
-    $scope.user = {
-        money: {
-            available: '0.00',
-            recharge: '1.00',
-            uiRecharge: false
-        },
-    };
+    $scope.profile = {};
+    $scope.i18nConf = i18nConf;
+    $scope.i18nLang = "cn";
 
-    $scope.logout = function() {
-        wdAccount.logout().then(function(data) {
-            if (data.is_succ) {
-                $location.path('/index');
-            }
-        }, function() {
-        });
-    };
-
-    equitySocket = wdAccountMoney.equitySocket();
-    equitySocket.onmessage = function(e) {
-        var data = JSON.parse(e.data);
-        console.log(data);
-    };
-
-    function getInfo() {
-        wdAccount.getInfo().then(function(data) {
-            console.log(data);
-            $scope.user.money.available = data.money.available;
-        });
-    }
-
-    // 金额要增加两位小数
-    $scope.pay = function() {
-        var num = Number($scope.user.money.recharge);
-        if (String(typeof(num)).toLocaleLowerCase() === 'number') {
-            wdAccountMoney.pay(Number(num).toFixed(2));
+    wdAccount.getInfo().then(function(data) {
+        $scope.hasLoadProfile = true;
+        $scope.profile = data;
+        if (data.verified) {
+            // 获取个人的资产信息
+            (function getEquity() {
+               wdAccountMoney.equityLast().then(function (data) {
+                   $scope.equityInfo = data;
+                   $timeout(getEquity, 5 * 1000)
+               });
+            }());
         }
-    };
+    });
 
 }]);

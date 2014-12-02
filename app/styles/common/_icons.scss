@@ -20,16 +20,16 @@
 }
 
 // 侧边栏的导航的icon
-$icon-navs: home, deposit, withdraw, history, notify;
+$icon-navs: home, info, deposit, password, withdraw, setting, history, test, notify;
 @each $name in $icon-navs {
     $i: index($icon-navs, $name) - 1;
     .icon-nav-#{$name} {
         @extend .icon-navs;
-        background-position: -79px -68px * $i;
+        background-position: -79px -34px * $i;
     }
     a.active .icon-nav-#{$name},
     a:hover .icon-nav-#{$name} {
-        background-position: 0 -68px * $i;
+        background-position: 0 -34px * $i;
     }
 }
 
@@ -87,6 +87,16 @@ $icon-navs: security, transparency, service, free, product, platform, deal, coop
     width: 94px;
 }
 
+.side-contact-icon {
+    text-indent: -999em;
+    display: block;
+    position: relative;
+    background-position: 0 -313px;
+    width: 216px;
+    height: 20px;
+    @include wd-image-url('icons.png');
+}
+
 .contact-icon {
     width: 45px;
     height: 53px;
@@ -94,6 +104,7 @@ $icon-navs: security, transparency, service, free, product, platform, deal, coop
     @include wd-image-url('icons-marketing.png');
     display: block;
 }
+
 .contact-icon-phone {
     @extend .contact-icon;
     background-position: -1210px 0;
@@ -119,4 +130,32 @@ $icon-navs: security, transparency, service, free, product, platform, deal, coop
     right: 0;
     background-position: 0 -364px;
     @include wd-image-url('icons.png');
+}
+.icon-progress-lg {
+    height: 97px;
+    width: 100px;
+    display: block;
+    background-position: -171px -200px;
+    @include wd-image-url('icons.png');
+}
+
+.icon-verfied {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-position: -112px 0;
+    @include wd-image-url('icons.png');
+}
+
+.icon-loading {
+    width: 100%;
+    height: 100%;
+    @include wd-image-url('ajax-loading.gif');
+}
+.icon-ing {
+    width: 120px;
+    height: 120px;
+    display: inline-block;
+    vertical-align: middle;
+    @include wd-image-url('ing.png');
 }

@@ -1,46 +1,14 @@
 <div id="personal-notify">
     <div class="hd-sub clearfix">
         <p class="pull-left title">通知</p>
-        <div class="pull-right">
-            <a href="" class="del-partly">删除选中项</a>
-            <a href="" class="del-all">全部删除</a>
-        </div>
     </div>
     <ul>
-        <li>
+        <li ng-repeat="notify in notifications" ng-class="{'unread':  notify.create_date }">
             <div>
-                <p class="notify-info">
-                欢迎加入老虎汇，我们竭诚为你提供最优秀的港股交易服务。老虎汇 以覆盖PC、MAC、WEB等几大平台、急速稳定的交易软件，全力为你主营 以覆盖PC、MAC、WEB等几大平台、急速稳定的交易软件，全力为你主营 以覆盖PC、MAC、WEB等几大平台、急速稳定的交易软件，全力为你主营
-                </p>
-                <input type="checkbox" name="notify-del"/>
+                <p class="notify-info" ng-bind-html="notify.html"></p>
             </div>
             <div class="clearfix">
-                <p class="pull-left">2014-11-06 20:55:41</p>
-                <a class="pull-right" href="">删除</a>
-            </div>
-        </li>
-        <li class="unread">
-            <div>
-                <p class="notify-info">
-                欢迎加入老虎汇，我们竭诚为你提供最优秀以PC、MAC、WEB等几大平台、急速稳定的交易软件，全力为你主营 以覆盖PC、MAC、WEB等几大平台、急速稳定的交易软件，全力为你主营
-                </p>
-                <input type="checkbox" name="notify-del"/>
-            </div>
-            <div class="clearfix">
-                <p class="pull-left time">2014-11-06 20:55:41</p>
-                <a class="pull-right del" href="">删除</a>
-            </div>
-        </li>
-        <li>
-            <div>
-                <p class="notify-info">
-                欢迎加入老虎汇，我们竭诚为你提供最优秀的港股交易服务。老虎汇 以覆盖PC、MAC、WEB等几大平台、急速稳定的交易软件，全力为你主营 以覆盖PC、MAC、WEB等几大平台、急速稳定的交易软件，全力为你主营 以覆盖PC、MAC、WEB等几大平台、急速稳定的交易软件，全力为你主营
-                </p>
-                <input type="checkbox" name="notify-del"/>
-            </div>
-            <div class="clearfix">
-                <p class="pull-left">2014-11-06 20:55:41</p>
-                <a class="pull-right" href="">删除</a>
+                <p class="pull-left">{{notify.create_date * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</p>
             </div>
         </li>
     </ul>

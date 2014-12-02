@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.directive('wdUploadForm', ['$window', 'wdConfig',
-function($window, wdConfig) {
+.directive('wdUploadForm', ['$window', 'wdConfig', '$timeout',
+function($window, wdConfig, $timeout) {
 return {
     restrict: 'A',
     scope: false,
@@ -17,8 +17,11 @@ return {
             // 选完文件后，是否自动上传。
             auto: true,
 
+            // compress
+            compress: false,
+
             // swf文件路径
-            // swf: '/base/webuploader-0.1.5/Uploader.swf',
+             swf: '/base/webuploader-0.1.5/Uploader.swf',
 
             // 文件接收服务端。
             server: wdConfig.apiUrl + '/upload',
@@ -30,13 +33,14 @@ return {
             // 只允许选择图片文件。
             accept: {
                 title: 'Images',
-                extensions: 'gif,jpg,jpeg,bmp,png',
+                extensions: 'jpg,jpeg,png',
                 mimeTypes: 'image/*'
             },
             formData: {
                 face: $attrs.face
             }
         });
+
         uploader.on('startUpload', function() {
             $scope.$emit('wd-upload-form-start', {
                 face: $attrs.face
@@ -44,7 +48,12 @@ return {
         });
 
         // 文件上传成功，给item添加成功class, 用样式标记上传成功。
-        uploader.on('uploadSuccess', function() {
+        uploader.on('uploadSuccess', function(data, response) {
+            var imagePath = response.path;
+            if ($('.image-uploaded', $element).length === 1) {
+                $('.image-uploaded', $element).remove();
+            }
+            $element.append('<img class="image-uploaded" src="' + imagePath + '?timestamp=' + (+new Date())+ '" />')
             $scope.$emit('wd-upload-form-success', {
                 face: $attrs.face
             });
@@ -56,6 +65,16 @@ return {
                 face: $attrs.face
             });
         });
+
+        // 文件上传失败，显示上传出错。
+        uploader.on('error', function(error) {
+            $timeout(function () {
+                $scope.$emit('wd-upload-form-type-error', {
+                    face: $attrs.face
+                });
+            }, 300);
+        });
+
     }
 };
 }]);

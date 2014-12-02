@@ -10,8 +10,12 @@ angular.module('tigerwitApp')
                 reg:'^(?:\\+86)?(1[0-9]{10}$)'
             },
             'email': {
-                tips: '请输入正确的邮箱',
-                reg:'\\S+@\\S+\\.\\S+'
+                tips: '请输入正确的邮箱名，邮箱前缀由英文数字、下划线、减号、点组成，以英文数字结尾',
+                reg:'^\\w+([-.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$'
+            },
+            'money': {
+                tips: '请输入正确的金额，只能为小数或者整数。小数点后两位',
+                reg: '(^0\\.[0-9]{1,2}$)|(^[1-9][0-9]*\\.[0-9]{1,2}$)|(^[1-9][0-9]*$)'
             },
             'num': {
                 tips: '输入项不能包含数字',
@@ -21,7 +25,7 @@ angular.module('tigerwitApp')
             'zh': {
                 tips: "输入项不能包含中文",
                 type: '中文',
-                reg: '\\u4e00-\\u9fa5'
+                reg: '\\u4e00-\\u9fa5·'
             },
             'en': {
                 tips: "输入项不能包含英文",
@@ -151,11 +155,12 @@ angular.module('tigerwitApp')
             var lengthContent = type.split(":")[1];
             var lengthStart = lengthContent.split("-")[0];
             var lengthEnd = lengthContent.split("-")[1];
+            var strLength = str.replace(/[^\x00-\xff]/g,"**").length;
 
-            var validateResult = (lengthStart <= str.length && str.length <= lengthEnd);
+            var validateResult = (lengthStart <= strLength && strLength <= lengthEnd);
             var validateReason = "";
             if (!validateResult) {
-                validateReason = "输入项长度应介于 " + lengthStart + " 位和 " + lengthEnd + " 位之间";
+                validateReason = "输入项长度应介于 " + lengthStart + " 位和 " + lengthEnd + " 位之间, 一个中文为两个字符";
             }
             return {
                 validate_reason: validateReason,
@@ -195,6 +200,24 @@ angular.module('tigerwitApp')
                 validate_result: validateResult
             };
         },
+        money: function (str) {
+            var moneyReg = new RegExp(this.regTypes.money.reg);
+            var validateReason = "";
+            var validateResult = moneyReg.test(str);
+            if (!validateResult) {
+                validateReason = this.regTypes.money.tips;
+            }
+
+            if (/\s/.test(str)) {
+                validateResult = false;
+                validateReason = "请勿包含空格";
+            }
+
+            return {
+                validate_reason: validateReason,
+                validate_result: validateResult
+            };
+        },
         email: function (str) {
             var emailReg = new RegExp(this.regTypes.email.reg);
             var validateReason = "";
@@ -202,6 +225,12 @@ angular.module('tigerwitApp')
             if (!validateResult) {
                 validateReason = this.regTypes.email.tips;
             }
+
+            if (/\s/.test(str)) {
+                validateResult = false;
+                validateReason = "请勿包含空格";
+            }
+
             return {
                 validate_reason: validateReason,
                 validate_result: validateResult
@@ -212,6 +241,30 @@ angular.module('tigerwitApp')
 
     return {
         validateFuns: validateFuns,
+        validateInput: function (moduelId) {
+            var $validateInput = $('#' + moduelId + ' [data-validate]:visible');
+            var valideAll = {
+                result: true,
+                reason: ''
+            };
+
+            var isBreaking;
+            var that = this;
+            $validateInput.each(function (index, element) {
+                    var $elem = $(element);
+                    var validatorType = $elem.attr("data-validate");
+                    var validatorVal = $elem.val();
+                    var validateResObj = that.validate(validatorType, validatorVal);
+                    $elem.closest(".form-group").removeClass("has-error");
+                    if (!validateResObj.validate_result) {
+                        $elem.closest(".form-group").addClass("has-error");
+                        valideAll.reason = validateResObj.validate_reason;
+                    }
+                    valideAll.result = valideAll.result && validateResObj.validate_result;
+            });
+
+            return valideAll;
+        },
         validate: function(type, str) {
             var typeList = type.split(" ");
             var validateResult = {
@@ -231,6 +284,7 @@ angular.module('tigerwitApp')
                     if (!temptResultObj.validate_result) {
                         isbreak = true;
                         validateResult = temptResultObj;
+                        ga('send', 'event', 'validate-error', type, temptResultObj.validate_reason);
                     }
                 }
             });

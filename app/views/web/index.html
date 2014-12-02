@@ -12,7 +12,7 @@
     <!--carousel end-->
 
     <!--form start-->
-    <div class="row row-signin" ng-if="isLogin === false">
+    <div class="row row-signin" ng-show="isLogin != undefined && !isLogin">
         <div class="container container-form form-inline text-center center-block">
             <div class="form-group">
                 <input type="phone" name="phone"
@@ -20,9 +20,11 @@
                     data-validate="required phone"
                     focus-tip="phone"
                     data-exits="已存在该用户"
-                    placeholder="您的手机号码" class="form-control input-magnet-rt" wd-place-holder autofocus>
+                    placeholder="{{i18nConf['000060'][i18nLang]}}" class="form-control input-magnet-rt" autofocus>
             </div>
-            <button type="submit" class="btn btn-primary btn-magnet-lf" ng-click="goToRegister();">快速开通模拟账号 &gt;</button>
+            <button type="submit"
+                analytics-on="click" analytics-label="phone" analytics-category="regist"
+                class="btn btn-primary btn-magnet-lf" ng-click="goToRegister();">{{i18nConf["00009"][i18nLang]}}&gt;</button>
             <p class="error"  ng-class="{'show': error_msg !== ''}">{{error_msg}}</p>
         </div>
     </div><!--form end-->
@@ -31,42 +33,42 @@
     <div class="container marketing">
         <div class="row">
             <div class="col-lg-3 text-center">
-                <img class="" src="/images/marketing/4_07.png" alt="" />
-                <h3>人人都会"玩"</h3>
+                <img class="" src="/images/marketing/4_07.png" alt=""/>
+                <h3>{{i18nConf["000010"][i18nLang]}}</h3>
                 <ul class="text-left marketing-text">
-                    <li>上百位投资高手“教”你玩</li>
-                    <li>不同水平的投资者都能找到适合自己的交易平台入门版，进阶版和专家版任你选择</li>
-                    <li>PC端，移动端，随时随地抄外汇</li>
+                    <li>{{i18nConf["000011"][i18nLang]}}</li>
+                    <li>{{i18nConf["000012"][i18nLang]}}</li>
+                    <li>{{i18nConf["000013"][i18nLang]}}</li>
                 </ul>
             </div>
             <div class="col-lg-3 text-center">
                 <img class="" src="/images/marketing/4_09.png" alt="" />
-                <h3>人人都"玩"的起</h3>
+                <h3>{{i18nConf["000014"][i18nLang]}}</h3>
                 <ul class="text-left marketing-text">
-                    <li>免费体验模拟账号，立即获得10000美金体验奖金</li>
-                    <li>最低交易5美金</li>
-                    <li>低至3%的交易手续费</li>
+                    <li>{{i18nConf["000015"][i18nLang]}}</li>
+                    <li>{{i18nConf["000016"][i18nLang]}}</li>
+                    <li>{{i18nConf["000038"][i18nLang]}}</li>
                 </ul>
             </div>
 
 
             <div class="col-lg-3 text-center">
                 <img class="" src="/images/marketing/4_11.png" alt="" />
-                <h3>灵活智能的平台</h3>
+                <h3>{{i18nConf["000017"][i18nLang]}}</h3>
                 <ul class="text-left marketing-text">
-                    <li>25, 50, 100, 200倍杠杆任意选择</li>
-                    <li>自动建议止盈、止损价</li>
-                    <li>复制交易高手订单，一键开启赚钱旅程</li>
+                    <li>{{i18nConf["000018"][i18nLang]}}</li>
+                    <li>{{i18nConf["000019"][i18nLang]}}</li>
+                    <li>{{i18nConf["000020"][i18nLang]}}</li>
                 </ul>
             </div>
 
             <div class="col-lg-3 text-center">
                 <img class="" src="/images/marketing/4_13.png" alt="" />
-                <h3>大家都在用</h3>
+                <h3>{{i18nConf["000021"][i18nLang]}}</h3>
                 <ul class="text-left marketing-text">
-                    <li>目前已有532位交易高手加入</li>
-                    <li>本周已经产生34567笔交易</li>
-                    <li>本月已经为投资者赚的456787美元</li>
+                    <li>{{i18nConf["000022"][i18nLang]}}</li>
+                    <li>{{i18nConf["000023"][i18nLang]}}</li>
+                    <li>{{i18nConf["000024"][i18nLang]}}</li>
                 </ul>
             </div>
 

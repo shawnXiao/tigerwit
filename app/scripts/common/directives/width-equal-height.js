@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('tigerwitApp')
-.directive('wdWidthEqualHeight', function($window) {
+.directive('wdWidthEqualHeight', ['$window', function($window) {
 var h = $($window).height();
 return {
     restrict: 'A',
@@ -11,4 +11,4 @@ return {
         element.height(w);
     }
 };
-});
+}]);

@@ -2,11 +2,20 @@
 
 angular.module('tigerwitApp')
 .controller('wdWebMarketingController',
-['$scope', 'wdAccount', '$timeout', '$state', 'wdValidator', 'wdStorage', '$location',
-function ($scope, wdAccount, $timeout, $state, wdValidator, wdStorage, $location) {
+['$scope', 'wdAccount', '$timeout', '$state', '$window', 'wdValidator', 'wdStorage', '$location', 'wdAccountMoney', 'principal', 'i18nConf',
+function ($scope, wdAccount, $timeout, $state, $window, wdValidator, wdStorage, $location,  wdAccountMoney, principal, i18nConf) {
     var stateName = $state.current.name;
+
     $scope.moduleId =  "tigerwit-" + stateName;
-    $scope.stateName = stateName;
+    $scope.i18nConf = i18nConf;
+    $scope.i18nLang = "cn";
+    if (stateName === "index") {
+        $scope.i18n =  true;
+    }
+
+    $scope.changeLang = function (lang) {
+        $scope.i18nLang = lang;
+    }
 
     var slides = $scope.slides = [];
     $scope.myInterval = 3000;
@@ -20,21 +29,6 @@ function ($scope, wdAccount, $timeout, $state, wdValidator, wdStorage, $location
     for (var i = 0; i < 2; i ++) {
         $scope.addSlide();
     }
-
-    // 进入时的逻辑
-    // 判断用户是否登录和用户的属性
-    // 登录用户：去掉提醒用户开户的横条
-    $scope.isLogin = false;
-    wdAccount.check().then(function(data) {
-        // 已经完成注册申请过程
-        if (data.is_succ) {
-            $scope.isLogin = true;
-            wdAccount.getInfo().then(function (data) {
-                $scope.verified = data.verified;
-            });
-        }
-    }, function(data) {});
-
 
     $scope.submit_text = "开通账号";
     $scope.error_msg = "";
@@ -63,4 +57,48 @@ function ($scope, wdAccount, $timeout, $state, wdValidator, wdStorage, $location
     function verifyPhone() {
         return wdAccount.verifyPhone($scope.signIn);
     }
+
+
+    // 进入时的逻辑
+    // 判断用户是否登录和用户的属性
+    // 登录用户：去掉提醒用户开户的横条
+    principal.identity().then(function () {
+        // 验证用户是否登录
+        if (principal.isLogined()) {
+            $scope.isLogin = true;
+            wdAccount.getInfo().then(function(data) {
+                $scope.hasLoadProfile = true;
+                $scope.profile = data;
+                $scope.verified = data.verified;
+                if (data.verified) {
+                    // 获取个人的资产信息
+                    (function getEquity() {
+                       wdAccountMoney.equityLast().then(function (data) {
+                           $scope.equityInfo = data;
+                           $timeout(getEquity, 5 * 1000)
+                       });
+                    }());
+                }
+            });
+        } else {
+            $scope.isLogin = false;
+        }
+    });
+
+    // 获得邀请码
+    $scope.getInviteLink = function () {
+        if ($scope.isLogin) {
+            wdAccount.getInviteLink().then(function (msg) {
+                $scope.inviteLink = msg.invite_url;
+                $scope.showInviteLink = true;
+            });
+        } else {
+            $location.path("/login");
+        }
+    };
+
+    $scope.copyInviteLink = function () {
+        $window.prompt("Ctrl + c ( Mac 系统：command + c ) 复制到剪切板，点击'确定'", $scope.inviteLink);
+    };
+
 }]);

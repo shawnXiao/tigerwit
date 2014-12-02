@@ -1,0 +1,47 @@
+.personal-side-block {
+    border-radius: 2px;
+    @include box-shadow(0 1px 3px rgba(0,0,0,.15));
+    margin-bottom: 20px;
+    .poster {
+        width: 100%;
+        img {
+            width: 100%;
+        }
+    }
+}
+
+.personal-side-divider {
+    border-top: 1px solid $module-border;
+}
+.personal-side-contact {
+    .side-contact-icon {
+        top: -20px;
+        left: 70px;
+    }
+}
+
+.personal-deposit-side {
+    background-color: $module-sub-bg;
+    padding: 14px 20px 20px 20px;
+    .hd {
+        padding-bottom: 20px;
+        color: $text-title-color;
+        border-bottom: 1px solid $module-border;
+    }
+    .money-total {
+        font-size: $font-size-h1;
+        font-weight: bolder;
+        color: $text-title-color;
+        height: 150px;
+        line-height: 150px;
+        text-align: right;
+    }
+    .btn-wrapper {
+        text-align: center;
+        .btn-md {
+            padding: 9px 30px 9px 45px;
+            position: relative;
+            font-size: $font-size-base;
+        }
+    }
+}

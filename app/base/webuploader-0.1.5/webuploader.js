@@ -1004,6 +1004,7 @@
             type = type || getFirstKey( factories );
 
             if ( !type ) {
+                window.hasNoFlash = true;
                 throw new Error('Runtime Error');
             }
 
@@ -1776,6 +1777,7 @@
                     bottom: 'auto',
                     right: 'auto',
                     width: "100%",
+                    'z-index': 2,
                     height: "100%"
                 }).offset( pos );
             },
@@ -6865,7 +6867,7 @@
                     if ( xhr.status >= 200 && xhr.status < 300 ) {
                         me._response = xhr.responseText;
                         return me.trigger('load');
-                    } else if ( xhr.status >= 500 && xhr.status < 600 ) {
+                    } else if ( xhr.status >= 400 && xhr.status < 600 ) {
                         me._response = xhr.responseText;
                         return me.trigger( 'error', 'server' );
                     }
@@ -7652,7 +7654,6 @@
                 var container = this.getContainer(),
                     opts = this.options,
                     html;
-
                 // if not the minimal height, shims are not initialized
                 // in older browsers (e.g FF3.6, IE6,7,8, Safari 4.0,5.0, etc)
                 container.css({

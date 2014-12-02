@@ -2,7 +2,7 @@
     <div class="container">
 
         <div class="col-lg-7 clearfix text-center box-slogan">
-            <img src=" http://placehold.it/520x210" alt="" />
+            <img src="/images/marketing/login.png" alt="" />
             <p>老虎汇为香港证监会认可的持牌法团（中央编号：AZT137），提供证券交易服务并受其监管。</p>
         </div>
 
@@ -12,7 +12,7 @@
                 <div class="col-sm-11">
                     <input type="text" class="form-control"
                     id="inputName" placeholder="手机号码"
-                    data-validate="phone"
+                    data-validate="phone" auto-fill
                     ng-model="login.phone">
                 </div>
               </div>
@@ -20,7 +20,7 @@
               <div class="form-group clearfix">
                 <div class="col-sm-11">
                     <input type="password" class="form-control"
-                    data-validate="id"
+                    data-validate="id" auto-fill
                     id="inputIDNumber" placeholder="登录密码"
                     ng-model="login.password">
                 </div>
@@ -42,8 +42,8 @@
                       <label for="login-auto">自动登录</label>
                   </div>
                   <span class="pull-right">
-                      <a href="#/regist" target="_blank">立即注册</a> | 
-                      <a href="#/reset" target="_blank">忘记密码</a>
+                      <a href="#/regist?phone={{login.phone}}" target="_blank">立即注册</a> | 
+                      <a href="#/reset?phone={{login.phone}}" target="_blank">忘记密码</a>
                   </span>
                 </div>
               </div>

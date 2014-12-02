@@ -15,7 +15,17 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//tigerwit01.qiniudn.com/scripts/ga-test.js','ga');
+      ga('create', 'UA-57157623-1', 'auto');
+      ga('send', 'pageview');
+    </script>
   </head>
+
   <body ng-app="tigerwitApp">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -30,49 +40,76 @@
     <![endif]-->
     <!-- endbuild -->
 
-    <!-- build:js(.) scripts/vendor.js -->
+    <script src="http://libs.useso.com/js/jquery/1.11.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <!-- build:js(.) /scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/json3/lib/json3.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/highcharts-release/highcharts.js"></script>
-    <script src="bower_components/highcharts-release/highcharts-more.js"></script>
-    <script src="bower_components/highcharts-release/modules/exporting.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="base/webuploader-0.1.5/webuploader.js"></script>
+        <script src="base/webuploader-0.1.5/webuploader.js" type="text/javascript" charset="utf-8"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/common/services/config.js"></script>
+        <script src="scripts/common/services/i18nConf.js"></script>
         <script src="scripts/common/services/storage.js"></script>
         <script src="scripts/common/services/transition.js"></script>
         <script src="scripts/common/services/validator.js"></script>
         <script src="scripts/common/services/authorization.js"></script>
         <script src="scripts/personal/services/stock.js"></script>
+        <script src="scripts/common/directives/auto-fill.js"></script>
         <script src="scripts/common/directives/upload-form.js"></script>
+        <script src="scripts/common/directives/analytics-on.js"></script>
         <script src="scripts/common/directives/loading.js"></script>
         <script src="scripts/common/directives/width-equal-height.js"></script>
+        <script src="scripts/common/directives/equal-height.js"></script>
         <script src="scripts/common/directives/place-holder.js"></script>
         <script src="scripts/common/directives/carousel.js"></script>
+        <script src="scripts/common/directives/modal.js"></script>
         <script src="scripts/common/directives/focus-tip.js"></script>
         <script src="scripts/common/directives/highcharts-stock.js"></script>
         <script src="scripts/web/controllers/marketing.js"></script>
         <script src="scripts/web/controllers/navbar.js"></script>
+        <script src="scripts/personal/filters/startnow.js"></script>
+        <script src="scripts/personal/directives/reloadstate.js"></script>
+        <script src="scripts/personal/directives/dropdown.js"></script>
+        <script src="scripts/personal/directives/fontfit.js"></script>
         <script src="scripts/personal/controllers/index.js"></script>
         <script src="scripts/personal/controllers/deposit.js"></script>
+        <script src="scripts/personal/controllers/withdraw.js"></script>
         <script src="scripts/personal/controllers/history.js"></script>
+        <script src="scripts/personal/controllers/notify.js"></script>
+        <script src="scripts/setting/controllers/index.js"></script>
+        <script src="scripts/master/controllers/index.js"></script>
         <script src="scripts/account/controllers/register.js"></script>
         <script src="scripts/account/controllers/login.js"></script>
         <script src="scripts/account/controllers/money.js"></script>
         <script src="scripts/account/services/account.js"></script>
         <script src="scripts/account/services/money.js"></script>
         <!-- endbuild -->
+<script language="javascript">
+    window.OpenChat = function (){
+        var chatUrl=" http://chat8.live800.com/live800/chatClient/chatbox.jsp?companyID=371437&jid=2997261242";
+              chatUrl+="&enterurl="+encodeURIComponent(document.referrer||document.URL);
+              chatUrl+="&t="+new Date().getTime();
+        try{
+            window.open(chatUrl,"chatbox79482","toolbar=0,scrollbars=0,location=0,menubar=0,resizable=1,width=570,height=424");
+        }catch(e){
+            // browser blocked
+            // do nothing;
+        }
+    }
+</script>
+<div id="floatBtn" style="position: fixed; padding: 5px; line-height: 20px; color: #fff; bottom: 40px; right: 10px;">
+    <img src="http://chat8.live800.com/live800/SurferServer?cmd=111&amp;companyID=371437&amp;online=http%3A%2F%2Fchat8.live800.com%2Flive800%2FchatClient%2Ficons%2F0_online.gif&amp;offline=http%3A%2F%2Fchat8.live800.com%2Flive800%2FchatClient%2Ficons%2F0_offline.gif&amp;tm=1417155370480"
+    onclick="OpenChat();"
+    border="0" style="cursor:pointer;">
+</div>
 </body>
 </html>

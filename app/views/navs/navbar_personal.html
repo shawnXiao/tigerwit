@@ -1,6 +1,6 @@
 <div class="navbar-personal">
     <!-- navbar start -->
-    <div class="navbar-wrapper" ng-class="{'hide': hideNav }">
+    <div class="navbar-wrapper">
         <div class="row">
             <div class="container">
                 <!--navbar-collapse start-->
@@ -14,22 +14,22 @@
 
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="#/personal" ng-class="{'active':  parentState === 'personal'}">个人中心</a>
+                            <a href="#/personal/index" ng-class="{'active':  parentState === 'personal'}">个人中心</a>
                         </li>
                         <li>
-                            <a href="#">高手榜</a>
+                            <a href="#/master" ng-class="{'active':  parentState === 'master'}">高手榜</a>
                         </li>
                         <li>
-                            <a href="#">新手指南</a>
+                            <a href="#/guides" ng-class="{'active':  parentState === 'guides'}">新手指南</a>
                         </li>
                         <li>
-                            <a href="#/setting" ng-class="{'active':  parentState === 'setting'}">设置</a>
+                            <a href="#/setting/index" ng-class="{'active':  parentState === 'setting'}">设置</a>
                         </li>
                     </ul>
                     <div class="navbar-tail">
                         <div class="dropdown pull-right dropdown-info" ng-mouseenter="showInfoDropdown()" ng-mouseleave="hideInfoDropdown()">
-                            <a class="dropdown-toggle" href="javascript:void(0)">
-                                令狐斌
+                            <a class="dropdown-toggle" href="#/personal/index">
+                                {{profile.username}}
                                 <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu"
@@ -38,13 +38,13 @@
                                 <div class="row clearfix">
                                     <div class="col-left">
                                         <img class="img-circle"
-                                        src="http://placehold.it/34x34"
+                                        ng-src="ngsrc/photo-{{ profile.sex ? 'man' : 'woman'}}.png"
                                         alt="thumbnail" />
                                     </div>
                                     <div class="col-right">
-                                        <p>Bin.Linghu</p>
-                                        <p>真实账户：令狐斌</p>
-                                        <p>模拟账户：linghubin</p>
+                                        <p>{{profile.username}}</p>
+                                        <p ng-class="{'show':  profile.verified }" class="hide">真实账户：{{profile.real_id}}</p>
+                                        <p>模拟账户：{{profile.demo_id}}</p>
                                     </div>
                                 </div>
 
@@ -53,13 +53,11 @@
                                         总资产
                                     </div>
                                     <div class=" money-total">
-                                        $6812.34
+                                        ${{equityInfo.equity || 0}}
                                     </div>
                                     <div class="btn-wrapper">
-                                        <button class="btn btn-md btn-danger" 
-                                            type="submit">入金</button>
-                                        <button class="btn btn-md btn-info"
-                                            type="submit">出金</button>
+                                        <a href="#/personal/deposit" class="btn btn-md btn-danger" reload-state data-subpage="deposit">入金</a>
+                                        <a href="#/personal/withdraw"class="btn btn-md btn-info" reload-state data-subpage="withdraw">出金</a>
                                     </div>
                                 </div>
                                 <a href="javascript:void(0)"  class="loginout text-center" ng-click="signOut()">退出</a>

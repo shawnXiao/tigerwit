@@ -1,29 +1,32 @@
 <div class="personal-info-side">
     <div class="personal-info">
         <div class="thumbnail text-center">
-            <img class="img-circle" src="http://placehold.it/90x90" alt="thumbnail" />
+            <img class="img-circle" ng-show="profile.sex != undefined" ng-src="ngsrc/photo-{{ profile.sex ? 'man' : 'woman'}}.png" alt="thumbnail" />
             <div class="caption">
-                <h3>Bin.Linghu</h3>
+                <h3>{{profile.username}}</h3>
             </div>
         </div>
         <div class="info-detail">
             <h4>MT4信息</h4>
             <div class="info-text">
-                <p>真实账户：令狐斌</p>
-                <p>模拟账户：linghubin</p>
-                <button type="submit" class="btn btn-md btn-primary"> 开通真实账户</button>
+
+                <p ng-show="profile.verified">真实账户：{{profile.real_id}}</p>
+
+                <p>模拟账户：{{profile.demo_id}}</p>
+
+                <a href="#/regist?type=virtual2real" target="_blank" ng-show="!profile.verified"  class="btn btn-md btn-primary"> 开通真实账户</a>
             </div>
         </div>
     </div>
     <ul class="nav nav-pills nav-stacked">
         <li>
-            <a href="#/personal" ng-class="{'active': stateName === 'personal'}"><span class="icon-nav-home"></span>首页</a>
+            <a href="#/personal/index" ng-class="{'active': stateName === 'index'}"><span class="icon-nav-home"></span>首页</a>
         </li>
         <li>
-            <a href="#/personal/deposit"  ng-class="{'active': stateName === 'deposit'}"><span class="icon-nav-deposit"></span> 入金</a>
+            <a href="/#/personal/deposit"  ng-class="{'active': stateName === 'deposit'}"><span class="icon-nav-deposit"></span> 入金</a>
         </li>
         <li>
-            <a href="#/personal/withdraw" ng-class="{'active':  stateName === 'withdraw'}"><span class="icon-nav-withdraw"></span>出金</a>
+            <a href="/#/personal/withdraw" ng-class="{'active':  stateName === 'withdraw'}"><span class="icon-nav-withdraw"></span>出金</a>
         </li>
         <li>
             <a href="#/personal/history" ng-class="{'active': stateName === 'history'}"><span class="icon-nav-history"></span>交易历史</a>

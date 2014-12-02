@@ -2,19 +2,11 @@
 
 angular.module('tigerwitApp')
 .controller('wdWebNavbarController',
-['$scope', 'wdAccount', '$state', '$timeout', 'wdStorage', 'principal', '$location', '$window', 'wdValidator',
-function ($scope, wdAccount, $state, $timeout, wdStorage, principal, $location, $window, wdValidator) {
+['$scope', 'wdAccount', '$state', '$timeout', 'wdStorage', '$location', '$window', 'wdValidator',
+function ($scope, wdAccount, $state, $timeout, wdStorage, $location, $window, wdValidator) {
     var stateUrl = $state.current.url;
     var stateUrlList = stateUrl.split("/");
     $scope.parentState = stateUrlList[1];
-
-    $scope.showTail = false;
-    principal.identity().then(function () {
-        // 验证用户是否登录
-        $scope.authenticated = principal.isAuthenticated();
-        $scope.showTail = true;
-    });
-
 
     // 登录相关操作
     $scope.login = {
@@ -35,7 +27,7 @@ function ($scope, wdAccount, $state, $timeout, wdStorage, principal, $location, 
         wdAccount.login($scope.login).then(function(data) {
             // 登录成功后跳转到个人页面
             if (data.is_succ) {
-                $location.path('/personal');
+                $location.path('/personal/index');
                 $window.location.reload();
             } else {
                 $scope.login.error_msg = data.error_msg;

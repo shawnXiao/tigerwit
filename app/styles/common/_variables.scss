@@ -13,6 +13,7 @@ $brand-success:         #5cb85c !default;
 $brand-info:            #589eef !default;
 $brand-light-info:      #589ecf !default;
 $brand-lightest-info:   #eef5fa !default;
+$brand-unactive:        #e6e6e6 !default;
 $brand-warning:         #feb96f !default;
 $brand-danger:          #ef4d4d !default;
 $brand-white:           #fff !default;
@@ -121,6 +122,11 @@ $btn-success-border:             darken($btn-success-bg, 5%) !default;
 $btn-info-color:                 #fff !default;
 $btn-info-bg:                    $brand-info !default;
 $btn-info-border:                darken($btn-info-bg, 5%) !default;
+
+$btn-unactive-color:                 $text-title-color !default;
+$btn-unactive-bg:                    $brand-unactive !default;
+$btn-unactive-border:                darken($btn-unactive-bg, 5%) !default;
+
 
 $btn-warning-color:              #fff !default;
 $btn-warning-bg:                 $brand-warning !default;
@@ -329,7 +335,7 @@ $navbar-inverse-bg:                         #000 !default;
 $navbar-inverse-border:                     darken($navbar-inverse-bg, 10%) !default;
 
 // Inverted navbar links
-$navbar-inverse-link-color:                 $gray-light !default;
+$navbar-inverse-link-color:                 #bbb !default;
 $navbar-inverse-link-border-color:          #000 !default;
 $navbar-inverse-link-hover-color:           #fff !default;
 $navbar-inverse-link-hover-border-color:    #f28a0f !default;
@@ -370,7 +376,7 @@ $state-danger-bg:                #ffeded !default;
 $state-danger-border:            #ffcac9 !default;
 
 //** Horizontal line color.
-$hr-border:                   $gray-lighter !default;
+$hr-border:                   $gray-dark !default;
 
 // For dropdown
 $caret-width-base: 4px;
@@ -379,3 +385,59 @@ $dropdown-border: rgba(0,0,0,.15) !default;
 $dropdown-link-color:            $gray-dark !default;
 $dropdown-link-hover-color:      darken($gray-dark, 5%) !default;
 $dropdown-link-hover-bg:         #f5f5f5 !default;
+
+
+//== Modals
+//
+//##
+
+//** Padding applied to the modal body
+$modal-inner-padding:         30px !default;
+
+//** Padding applied to the modal title
+$modal-title-padding:         7px !default;
+//** Modal title line-height
+$modal-title-line-height:     $line-height-base !default;
+
+//** Background color of modal content area
+$modal-content-bg:                             #fff !default;
+//** Modal content border color
+$modal-content-border-color:                   rgba(0,0,0,.2) !default;
+//** Modal content border color **for IE8**
+$modal-content-fallback-border-color:          #999 !default;
+
+//** Modal backdrop background color
+$modal-backdrop-bg:           #000 !default;
+//** Modal backdrop opacity
+$modal-backdrop-opacity:      .5 !default;
+//** Modal header border color
+$modal-header-border-color:   #e5e5e5 !default;
+//** Modal footer border color
+$modal-footer-border-color:   $modal-header-border-color !default;
+
+$modal-lg:                    900px !default;
+$modal-md:                    600px !default;
+$modal-sm:                    300px !default;
+
+
+//== Tables
+//
+//## Customizes the `.table` component with basic values, each used across all table variations.
+
+$table-cell-padding:            8px !default;
+$table-condensed-cell-padding:  5px !default;
+
+//** Default background color used for all tables.
+$table-bg:                      transparent !default;
+$table-head-bg:                 #eaeff5 !default;
+//** Background color used for `.table-striped`.
+$table-bg-accent:               #f9f9f9 !default;
+$table-ranking-bg:              #ebf5e4 !default;
+$table-ranking-head-bg:         #84bf56 !default;
+//** Background color used for `.table-hover`.
+$table-bg-hover:                #f5f5f5 !default;
+$table-bg-active:               $table-bg-hover !default;
+
+//** Border color for table and cell borders.
+$table-border-color:            #ddd !default;
+

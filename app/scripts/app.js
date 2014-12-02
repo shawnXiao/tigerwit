@@ -8,7 +8,7 @@
  *
  * Main module of the application.
  */
-var routerApp = angular.module('tigerwitApp', ['ngCookies', 'ngResource', 'ngRoute', 'ngSanitize', 'ui.router']);
+var routerApp = angular.module('tigerwitApp', ['ngRoute', 'ngSanitize', 'ui.router']);
 
 // 在 IE 8 中请求会被缓存，通过下面来阻止缓存
 routerApp.config(['$httpProvider', function ($httpProvider) {
@@ -18,15 +18,16 @@ routerApp.config(['$httpProvider', function ($httpProvider) {
     $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
 }]);
 
-routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
-
+routerApp.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$controllerProvider',
+    function ($stateProvider, $urlRouterProvider, $httpProvider, $controllerProvider) {
     // 全局 $http 请求配置。
-    $httpProvider.interceptors.push(['wdConfig', '$location', function(wdConfig, $location) {
+    $httpProvider.interceptors.push(['wdConfig', '$rootScope', '$location', '$q', function(wdConfig, $rootScope, $location, $q) {
         return {
             'request': function(config) {
                 config.timeout = wdConfig.httpTimeout;
-                if (!/^[http|https]/.test(config.url) && !/\.html$/.test(config.url)) {
+                if (!/^[http|https|ws]/.test(config.url) && !/\.html$/.test(config.url)) {
                     config.url = wdConfig.apiUrl + config.url;
+                    ga('send', 'event', 'xhr-request', config.url, $location.path());
                 }
                 return config;
             },
@@ -34,7 +35,18 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
                 if (/\.html/.test(response.config.url)) {
                     return response;
                 } else {
+                    ga('send', 'event', 'xhr-response', response.config.url, response.status);
                     return response.data;
+                }
+            },
+            'responseError': function (response) {
+                // 当修改密码成功时不自动跳转到登录页
+                if (response.status === 401 && $rootScope.resetPassword) {
+                    ga('send', 'event', '401', response.config.url);
+                    $location.path('/login')
+                    return $q.reject(response);
+                } else {
+                    return $q.reject(response);
                 }
             }
         };
@@ -43,12 +55,21 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     $urlRouterProvider.otherwise('/index');
 
     // 登录验证
-    var authorizResolve =  { authorize: ['authorization', function (authorization) { return authorization.authorize(); }] };
+    var authorizResolve =  {
+        simpleObj: function () {
+            return {value: "simple!"}
+        },
+        authorize: ['authorization', function (authorization) {
+            return authorization.authorize();
+        }]
+    };
+
 
     // 下面为 page 的配置
     $stateProvider
     .state('index', {
         url: "/index",
+        primaryPage: "index",
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
@@ -59,101 +80,77 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
                 controller: 'wdWebNavbarController'
             },
             'bd@index': {
-                templateUrl: 'views/web/index.html',
-                controller: 'wdWebMarketingController'
+                templateUrl: 'views/web/index.html'
             },
             'ft@index': {
                 templateUrl: 'views/layout/footer.html'
             }
         }
     })
-
-    .state('about', {
-        url: "/about",
+    // 各种静态页面的配置
+    .state('static', {
+        url: "/static/:subPage",
+        primaryPage: "static",
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
                 controller: 'wdWebMarketingController'
             },
-            'hd@about': {
+            'hd@static': {
                 templateUrl: 'views/navs/navbar1.html',
                 controller: 'wdWebNavbarController'
             },
-            'bd@about': {
-                templateUrl: 'views/web/about.html',
-                controller: 'wdWebMarketingController'
+            'bd@static': {
+                templateUrl: function ($stateParams) {
+                    return 'views/web/' + $stateParams.subPage+ '.html';
+                }
             },
-            'ft@about': {
+            'staticGuide@static': {
+                templateUrl: 'views/guides/install.html',
+            },
+            'ft@static': {
                 templateUrl: 'views/layout/footer.html'
             }
         }
     })
-
-    .state('security', {
-        url: "/security",
+    // 常见问题页面对应的 router
+    .state('faqRoot', {
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
                 controller: 'wdWebMarketingController'
             },
-            'hd@security': {
+            'hd@faqRoot': {
                 templateUrl: 'views/navs/navbar1.html',
                 controller: 'wdWebNavbarController'
             },
-            'bd@security': {
-                templateUrl: 'views/web/security.html',
-                controller: 'wdWebMarketingController'
+            'bd@faqRoot': {
+                templateUrl: 'views/web/faq.html',
             },
-            'ft@security': {
+            'ft@faqRoot': {
                 templateUrl: 'views/layout/footer.html'
             }
         }
     })
-
-    .state('contact', {
-        url: "/contact",
+    .state('faqRoot.setting', {
+        url: '/faq/:subPage',
+        primaryPage: "faq",
         views: {
-            '': {
-                templateUrl: 'views/layout/doc1.html',
-                controller: 'wdWebMarketingController'
+            'sidebar': {
+                templateUrl: 'views/web/faq_side.html',
             },
-            'hd@contact': {
-                templateUrl: 'views/navs/navbar1.html',
-                controller: 'wdWebNavbarController'
-            },
-            'bd@contact': {
-                templateUrl: 'views/web/contact.html',
-                controller: 'wdWebMarketingController'
-            },
-            'ft@contact': {
-                templateUrl: 'views/layout/footer.html'
-            }
-        }
-    })
-
-    .state('advantage', {
-        url: "/advantage",
-        views: {
-            '': {
-                templateUrl: 'views/layout/doc1.html',
-                controller: 'wdWebMarketingController'
-            },
-            'hd@advantage': {
-                templateUrl: 'views/navs/navbar1.html',
-                controller: 'wdWebNavbarController'
-            },
-            'bd@advantage': {
-                templateUrl: 'views/web/advantage.html',
-                controller: 'wdWebMarketingController'
-            },
-            'ft@advantage': {
-                templateUrl: 'views/layout/footer.html'
+            'content': {
+                templateUrl: function ($stateParams) {
+                    $stateParams.subPage = $stateParams.subPage || 'index';
+                    return 'views/web/faq_' + $stateParams.subPage + '.html';
+                }
             }
         }
     })
 
     .state('regist', {
         url: "/regist",
+        primaryPage: "regist",
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
@@ -175,6 +172,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
     .state('login', {
         url: "/login",
+        primaryPage: "login",
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
@@ -196,6 +194,7 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
     .state('reset', {
         url: "/reset",
+        primaryPage: "reset",
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
@@ -214,13 +213,10 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
-
     .state('regist_succ', {
         url: "/regist_succ",
-        data: {
-            roles: []
-        },
-        resolve: authorizResolve,
+        primaryPage: "regist-succ",
+        authenticate: true,
         views: {
             '': {
                 templateUrl: 'views/layout/doc1.html',
@@ -238,200 +234,157 @@ routerApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
             }
         }
     })
-    .state('personal', {
-        url: '/personal',
-        data: {
-            roles: []
-        },
-        resolve: authorizResolve,
+    .state('personalRoot', {
         views: {
             '': {
                 templateUrl: 'views/layout/doc2.html',
                 controller: 'wdPersonalController'
             },
-            'hd@personal': {
+            'hd@personalRoot': {
                 templateUrl: 'views/navs/navbar_personal.html',
                 controller: 'wdWebNavbarController'
             },
-            'sidebar@personal': {
-                templateUrl: 'views/personal/info_side.html',
-                controller: ''
+            'sidebar@personalRoot': {
+                templateUrl: 'views/personal/info_side.html'
             },
-            'content@personal': {
-                templateUrl: 'views/personal/history_chart.html',
-                controller: 'wdPersonalHistoryController'
+            'sidebar-ad@personalRoot': {
+                templateUrl: 'views/personal/personal_side.html'
             },
-            'sidebar-ad@personal': {
-                templateUrl: 'views/personal/deposit_side.html',
-                controller: ''
-            },
-            'ft@personal': {
+            'ft@personalRoot': {
                 templateUrl: 'views/layout/footer.html'
             }
         }
     })
-    .state('deposit', {
-        url: '/personal/deposit',
+    // 个人页面对应的 router, 需要 subUrl 和对应的 controller 名称对应
+    .state('personalRoot.personal', {
+        url: '/personal/:subPage',
+        primaryPage: "personal",
+        authenticate: true,
         views: {
-            '': {
-                templateUrl: 'views/layout/doc2.html',
-                controller: 'wdPersonalController'
-            },
-            'hd@deposit': {
-                templateUrl: 'views/navs/navbar_personal.html',
-                controller: 'wdWebNavbarController'
-            },
-            'sidebar@deposit': {
-                templateUrl: 'views/personal/info_side.html',
-                controller: ''
-            },
-            'content@deposit': {
-                templateUrl: 'views/personal/deposit.html',
-                controller: 'wdPersonalDepositController'
-            },
-            'sidebar-ad@deposit': {
-                templateUrl: 'views/personal/deposit_side.html',
-                controller: ''
-            },
-            'ft@deposit': {
-                templateUrl: 'views/layout/footer.html'
+            'content': {
+                templateUrl: function ($stateParams) {
+                    $stateParams.subPage = $stateParams.subPage || 'index';
+                    return 'views/personal/' + $stateParams.subPage + '.html';
+                },
+                controllerProvider: function ($stateParams) {
+                    var ctrlPrefix = "wdPersonal";
+                    var ctrlSuffix = "Controller";
+                    var subPage = $stateParams.subPage || 'index';
+                    var ctrlName = subPage.charAt(0).toUpperCase() + subPage.substring(1, subPage.length);
+                    if (subPage === "index") {
+                        ctrlName = "History";
+                    }
+                    ctrlName = ctrlPrefix + ctrlName + ctrlSuffix;
+                    return ctrlName;
+                }
             }
         }
     })
-    .state('history', {
-        url: '/personal/history',
-        views: {
-            '': {
-                templateUrl: 'views/layout/doc2.html',
-                controller: 'wdPersonalController'
-            },
-            'hd@history': {
-                templateUrl: 'views/navs/navbar_personal.html',
-                controller: 'wdWebNavbarController'
-            },
-            'sidebar@history': {
-                templateUrl: 'views/personal/info_side.html',
-                controller: ''
-            },
-            'content@history': {
-                templateUrl: 'views/personal/history.html',
-                controller: 'wdPersonalDepositController'
-            },
-            'sidebar-ad@history': {
-                templateUrl: 'views/personal/deposit_side.html',
-                controller: ''
-            },
-            'ft@history': {
-                templateUrl: 'views/layout/footer.html'
-            }
-        }
-    })
-    .state('notify', {
-        url: '/personal/notify',
-        views: {
-            '': {
-                templateUrl: 'views/layout/doc2.html',
-                controller: 'wdPersonalController'
-            },
-            'hd@notify': {
-                templateUrl: 'views/navs/navbar_personal.html',
-                controller: 'wdWebNavbarController'
-            },
-            'sidebar@notify': {
-                templateUrl: 'views/personal/info_side.html',
-                controller: ''
-            },
-            'content@notify': {
-                templateUrl: 'views/personal/notify.html'
-            },
-            'sidebar-ad@notify': {
-                templateUrl: 'views/personal/deposit_side.html',
-                controller: ''
-            },
-            'ft@notify': {
-                templateUrl: 'views/layout/footer.html'
-            }
-        }
-    })
-    .state('setting', {
-        url: '/setting',
+    // 设置页面对应的 router，subPage 都共用的一个 controller
+    .state('settingRoot', {
         views: {
             '': {
                 templateUrl: 'views/layout/doc3.html',
                 controller: 'wdPersonalController'
             },
-            'hd@setting': {
+            'hd@settingRoot': {
                 templateUrl: 'views/navs/navbar_personal.html',
                 controller: 'wdWebNavbarController'
             },
-            'sidebar@setting': {
+            'sidebar@settingRoot': {
                 templateUrl: 'views/settings/side.html',
-                controller: ''
             },
-            'content@setting': {
-                templateUrl: 'views/settings/info.html'
-            },
-            'ft@setting': {
+            'ft@settingRoot': {
                 templateUrl: 'views/layout/footer.html'
             }
         }
     })
-    .state('settingPassword', {
-        url: '/setting/password',
+    .state('settingRoot.setting', {
+        url: '/setting/:subPage',
+        primaryPage: "setting",
+        authenticate: true,
+        views: {
+            'content': {
+                templateUrl: function ($stateParams) {
+                    $stateParams.subPage = $stateParams.subPage || 'index';
+                    return 'views/settings/' + $stateParams.subPage + '.html';
+                },
+                controller: 'wdSettingController'
+            },
+        }
+    })
+    .state('master', {
+        url: '/master',
+        primaryPage: "master",
+        authenticate: true,
         views: {
             '': {
-                templateUrl: 'views/layout/doc3.html',
+                templateUrl: 'views/layout/doc1.html',
                 controller: 'wdPersonalController'
             },
-            'hd@settingPassword': {
+            'hd@master': {
                 templateUrl: 'views/navs/navbar_personal.html',
                 controller: 'wdWebNavbarController'
             },
-            'sidebar@settingPassword': {
-                templateUrl: 'views/settings/side.html',
-                controller: ''
+            'bd@master': {
+                templateUrl: 'views/master/index.html',
+                controller: 'wdMasterController'
             },
-            'content@settingPassword': {
-                templateUrl: 'views/settings/password.html'
-            },
-            'ft@settingPassword': {
+            'ft@master': {
                 templateUrl: 'views/layout/footer.html'
             }
         }
     })
-    .state('settingGlobal', {
-        url: '/setting/global',
+    .state('guides', {
+        url: '/guides',
+        primaryPage: "guides",
         views: {
             '': {
-                templateUrl: 'views/layout/doc3.html',
+                templateUrl: 'views/layout/doc1.html',
                 controller: 'wdPersonalController'
             },
-            'hd@settingGlobal': {
+            'hd@guides': {
                 templateUrl: 'views/navs/navbar_personal.html',
                 controller: 'wdWebNavbarController'
             },
-            'sidebar@settingGlobal': {
-                templateUrl: 'views/settings/side.html',
-                controller: ''
+            'bd@guides': {
+                templateUrl: 'views/guides/index.html',
+                controller: 'wdMasterController'
             },
-            'content@settingGlobal': {
-                templateUrl: 'views/settings/global.html'
+            'staticGuide@guides': {
+                templateUrl: 'views/guides/install.html',
             },
-            'ft@settingGlobal': {
+            'ft@guides': {
                 templateUrl: 'views/layout/footer.html'
             }
         }
     })
-
-})
+}])
 .run(['$rootScope', '$state', '$stateParams', 'authorization', 'principal',
      function ($rootScope, $state, $stateParams, authorization, principal) {
+
          $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
              $rootScope.toState = toState;
              $rootScope.toStateParams = toStateParams;
-             if (principal.isIdentityResolved()) {
+
+             // 页面的 pageId
+             $rootScope.moduleId = "tigerwit-" + toState.primaryPage + (toStateParams.subPage ? "-" + toStateParams.subPage : "");
+
+             // 判断子导航条是否是 active
+             $rootScope.stateName = toStateParams.subPage || "";
+             $rootScope.primaryPage = toState.primaryPage || "";
+             ga('send', 'pageview', {
+                 'page': $rootScope.primaryPage + "/" + $rootScope.stateName
+             });
+
+             if (toState.authenticate) {
                  authorization.authorize();
              }
          });
+
+         $rootScope.$on('$stateChangeSuccess', function () {
+             $("html, body").animate({scrollTop: 0}, 300)
+         });
+
      }
 ])

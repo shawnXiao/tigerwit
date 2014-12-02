@@ -3,19 +3,16 @@ angular.module('tigerwitApp')
     return {
         restrict: 'A',
         replace: true,
-        template: '<div id="container" style="width: 480px; height: 200px;">not working</div>',
+        template: '<div id="container" style="width: 480px; height: 200px;"><img style="padding-left: 150px;height: 200px;" src="ngsrc/ajax-loading.gif" /></div>',
         link: function (scope, elemnt, attrs) {
             scope.$on("personal_history", function (event, data) {
                 data = Highcharts.map(data, function (config) {
                     return {
-                        x: config[0],
-                        open: config[1],
-                        high: config[2],
-                        low: config[3],
-                        close: config[4],
-                        y: config[4]
+                        x: config[0] * 1000,
+                        y: config[1]
                     }
                 });
+
                 var options = {
                     chart: {
                         renderTo: 'container',
@@ -31,7 +28,13 @@ angular.module('tigerwitApp')
                     },
                     xAxis: {
                         gapGridLineWidth: 0,
-                        type: 'datetime'
+                        type: 'datetime',
+                        dateTimeLabelFormats: {
+                            day: '%m/%d',
+                            month: '%m/%d',
+                            year: '%m年',
+                            week: '%m/%d'
+                        }
                     },
                     credits: {
                         enabled: false
@@ -42,30 +45,12 @@ angular.module('tigerwitApp')
                     legend: {
                         enabled: false
                     },
-                    rangeSelector : {
-                        buttons : [{
-                            type : 'hour',
-                            count : 1,
-                            text : '1h'
-                        }, {
-                            type : 'day',
-                            count : 1,
-                            text : '1D'
-                        }, {
-                            type : 'all',
-                            count : 1,
-                            text : 'All'
-                        }],
-                        selected : 1,
-                        inputEnabled : false
-                    },
                     tooltip: {
                         useHTML: true,
                         formatter: function () {
                             var dateStamp = new Date(this.x);
-                            var date = dateStamp.getFullYear() + '/' + (dateStamp.getMonth() + 1) + "/" + (dateStamp.getDate()) + " " +
-                                dateStamp.getHours() + ":" + dateStamp.getMinutes();
-                            return '<p>' + date + '</p><p>' + this.y + '</p>';
+                            var date = dateStamp.getFullYear() + '/' + (dateStamp.getMonth() + 1) + "/" + (dateStamp.getDate());
+                            return '<p class="chart-title">' + date + '</p><p class="chart-money">$' + this.y + '</p>';
                         }
                     },
                     series : [{

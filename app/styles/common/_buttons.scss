@@ -86,6 +86,20 @@
   @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
 }
 
+.btn-unactive {
+  @include button-variant($btn-unactive-color, $btn-unactive-bg, $btn-unactive-border);
+}
+
+.btn-gradient-unactive {
+    @include button-variant($btn-unactive-color, $btn-unactive-bg, $btn-unactive-border);
+    @include background-image(linear-gradient(to bottom, #fbfbfb, #e5e5e5))
+}
+
+.btn-gradient-info {
+    @include button-variant($btn-info-color, $btn-info-bg, $btn-info-border);
+    @include background-image(linear-gradient(to bottom, #0296ee, #002d8c))
+}
+
 
 // Link buttons
 // -------------------------
@@ -129,6 +143,10 @@
 
 // Button Sizes
 // --------------------------------------------------
+
+.btn-static-md {
+    width: 110px;
+}
 
 .btn-ex-lg {
   // line-height: ensure even-numbered height of button next to large input

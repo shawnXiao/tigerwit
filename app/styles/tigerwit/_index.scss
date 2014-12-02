@@ -22,6 +22,12 @@
       .btn-magnet-lf {
             margin-left: -5px;
       }
+      .input-magnet-rt {
+          width: 260px;
+      }
+      input, button {
+          height: 46px;
+      }
     }
     .contact-lg {
         color: $text-inverse-title-color;

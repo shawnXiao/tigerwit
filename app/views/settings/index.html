@@ -1,0 +1,23 @@
+<div id="settings-index">
+    <div class="hd-sub">
+        <p class="title">个人信息</p>
+    </div>
+    <div class="bd-sub">
+        <div class="col-left">
+            <img class="img-circle" ng-show="profile.sex != undefined" ng-src="ngsrc/photo-{{ profile.sex ? 'man' : 'woman'}}.png" alt="thumbnail" />
+        </div>
+        <div class="col-right personal-info">
+            <p><span>昵称：</span>{{profile.username}}</p>
+            <p><span>手机：</span>{{profile.phone}}</p>
+            <p><span>邮箱：</span>{{profile.email}}</p>
+            <div ng-show="profile.verified != undefined && profile.verified">
+                <p><span>姓名：</span>{{profile.realname}}</p>
+                <p><span>出生日期：</span>{{profile.birthday}}</p>
+                <p><span>身份证号：</span>{{profile.id_no}}<i class="verified-tip"><i class="icon-verfied"></i>已验证</i></p>
+            </div>
+            <p class="btn-wrapper">
+                <a href="#/regist?type=virtual2real" target="_blank" ng-show="profile.verified != undefined && !profile.verified"  class="btn btn-md btn-primary"> 开通真实账户</a>
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+#personal-deposit {
+    .bd-sub {
+        color: $text-content-color;
+        .deposit-fund {
+            margin-top: 50px;
+            .col-sm-3 {
+                width: 22%;
+                padding: 0;
+            }
+            .control-label {
+                top: 7px;
+                width: 23%;
+            }
+            .btn {
+                padding: 6px 16px;
+            }
+        }
+        .tip-wrapper {
+            margin-top: 20px;
+        }
+    }
+    .tigerwitSuccForm {
+        p {
+            text-align: center;
+            font-size: $font-size-large;
+        }
+        .wrapper-btn {
+            text-align: center;
+            margin-top: 10px;
+        }
+    }
+}

@@ -3,8 +3,8 @@ var fs = require('fs');
 var path = require('path');
 
 var client = qn.create({
-    accessKey: 'bgo9iu3HYai956dd6KVIg9fnaFB4afjj1lj3wqFM',
-    secretKey: 'hXJKK_FMlMnEPfmPFPO6_-GVtkXWnKYOvX43KK7d',
+    accessKey: '',
+    secretKey: '',
     bucket: 'tigerwit01',
     domain: 'https://dn-tigerwit.qbox.me'
 });

@@ -5,8 +5,6 @@
         <div class="container" ng-class="{'hide': (registType === 'virtual2real' || signIn.success == true)}">
               <h2 class="h2">开通模拟账户</h2>
               <div class="form-wrapper">
-                  <input type="text" style="display:none">
-                  <input type="password" style="display:none">
                   <div class="form-group clearfix">
                     <label for="inputNickname" class="col-sm-2 control-label text-right">昵称</label>
                     <div class="col-sm-4">
@@ -71,6 +69,9 @@
                   <div class="form-group clearfix">
                     <label for="inputPassword" class="col-sm-2 control-label text-right">密码</label>
                     <div class="col-sm-4">
+                        <input type="text" id="inputTest" style="display:none">
+                        <input type="password" id="inputPassword2" style="display:none">
+                        <input type="password" id="inputPassword3" style="display:none">
                         <input type="password" class="form-control"
                         data-validate="length:6-15 password"
                         analytics-on="click" analytics-label="password" analytics-category="regist"
@@ -177,13 +178,12 @@
                       <p class="bg-info help-tip help-tip-single" data-info="请输入邀请码(可选)"></p>
                     </div>
                   </div>
-
                   <div class="form-group">
                     <label for="inputIDNumber" class="col-sm-2 control-label text-right">上传身份证</label>
-                    <div class="upload col-sm-10">
-                        <div  ng-class="{error: person.uiFrontImageStatus >= 3, success: person.uiFrontImageStatus === 2}" class="front" wd-upload-form data-face="front">
+                    <div class="upload col-sm-10" ng-if="hasNoFlash != true">
+                        <div ng-class="{error: person.uiFrontImageStatus >= 3, success: person.uiFrontImageStatus === 2}" class="front" wd-upload-form data-face="front">
                         </div>
-                        <div ng-class="{error: uiBackImageStatus >= 3, success: person.uiBackImageStatus === 2}" class="back" wd-upload-form data-face="back">
+                        <div ng-class="{error: person.uiBackImageStatus >= 3, success: person.uiBackImageStatus === 2}" class="back" wd-upload-form data-face="back">
                         </div>
                         <div class="upload-tip">
                             <p ng-if="person.uiFrontImageStatus === 1" class="status uploading">正在上传...</p>
@@ -195,9 +195,14 @@
                             <p ng-if="person.uiBackImageStatus === 1" class="status uploading">正在上传...</p>
                             <p ng-if="person.uiBackImageStatus === 2" class="status success">上传成功</p>
                             <p ng-if="person.uiBackImageStatus === 3" class="status error">{{person.uiBackImageError}}</p>
-                            <p ng-if="person.uiBackImageStatus === 4" class="status error">{{person.uiFrontImageError}}</p>
+                            <p ng-if="person.uiBackImageStatus === 4" class="status error">{{person.uiBackImageError}}</p>
                         </div>
+                        <p>请上传大小小于 3MB 且格式为 png 、jpg 或者 jpeg 的清晰身份证图片。</p>
                     </div>
+                    <div class="upload col-sm-10" ng-if="hasNoFlash">
+                        <p class="color-danger" style="padding-top: 10px;">亲，上传身份证需要 Flash 支持！请 <a href="http://get.adobe.com/cn/flashplayer/" target="_blank">安装 Flash</a> 或者使用 360, Chrome 浏览器完成上传。</p>
+                    </div>
+
                   </div>
                   <div class="form-group clearfix">
                     <div class="col-sm-offset-2 col-sm-8 text-center">

@@ -68,12 +68,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
                     }
 
                     if ($scope.registType === "virtual2real") {
-                        if ($window.hasNoFlash) {
-                            var downloadConfirm = confirm("你好，上传身份证需要安装 Flash ! 点击 '确定' 安装");
-                            if (downloadConfirm) {
-                                $window.open('http://get.adobe.com/cn/flashplayer/', '_self');
-                            }
-                        }
+                        $scope.hasNoFlash = $window.hasNoFlash;
                         if (data.fork_code) {
                             $scope.person.fork_code = data.fork_code;
                             $scope.person.withForkCode = true;
@@ -382,7 +377,7 @@ function ($scope, wdAccount, $timeout, wdConfig, wdValidator, $location, $interv
             break;
             case 'back':
                 $scope.$apply(function() {
-                    $scope.person.uiBackImageError = '上传失败';
+                    $scope.person.uiBackImageError = '上传的类型不正确，只支持 jpg, jpeg, png 三种格式';
                     $scope.person.uiBackImageStatus = 4;
                 });
             break;

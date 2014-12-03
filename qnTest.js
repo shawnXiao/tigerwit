@@ -6,8 +6,8 @@ var client = qn.create({
     accessKey: 'bgo9iu3HYai956dd6KVIg9fnaFB4afjj1lj3wqFM',
     secretKey: 'hXJKK_FMlMnEPfmPFPO6_-GVtkXWnKYOvX43KK7d',
     bucket: 'tigerwit01',
-    domain: 'http://tigerwit01.qiniudn.com'
-})
+    domain: 'https://dn-tigerwit.qbox.me'
+});
 
 var options = [{
     folder: "./dist/images/",

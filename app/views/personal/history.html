@@ -14,7 +14,7 @@
                 </div>
                 <span class="col-sm-2 currency"> {{item.open_price}}</span>
                 <span class="col-sm-2 currency"> {{item.close_price}}</span>
-                <span class="col-sm-2 currency" ng-class="{'up': item.sum > 0, 'down': item.sum < 0}"> {{item.sum}}</span>
+                <span class="col-sm-2 currency" ng-class="{'down': item.sum > 0, 'up': item.sum < 0}"> {{item.sum}}</span>
             </li>
         </ul>
 

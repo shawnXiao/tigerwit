@@ -234,8 +234,8 @@ function($rootScope, $location) {
             "us": "Enter your phone number"
         },
         "000061": {
-            "cn": "账号",
-            "us": "Account"
+            "cn": "注册手机号",
+            "us": "Phone Number"
         },
         "000062": {
             "cn": "密码",

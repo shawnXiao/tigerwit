@@ -36,6 +36,7 @@
                 <button type="submit"
                     class="btn btn-primary btn-sm btn-magnet-lf" 
                     ng-click="loginFun();">&gt;</button>
+                <a href="#/reset?phone={{login.phone}}">忘记密码</a>
             </div>
             <p class="color-danger text-center" ng-class="{'show': !!login.error_msg }">{{login.error_msg}}</p>
         </div>
